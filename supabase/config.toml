@@ -1,0 +1,12 @@
+# Minimal Supabase CLI config. `supabase link --project-ref <ref>` fills in the rest
+# as needed; migrations live in ./migrations and are applied with `supabase db push`.
+project_id = "becoming"
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://localhost:3000/auth/confirm"]
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false

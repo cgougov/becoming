@@ -12,9 +12,19 @@ Requires Node 22+.
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in values (not needed for M0)
+cp .env.example .env.local   # Supabase URL + anon key; without them the app renders unauthenticated
 npm run dev                  # http://localhost:3000
 npm run check                # lint + typecheck + tests + build
+```
+
+## Database
+
+Schema lives in `supabase/migrations/` and is applied with the Supabase CLI; never edit it in the dashboard.
+
+```bash
+npx supabase login
+npx supabase link --project-ref <project-ref>
+npx supabase db push
 ```
 
 ## Install on iPhone

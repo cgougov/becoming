@@ -32,3 +32,29 @@ changes (`ANTHROPIC_MODEL`).
 ### 2026-11-11 — Partner is openly an AI, not a therapist
 Why: Christian's call. It must never pretend to be human. A small cute avatar is welcome. In a
 crisis it points to real help rather than acting as care.
+
+### 2026-11-11 — Schema shape for v1 (M1)
+`profiles` holds check-in preferences (window, count, quiet hours by implication, timezone)
+rather than a separate settings table. `entries` is the single scrapbook table: captures,
+check-in replies and reflection outputs all land there with a `source` enum, so Today and
+bucket views read one table. `check_ins`, `reflections` and `next_steps` are their own tables
+because they have lifecycles (scheduled → sent → answered; proposed → accepted → done/skipped).
+Gave up: a generic "events" table; too abstract for a one-user MVP.
+
+### 2026-11-11 — Buckets are rows, not an enum
+Users can rename and add buckets, so the three starters are seeded per user by the
+`handle_new_user` trigger (`is_starter = true`). `src/lib/buckets.ts` keeps the defaults for the
+UI and the seed in sync by convention; if they diverge, the DB wins.
+
+### 2026-11-11 — Auth via Next proxy + `@supabase/ssr`, both magic-link flows supported
+The proxy refreshes the session cookie on every request (required by `@supabase/ssr`) and does
+the redirect-to-login check; pages verify with `getUser()` (server-validated), never the cookie
+alone. Both `/auth/callback` (PKCE `?code=`) and `/auth/confirm` (`?token_hash=`) exist so the
+default Supabase email template and a customised one both work. Only same-origin `next` paths
+are honoured after login.
+
+### 2026-11-11 — App builds and runs without Supabase env vars
+`getSupabaseEnv()` returns null instead of throwing, the proxy passes requests through, and
+`/login` shows an "unconfigured" note. Why: CI and `next build` must not need secrets, and a
+fresh clone should render the shell. `getUser()` calls `connection()` first so the account
+slot is always request-time, never prerendered as signed-out.
