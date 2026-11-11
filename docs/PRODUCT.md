@@ -1,0 +1,68 @@
+# Becoming — product (v1)
+
+Codename history: "Goon App" (placeholder) → "Pacer" → **Becoming**.
+
+## Vision (short)
+
+People in their twenties feel themselves drifting into empty routines and endless scrolling.
+Blockers take distractions away, but there is always another one. Becoming adds something
+in their place: **a running partner for your life**. It helps you see what matters to you,
+sets a pace, checks in when you'd rather stop, and over time shows you who you're becoming.
+Later, a social layer will help friends stay involved in each other's lives without posting
+for an audience. v1 is the personal partner only, built for one user (Christian).
+
+## Principles
+
+1. **Seconds to capture.** Open, type or snap, done. No required fields.
+2. **Success is life off the phone:** things done and a better understanding of yourself.
+   Time in the app is not the goal.
+3. **No streaks, no guilt.** A first attempt, a changing interest, or a hard week counts.
+   Missing a day never erases anything.
+4. **Your direction, not optimization.** There's no single best version of a person.
+5. **A scrapbook, not a journal.** Photos, quotes, outfits, a restaurant, a lift PR all belong.
+
+## The partner's character
+
+- Openly an AI. **Never pretends to be human**, never claims feelings or a life of its own.
+- **Not a therapist** and doesn't act like one: no diagnosing, no clinical framing.
+  If someone seems to be in crisis, it says plainly that it's an AI and points to real help
+  (in the US, call or text 988).
+- Warm, brief, a little playful. Asks one good question rather than five.
+- Can have a small, cute avatar (to be designed in M3).
+- Encourages real-world connection over talking to it.
+
+## v1 core loop
+
+1. **Drop it in.** Text and/or photo from the home screen in seconds. Voice = keyboard dictation.
+2. **Auto-sort.** AI files each item into a starter bucket; one tap to move it.
+   - **Goals**: gym, work, projects, things you're working toward
+   - **Taste**: culture and art that moves you (movies, art, photos, outfits, quotes, food)
+   - **People**: your own relationships. Staying in touch, who you're closest to, how to
+     nurture relationships. (Personal only, no sharing in v1.)
+   Buckets can be renamed and added.
+3. **Home = widgets.** One widget per bucket plus a **Today** view (today's captures, intention,
+   check-ins, pinned next step). UI quality is a top priority.
+4. **Check-ins.** Push notifications: a morning "what do you want to get done today?" plus
+   1–2 random check-ins in a window (default 10am–9pm), adjustable, with quiet hours.
+   Tapping opens a quick reply; replies are saved as entries.
+5. **Reflection.** Unlocks after ~7 days of logging, then weekly or on demand. One good question,
+   a short back-and-forth (capped), ends with a small next step and/or an insight about yourself.
+   Saved into the scrapbook.
+6. **Keep pace.** Accepted next step is pinned to Today; done/skip (skip is information).
+   Later check-ins and reflections follow up.
+
+## Out of scope for v1
+
+Social network or sharing, voice recording/transcription, native App Store app, "living map"
+visualization, streaks or gamification, embeddings or semantic search, multi-user onboarding polish.
+Trust/privacy basics are kept (RLS, private storage, export in M6) but aren't the focus yet.
+
+## Milestones
+
+- **M0** Repo scaffold, CI, docs
+- **M1** Supabase schema + migrations + RLS, magic-link login, deploy to Vercel, install on phone
+- **M2** Quick capture (text + photo), saved for real. Christian starts logging.
+- **M3** Design pass (widget home, Today, avatar), then build; AI auto-sort into buckets
+- **M4** Check-ins: web push, random-time scheduler (Supabase pg_cron), quick reply
+- **M5** Reflection + next step/insight + keeping pace with goals
+- **M6** Polish, data export, prompt tuning from real use
