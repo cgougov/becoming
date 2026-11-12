@@ -1,8 +1,22 @@
 import type React from "react";
 import { STARTER_BUCKETS } from "@/lib/buckets";
 
-// M0/M1 placeholder home. The real widget home is designed and built in M3.
-export function HomeView({ account }: { account?: React.ReactNode }) {
+/**
+ * Home layout. Slots are filled by the page with request-time data inside
+ * Suspense boundaries; with no slots it renders the static placeholder (and
+ * is what the unit test exercises).
+ */
+export function HomeView({
+  capture,
+  today,
+  buckets,
+  account,
+}: {
+  capture?: React.ReactNode;
+  today?: React.ReactNode;
+  buckets?: React.ReactNode;
+  account?: React.ReactNode;
+}) {
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-8 px-6 pb-10 pt-[max(3rem,env(safe-area-inset-top))]">
       <header className="flex flex-col gap-2">
@@ -10,16 +24,19 @@ export function HomeView({ account }: { account?: React.ReactNode }) {
         <p className="text-base opacity-70">A running partner for your life.</p>
       </header>
 
-      <section className="grid gap-3" aria-label="Buckets">
-        {STARTER_BUCKETS.map((bucket) => (
-          <div key={bucket.slug} className="rounded-2xl border border-current/10 bg-current/[.03] p-4">
-            <h2 className="font-medium">{bucket.name}</h2>
-            <p className="text-sm opacity-70">{bucket.description}</p>
-          </div>
-        ))}
-      </section>
+      {capture}
+      {today}
 
-      <p className="text-sm opacity-50">Setup build. Capture arrives in M2.</p>
+      {buckets ?? (
+        <section className="grid gap-3" aria-label="Buckets">
+          {STARTER_BUCKETS.map((bucket) => (
+            <div key={bucket.slug} className="rounded-2xl border border-current/10 bg-current/[.03] p-4">
+              <h2 className="font-medium">{bucket.name}</h2>
+              <p className="text-sm opacity-70">{bucket.description}</p>
+            </div>
+          ))}
+        </section>
+      )}
 
       {account}
     </main>

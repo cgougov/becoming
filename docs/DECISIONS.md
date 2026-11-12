@@ -58,3 +58,14 @@ are honoured after login.
 `/login` shows an "unconfigured" note. Why: CI and `next build` must not need secrets, and a
 fresh clone should render the shell. `getUser()` calls `connection()` first so the account
 slot is always request-time, never prerendered as signed-out.
+
+### 2026-11-11 — Deploy after M2, not before (Christian)
+Why: nothing worth opening on a phone until capture exists; local `npm run dev` is enough to
+iterate. Vercel + redirect URLs + Home Screen install move to right after M2.
+
+### 2026-11-11 — Photos upload from the browser, not through a Server Function
+Server Functions have a ~1 MB body limit by default and would double the transfer. The browser
+compresses (canvas, ≤1600px, JPEG) and uploads directly to Supabase Storage with the user's own
+session; storage RLS keys off the first path segment (`<user_id>/…`). The server action stores
+only the path and re-checks that segment. Gave up: HEIC conversion on desktop browsers (falls
+back to the original file; iPhone Safari hands over JPEG anyway).
