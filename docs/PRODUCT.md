@@ -44,6 +44,26 @@ Design direction agreed after two rounds of mockups:
   ("how does the gym affect my mood", "am I seeing people enough"). The reflection
   conversation sits at the bottom, not the top.
 
+## Benefit from better models, don't get replaced by them (Christian, 2026-11-12)
+
+Models will keep getting better at remembering, noticing and advising. Becoming must get
+*better* when that happens, not obsolete. Rules for building:
+- **The partner's intelligence is swappable.** One module (`src/lib/partner/`) talks to the
+  model; nothing else knows which model. A better model = a better Becoming, overnight.
+- **Accumulate what models can't conjure:** years of captures, collections in the user's
+  words, lenses they chose, next steps accepted or skipped. Structured, personal, consented.
+  Every schema choice should make that record richer for whatever reads it later.
+- **The feel is ours.** Character, motion, homeyness, the companion. A lab ships a chat box,
+  not a place you'd want to live.
+- **Later, the social graph:** who trusts whom with what. No model improvement produces it.
+- **Never write cleverness the model will do better next year; always write structure the
+  model will need forever.** No bespoke ML, no hand-tuned heuristics where a prompt will do.
+
+Design decisions 2026-11-12, after round 4: **light theme** by default (dark follows the phone
+later), monochrome base, color only from the user's photos and one accent on the companion and
+active states, collections marked by a small dot not a tinted tile. The companion is a **circle**,
+not a blob; its character gets its own pass later.
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.
