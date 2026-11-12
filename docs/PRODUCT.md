@@ -11,6 +11,18 @@ sets a pace, checks in when you'd rather stop, and over time shows you who you'r
 Later, a social layer will help friends stay involved in each other's lives without posting
 for an audience. v1 is the personal partner only, built for one user (Christian).
 
+## Why the personal companion comes first (Christian, 2026-11-12)
+
+Social apps die at the cold start: nobody wants to be the first user, and a feed with no friends
+is empty. Becoming has to be worth opening **alone, on day one**: the capture, the collections,
+the companion, the weekly reflection all pay off for a single person with zero friends on it.
+That is the initial reason to use the app. Friends come later *because* you already use it,
+not as the reason you start. Every v1 feature should pass the test: "is this valuable with one
+user?" If not, it belongs to the social layer, later.
+
+This is also why UI and the feeling of using it matter as much as any feature: for a solo
+product, the experience *is* the retention.
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.
