@@ -23,13 +23,22 @@ Done (code side, no accounts needed):
   (Cache Components requirement)
 - Unit tests for the pure auth helpers (`isPublicPath`, `safeNextPath`, `normalizeEmail`)
 
-Remaining (needs Christian's accounts):
-1. Create a Supabase project (free). In the dashboard: Authentication → URL configuration →
-   add the Vercel URL and `http://localhost:3000` plus `/auth/callback` redirect URLs.
-2. `npx supabase login && npx supabase link --project-ref <ref> && npx supabase db push`
+Supabase project (created 2026-11-11, free tier). These two values are public by design:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://rwajpzussyvjgezvwkly.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_EC4q6STXYgve31zaRk1G_w_u2XdEX8_
+```
+(project ref `rwajpzussyvjgezvwkly`; the publishable key is the new-style anon key.)
+The Supabase API is not reachable from Claude Code cloud sessions, so `db push` runs on Christian's Mac.
+
+Remaining:
+1. On the Mac, from the repo: `npx supabase login && npx supabase link --project-ref rwajpzussyvjgezvwkly && npx supabase db push`
    to apply the migration (never edit the schema by hand).
-3. Import the repo into Vercel; set `NEXT_PUBLIC_SUPABASE_URL` and
-   `NEXT_PUBLIC_SUPABASE_ANON_KEY` (Production + Preview); confirm preview deploys on PRs.
+2. Dashboard → Authentication → URL Configuration: add `http://localhost:3000/**` and, once
+   Vercel exists, `https://<app>.vercel.app/**` to redirect URLs; set Site URL to the Vercel URL.
+3. Import the repo into Vercel; set the two env vars above (Production + Preview); confirm
+   preview deploys on PRs.
 4. Sign in on the phone via the emailed link, then Safari → Share → Add to Home Screen and
    confirm it opens full screen.
 5. Supabase auth rate limits: free tier sends ~2 emails/hour with the built-in SMTP; fine for
