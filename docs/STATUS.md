@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 2026-11-11 (M2 built; deploy deferred)_
+_Last updated: 2026-11-12 (M3 shell)_
 
 ## Done
 
@@ -58,7 +58,28 @@ Remaining:
 - Bucket cards show per-bucket counts; entries are unsorted until M3 auto-sort.
 - Unit tests: day boundaries across DST, photo path construction.
 
+## M3 step 1 — app shell ✅ (PR #6)
+
+Decided with Christian 2026-11-12 (see PRODUCT.md "Three panes" and DECISIONS):
+- Route group `src/app/(app)/` with a shared layout: bottom bar (Capture · You · Reflect),
+  swipe-between-panes as a bonus (edge-safe, horizontal-only; `src/lib/panes.ts` is unit-tested),
+  and a reserved `CompanionSlot` so the layout won't shift when the character arrives.
+- **Capture** `/`: box + today's log.
+- **You** `/you`: Today widget + bucket cards; `/you/<slug>` opens the bucket's scrapbook,
+  `/you/unsorted` shows unfiled entries. Sign-out lives at the bottom of this pane.
+- **Reflect** `/reflect`: "this week so far" (captures, photos, days; up to 4 recent photos)
+  and an openly-AI note on when reflection unlocks.
+- Cache Components: anything reading `cookies()`, `params` or `usePathname()` sits in `<Suspense>`.
+
 ## Next
+
+1. **Christian tries the shell locally** and decides whether swipe stays.
+2. **M3 step 2 — design pass.** Typography, color, spacing, the companion's look. This is
+   where UI quality gets decided; do it as a conversation, with mockups, before code.
+3. **M3 step 3 — AI auto-sort** into buckets (first Claude API use; needs the key).
+4. Deploy (Vercel + redirect URLs + Home Screen install) once the shell feels right.
+
+### Earlier notes
 
 1. **Christian tries it locally** (`git pull`, `npm run dev`) and logs a few real things.
    Decision from Christian: get something functioning first, deploy after.

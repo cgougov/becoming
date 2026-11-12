@@ -28,7 +28,12 @@ for an audience. v1 is the personal partner only, built for one user (Christian)
   If someone seems to be in crisis, it says plainly that it's an AI and points to real help
   (in the US, call or text 988).
 - Warm, brief, a little playful. Asks one good question rather than five.
-- Can have a small, cute avatar (to be designed in M3).
+- Has a small animated **companion** that lives in the app: hops between panes, says hello,
+  reacts when you log something. It celebrates and keeps you company; it never nags or droops.
+  Reminders come only through the check-ins you configured. It's the face of "openly an AI".
+- **After, not during.** The partner never interrupts a moment. It catches up afterward:
+  "anything from today worth keeping?", or, from a photo's time and place, "this looks like
+  Bryant Park on Tuesday?". The app has a reserved slot for the companion from the shell on.
 - Encourages real-world connection over talking to it.
 
 ## v1 core loop
@@ -40,8 +45,15 @@ for an audience. v1 is the personal partner only, built for one user (Christian)
    - **People**: your own relationships. Staying in touch, who you're closest to, how to
      nurture relationships. (Personal only, no sharing in v1.)
    Buckets can be renamed and added.
-3. **Home = widgets.** One widget per bucket plus a **Today** view (today's captures, intention,
-   check-ins, pinned next step). UI quality is a top priority.
+3. **Three panes, bottom bar.** Decided 2026-11-12 with Christian:
+   - **Capture** (landing): the box, with today's log underneath so a save is visibly real.
+   - **You** (widgets): a Today widget plus one card per bucket. Cards are summaries; tapping
+     one opens that bucket as a scrollable scrapbook. Check-ins join later.
+   - **Reflect**: "this week so far" (counts, a few recent photos, one line from the partner)
+     until reflection unlocks after ~7 days; then reflections and insights live here.
+   A bottom bar is the primary navigation (reliable on iOS, deep-linkable from notifications);
+   swiping between panes is a bonus kept only if it doesn't fight vertical scrolling.
+   UI quality is a top priority.
 4. **Check-ins.** Push notifications: a morning "what do you want to get done today?" plus
    1–2 random check-ins in a window (default 10am–9pm), adjustable, with quiet hours.
    Tapping opens a quick reply; replies are saved as entries.
@@ -50,6 +62,15 @@ for an audience. v1 is the personal partner only, built for one user (Christian)
    Saved into the scrapbook.
 6. **Keep pace.** Accepted next step is pinned to Today; done/skip (skip is information).
    Later check-ins and reflections follow up.
+
+## Later (noted so v1 grows toward them)
+
+- **Friends' companions.** The social layer's shape: your friend's companion is the one who
+  tells you "btw, they finished the thing", with their permission and no audience tally.
+  The v1 companion therefore needs an identity, not just an animation.
+- **Place-aware catch-ups.** True "you just left Bryant Park" needs background location, which
+  a home-screen web app can't do on iOS; a native app could. Meanwhile photo metadata (time,
+  place) and, later, calendar access give most of the effect.
 
 ## Out of scope for v1
 
