@@ -1,12 +1,15 @@
 # Status
 
-_Last updated: 2026-11-11 (M1, step 1)_
+_Last updated: 2026-11-11 (M2 built; deploy deferred)_
 
 ## Done
 
 - **M0** — repo scaffold: Next.js 16 app, PWA basics, `npm run check`, CI, docs. Merged (#1).
 
-## Current milestone: M1 — data, login, deploy (in progress)
+## M1 — data + login ✅ (PR #2) · deploy deferred to after M2
+
+Supabase project created and migration applied with `supabase db push --remote` (2026-11-11).
+`.env.local` exists on Christian's Mac; the app runs locally with `npm run dev`.
 
 Done (code side, no accounts needed):
 - Schema in `supabase/migrations/20261111000000_init.sql`: `profiles`, `buckets`, `entries`,
@@ -44,9 +47,24 @@ Remaining:
 5. Supabase auth rate limits: free tier sends ~2 emails/hour with the built-in SMTP; fine for
    one user, but note it if sign-in emails seem slow.
 
-## Next: M2 — quick capture
+## M2 — quick capture ✅ (PR #3, built on top of #2)
 
-Text + photo capture from the home screen, saved to `entries` / `photos`. Christian starts logging.
+- Capture box on home: text and/or photo, nothing required. ⌘/Ctrl+Enter saves.
+- Photos are compressed in the browser (≤1600px JPEG) and uploaded straight to the private
+  `photos` bucket under `<user_id>/<yyyy-mm>/<uuid>.jpg`; the server action only stores the path
+  and checks the path's owner segment matches the user.
+- Today list: today's entries in the profile's timezone, newest first, signed photo URLs
+  (1 h), remove button (also deletes the storage object).
+- Bucket cards show per-bucket counts; entries are unsorted until M3 auto-sort.
+- Unit tests: day boundaries across DST, photo path construction.
+
+## Next
+
+1. **Christian tries it locally** (`git pull`, `npm run dev`) and logs a few real things.
+   Decision from Christian: get something functioning first, deploy after.
+2. Deploy (the deferred M1 items): Vercel import + the two env vars, Supabase redirect URLs,
+   install on iPhone. Needed before check-ins (M4) can mean anything.
+3. **M3** — design pass (widget home, Today, avatar), then AI auto-sort into buckets.
 
 ## Blockers / needs from Christian
 
