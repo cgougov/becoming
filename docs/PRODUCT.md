@@ -23,6 +23,27 @@ user?" If not, it belongs to the social layer, later.
 This is also why UI and the feeling of using it matter as much as any feature: for a solo
 product, the experience *is* the retention.
 
+## Distinctly human and homey (Christian, 2026-11-12)
+
+As AI agents get better at remembering and tracking on their own, "an app that remembers
+things about you" stops being a differentiator. What won't commoditize is how it *feels*:
+Becoming should feel distinctly human and homey, a place rather than a feature. That is the
+bar for every design choice.
+
+Design direction agreed after two rounds of mockups:
+- **Modern, natural, a little sexy.** Curves over corners, movement over static, warmth over
+  minimalism. Simple like BeReal, fun like Duolingo, never as dense as Whoop. If it's boring,
+  it's wrong; if it's complex, it's wrong.
+- **Capture opens clean.** Just the box and what you kept. No greeting, no prompt, no agenda
+  on the first screen. Direction and encouragement come from the companion's presence and from
+  Look back, not from text at the top of Capture.
+- **The companion is ambient, not chatty.** It pops, moves, reacts. It does not open every
+  screen with a question. It speaks rarely, and when it does it matters.
+- **Yours** (collections as colored tiles) is right. Keep refining, don't rethink.
+- **Look back** leads with insights the app tracks automatically, through lenses the user chose
+  ("how does the gym affect my mood", "am I seeing people enough"). The reflection
+  conversation sits at the bottom, not the top.
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.
