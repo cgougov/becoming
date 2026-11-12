@@ -27,3 +27,14 @@ export function formatTimeInTimeZone(date: Date, timeZone: string): string {
 export function formatDayLabel(date: Date, timeZone: string): string {
   return new Intl.DateTimeFormat("en-US", { timeZone, weekday: "long", month: "long", day: "numeric" }).format(date);
 }
+
+/** Monday 00:00 in the user's timezone. */
+export function startOfWeekInTimeZone(now: Date, timeZone: string): Date {
+  const dayStart = startOfDayInTimeZone(now, timeZone);
+  const weekday = new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short" }).format(now);
+  const offset = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(weekday);
+  // Step back day by day (not 24h × n) so DST transitions inside the week don't shift midnight.
+  let d = dayStart;
+  for (let i = 0; i < offset; i++) d = startOfDayInTimeZone(new Date(d.getTime() - 1), timeZone);
+  return d;
+}

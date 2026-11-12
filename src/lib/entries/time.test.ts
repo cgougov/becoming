@@ -25,3 +25,25 @@ describe("formatTimeInTimeZone", () => {
     expect(formatTimeInTimeZone(new Date("2026-01-15T03:05:00Z"), "America/New_York")).toBe("10:05 PM");
   });
 });
+
+describe("startOfWeekInTimeZone", () => {
+  it("returns the Monday of the current week", async () => {
+    const { startOfWeekInTimeZone } = await import("./time");
+    // Thu 2026-11-12 16:25 UTC (11:25 EST)
+    const now = new Date("2026-11-12T16:25:00Z");
+    expect(startOfWeekInTimeZone(now, "America/New_York").toISOString()).toBe("2026-11-09T05:00:00.000Z");
+  });
+
+  it("is the same day on a Monday", async () => {
+    const { startOfWeekInTimeZone } = await import("./time");
+    const now = new Date("2026-11-09T23:00:00Z"); // Mon 18:00 EST
+    expect(startOfWeekInTimeZone(now, "America/New_York").toISOString()).toBe("2026-11-09T05:00:00.000Z");
+  });
+
+  it("handles a week containing the fall DST change", async () => {
+    const { startOfWeekInTimeZone } = await import("./time");
+    // Sun 2026-11-01 was the DST end in the US. Thu Nov 5 12:00 EST → Monday Nov 2 00:00 EST (05:00Z)
+    const now = new Date("2026-11-05T17:00:00Z");
+    expect(startOfWeekInTimeZone(now, "America/New_York").toISOString()).toBe("2026-11-02T05:00:00.000Z");
+  });
+});

@@ -69,3 +69,14 @@ compresses (canvas, ≤1600px, JPEG) and uploads directly to Supabase Storage wi
 session; storage RLS keys off the first path segment (`<user_id>/…`). The server action stores
 only the path and re-checks that segment. Gave up: HEIC conversion on desktop browsers (falls
 back to the original file; iPhone Safari hands over JPEG anyway).
+
+### 2026-11-12 — Three panes (Capture · You · Reflect), bottom bar primary, swipe secondary
+Christian's model: capture first, swipe to widgets, swipe again to insights. Claude pushed back
+on swipe as the *primary* navigation: iOS edge-swipe conflicts in a PWA, swipe vs. vertical
+scroll on long lists, no stable target for notification deep links, poor discoverability.
+Agreed: bottom bar is primary, swipe stays if it behaves. Mental model unchanged.
+
+### 2026-11-12 — Companion celebrates, never nags; prompts come after the moment
+Christian wants an animated companion bouncing between panes (Duolingo-style warmth).
+Guardrail from the no-guilt principle: it never droops or pressures; reminders are only the
+configured check-ins, and they catch up with you after the fact rather than interrupting.
