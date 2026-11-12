@@ -42,3 +42,12 @@ describe("buildInitialCollections", () => {
     expect(buildInitialCollections([], [])).toEqual([]);
   });
 });
+
+describe("dotColor", () => {
+  it("is stable per slug and grey for unsorted", async () => {
+    const { dotColor, DOT_COLORS } = await import("./collections");
+    expect(dotColor("lifts")).toBe(dotColor("lifts"));
+    expect(DOT_COLORS).toContain(dotColor("lifts"));
+    expect(dotColor(null)).toBe("#c8c8d0");
+  });
+});

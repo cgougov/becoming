@@ -8,7 +8,7 @@ import { EntryList, type EntryRow } from "../../capture/entry-list";
 
 export default function CollectionPage({ params }: PageProps<"/you/[slug]">) {
   return (
-    <Suspense fallback={<Pane title="…">{null}</Pane>}>
+    <Suspense fallback={<Pane big title="…">{null}</Pane>}>
       <CollectionBody params={params} />
     </Suspense>
   );
@@ -37,7 +37,7 @@ async function CollectionBody({ params }: Pick<PageProps<"/you/[slug]">, "params
   const { data } = await q;
 
   return (
-    <Pane title={collection.name} subtitle={collection.description ?? undefined}>
+    <Pane big title={collection.name} subtitle={collection.description ?? undefined}>
       <Link href="/you" className="-mt-4 text-sm opacity-60 underline-offset-2 hover:underline">
         ← You
       </Link>

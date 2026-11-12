@@ -29,7 +29,7 @@ export function LoginForm({ next }: { next: string }) {
           autoComplete="email"
           autoFocus
           required
-          className="rounded-xl border border-current/20 bg-transparent px-3 py-3 text-base outline-none focus:border-current/50"
+          className="h-12 rounded-full border-[1.5px] border-foreground/15 bg-surface px-4 text-base outline-none focus:border-foreground/50"
         />
       </label>
       {state.status === "error" && (
@@ -40,7 +40,7 @@ export function LoginForm({ next }: { next: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-xl bg-foreground px-4 py-3 font-medium text-background disabled:opacity-50"
+        className="h-12 rounded-full bg-accent font-bold text-foreground disabled:opacity-50"
       >
         {pending ? "Sending…" : "Send me a sign-in link"}
       </button>

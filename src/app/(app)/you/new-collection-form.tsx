@@ -18,9 +18,9 @@ export function NewCollectionForm() {
           name="name"
           maxLength={MAX_COLLECTION_NAME}
           placeholder="Keep track of something new…"
-          className="flex-1 rounded-xl border border-current/20 bg-transparent px-3 py-2 text-base outline-none placeholder:opacity-40 focus:border-current/50"
+          className="h-11 flex-1 rounded-full border-[1.5px] border-dashed border-foreground/20 bg-transparent px-4 text-[15px] outline-none placeholder:text-muted focus:border-foreground/50"
         />
-        <button type="submit" disabled={pending} className="rounded-xl border border-current/20 px-3 text-sm disabled:opacity-40">
+        <button type="submit" disabled={pending} className="h-11 rounded-full bg-foreground px-4 text-sm font-semibold text-background disabled:opacity-40">
           Add
         </button>
       </div>

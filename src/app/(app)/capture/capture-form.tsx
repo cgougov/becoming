@@ -1,10 +1,19 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import { KEPT_EVENT } from "@/components/companion";
 import { compressImage } from "@/lib/photos/compress";
 import { MAX_PHOTO_BYTES, photoObjectPath } from "@/lib/photos/path";
 import { createClient } from "@/lib/supabase/client";
 import { createEntry } from "./actions";
+
+function Icon({ d }: { d: React.ReactNode }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.9" aria-hidden>
+      {d}
+    </svg>
+  );
+}
 
 export function CaptureForm({ userId }: { userId: string }) {
   const [body, setBody] = useState("");
@@ -46,6 +55,7 @@ export function CaptureForm({ userId }: { userId: string }) {
       const result = await createEntry({ body, photoPath });
       if (!result.ok) return setError(result.message);
       reset();
+      window.dispatchEvent(new Event(KEPT_EVENT));
     });
   }
 
@@ -53,33 +63,37 @@ export function CaptureForm({ userId }: { userId: string }) {
 
   return (
     <form
-      className="flex flex-col gap-3 rounded-2xl border border-current/10 bg-current/[.03] p-3"
+      className="flex flex-col gap-4"
       onSubmit={(e) => {
         e.preventDefault();
         submit();
       }}
-      aria-label="Capture"
+      aria-label="Keep something"
     >
+      <label htmlFor="capture" className="sr-only">
+        What&apos;s on your mind
+      </label>
       <textarea
+        id="capture"
         value={body}
         onChange={(e) => setBody(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submit();
         }}
-        placeholder="Drop it in…"
-        rows={2}
+        placeholder="What's on your mind."
+        rows={3}
         enterKeyHint="done"
-        className="w-full resize-none bg-transparent px-1 py-1 text-base outline-none placeholder:opacity-40"
+        className="w-full resize-none bg-transparent text-[26px] font-medium leading-[1.25] tracking-[-0.02em] outline-none placeholder:text-foreground/30"
       />
 
       {preview && (
         <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={preview} alt="" className="max-h-56 w-full rounded-xl object-cover" />
+          <img src={preview} alt="" className="max-h-56 w-full rounded-card object-cover" />
           <button
             type="button"
             onClick={() => pickPhoto(null)}
-            className="absolute right-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white"
+            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-foreground/70 text-sm text-background"
             aria-label="Remove photo"
           >
             ✕
@@ -93,9 +107,17 @@ export function CaptureForm({ userId }: { userId: string }) {
         </p>
       )}
 
-      <div className="flex items-center justify-between">
-        <label className="cursor-pointer rounded-full px-3 py-1.5 text-sm opacity-70 hover:opacity-100">
-          📷 Photo
+      <div className="flex items-center gap-2">
+        <label className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-chip" aria-label="Add a photo">
+          <Icon
+            d={
+              <>
+                <rect x="3" y="6" width="18" height="14" rx="4" />
+                <circle cx="12" cy="13" r="3.5" />
+                <path d="M9 6l1.2-2h3.6L15 6" />
+              </>
+            }
+          />
           <input
             ref={fileInput}
             type="file"
@@ -107,9 +129,9 @@ export function CaptureForm({ userId }: { userId: string }) {
         <button
           type="submit"
           disabled={!canSave}
-          className="rounded-full bg-foreground px-4 py-1.5 text-sm font-medium text-background disabled:opacity-40"
+          className="ml-auto h-11 rounded-full bg-accent px-6 text-[15px] font-bold text-foreground transition-opacity disabled:opacity-40"
         >
-          {pending ? "Saving…" : "Save"}
+          {pending ? "Keeping…" : "Keep"}
         </button>
       </div>
     </form>

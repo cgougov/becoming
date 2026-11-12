@@ -1,8 +1,8 @@
 /** The three panes of the app, in swipe order. Pure so the bar and swipe logic can be tested. */
 export const PANES = [
-  { href: "/", label: "Capture" },
-  { href: "/you", label: "You" },
-  { href: "/reflect", label: "Reflect" },
+  { href: "/", label: "Keep" },
+  { href: "/you", label: "Yours" },
+  { href: "/reflect", label: "Look back" },
 ] as const;
 
 export type PaneHref = (typeof PANES)[number]["href"];
