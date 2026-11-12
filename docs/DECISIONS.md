@@ -80,3 +80,17 @@ Agreed: bottom bar is primary, swipe stays if it behaves. Mental model unchanged
 Christian wants an animated companion bouncing between panes (Duolingo-style warmth).
 Guardrail from the no-guilt principle: it never droops or pressures; reminders are only the
 configured check-ins, and they catch up with you after the fact rather than interrupting.
+
+### 2026-11-12 — Collections in the user's words, not fixed buckets (Christian)
+Christian: Goals/Taste/People felt imposed; the app should shape itself around the person and
+be a base for recommendations. Agreed: emergent collections with a first-open picker of
+suggestions (so no blank page), free-text additions any time, and partner-proposed collections
+once the API is wired. Renamed `buckets` → `collections` everywhere now, before auto-sort and
+recommendations build on the name (migration `20261112000000_collections.sql`; new users get no
+preset rows; `profiles.setup_completed_at` gates the first-open screen). Gave up: a guaranteed
+sort target for the AI; it will have to propose instead of assume.
+
+### 2026-11-12 — First-open is a screen, not a chat (for now)
+Talking to the partner to set things up is the goal, but it needs the API and prompt work.
+A picker with suggestions + free text gets the same data today with zero AI risk. The screen is
+the fallback even after chat exists.

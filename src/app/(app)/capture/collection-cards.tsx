@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
-interface BucketRow {
+interface CollectionRow {
   id: string;
   slug: string;
   name: string;
@@ -9,23 +9,23 @@ interface BucketRow {
   position: number;
 }
 
-/** One card per bucket with a count; tapping opens the bucket's scrapbook. */
-export async function BucketCards({ userId }: { userId: string }) {
+/** One card per collection with a count; tapping opens the collection's scrapbook. */
+export async function CollectionCards({ userId }: { userId: string }) {
   const supabase = await createClient();
-  const [{ data: buckets }, { data: counts }] = await Promise.all([
-    supabase.from("buckets").select("id, slug, name, description, position").eq("owner_id", userId).order("position"),
-    supabase.from("entries").select("bucket_id").eq("owner_id", userId),
+  const [{ data: collections }, { data: counts }] = await Promise.all([
+    supabase.from("collections").select("id, slug, name, description, position").eq("owner_id", userId).order("position"),
+    supabase.from("entries").select("collection_id").eq("owner_id", userId),
   ]);
 
   const tally = new Map<string | null, number>();
-  for (const row of (counts ?? []) as { bucket_id: string | null }[]) {
-    tally.set(row.bucket_id, (tally.get(row.bucket_id) ?? 0) + 1);
+  for (const row of (counts ?? []) as { collection_id: string | null }[]) {
+    tally.set(row.collection_id, (tally.get(row.collection_id) ?? 0) + 1);
   }
   const unsorted = tally.get(null) ?? 0;
 
   return (
-    <section className="grid gap-3" aria-label="Buckets">
-      {((buckets ?? []) as BucketRow[]).map((b) => (
+    <section className="grid gap-3" aria-label="Collections">
+      {((collections ?? []) as CollectionRow[]).map((b) => (
         <Link
           key={b.id}
           href={`/you/${b.slug}`}
@@ -40,7 +40,7 @@ export async function BucketCards({ userId }: { userId: string }) {
       ))}
       {unsorted > 0 && (
         <Link href="/you/unsorted" className="text-xs opacity-50 underline-offset-2 hover:underline">
-          {unsorted} unsorted · auto-sorting arrives in M3
+          {unsorted} not filed yet
         </Link>
       )}
     </section>

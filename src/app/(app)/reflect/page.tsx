@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { Pane } from "@/components/pane";
 import { startOfWeekInTimeZone } from "@/lib/entries/time";
-import { createClient, getUser } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/session";
+import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "../capture/entry-list";
 
 export default function ReflectPage() {
@@ -15,11 +16,11 @@ export default function ReflectPage() {
 }
 
 async function WeekSoFar() {
-  const user = await getUser();
-  if (!user) return null;
+  const session = await requireUser();
+  if (!session) return null;
+  const { user, timeZone } = session;
   const supabase = await createClient();
-  const { data: profile } = await supabase.from("profiles").select("timezone, created_at").eq("id", user.id).maybeSingle();
-  const timeZone = profile?.timezone ?? "America/New_York";
+  const { data: profile } = await supabase.from("profiles").select("created_at").eq("id", user.id).maybeSingle();
   const now = new Date();
   const weekStart = startOfWeekInTimeZone(now, timeZone);
 

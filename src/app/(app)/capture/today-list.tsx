@@ -7,7 +7,7 @@ export async function TodayList({ userId, timeZone }: { userId: string; timeZone
   const now = new Date();
   const { data } = await supabase
     .from("entries")
-    .select("id, body, photo_path, captured_at, bucket_id")
+    .select("id, body, photo_path, captured_at, collection_id")
     .eq("owner_id", userId)
     .gte("captured_at", startOfDayInTimeZone(now, timeZone).toISOString())
     .order("captured_at", { ascending: false });

@@ -38,17 +38,25 @@ for an audience. v1 is the personal partner only, built for one user (Christian)
 
 ## v1 core loop
 
-1. **Drop it in.** Text and/or photo from the home screen in seconds. Voice = keyboard dictation.
-2. **Auto-sort.** AI files each item into a starter bucket; one tap to move it.
-   - **Goals**: gym, work, projects, things you're working toward
-   - **Taste**: culture and art that moves you (movies, art, photos, outfits, quotes, food)
-   - **People**: your own relationships. Staying in touch, who you're closest to, how to
-     nurture relationships. (Personal only, no sharing in v1.)
-   Buckets can be renamed and added.
+1. **Drop it in.** Text and/or photo from the home screen in seconds. Voice = keyboard dictation
+   for now; a real voice/talk-to-it mode is a later version (Christian, 2026-11-12).
+2. **Collections, in your words.** (Decided 2026-11-12, replacing fixed Goals/Taste/People.)
+   - **First open:** the partner asks one thing, "what do you want to keep track of?", and
+     shows ~12 suggestions to tap into (lifts, places I ate, reading, people, ideas, outfits,
+     quotes, art, work, places, small wins, questions) plus a box for your own. Starting with
+     nothing is allowed. Nothing is permanent: rename, add, drop later.
+   - **Any time:** "keep track of something new" on the You pane. Later: say it to the partner.
+   - **Emergent (later, needs the API):** the partner proposes a collection when it notices a
+     pattern ("you've logged four restaurants, want a place for them?"), and auto-files new
+     captures into your collections with one tap to move. Collections are also the base for
+     recommendations: it can only suggest ramen on Thursday if ramen is something you track.
+   - Each collection records its `origin` (suggested / user / partner) so we can learn which
+     ones actually get used.
 3. **Three panes, bottom bar.** Decided 2026-11-12 with Christian:
    - **Capture** (landing): the box, with today's log underneath so a save is visibly real.
-   - **You** (widgets): a Today widget plus one card per bucket. Cards are summaries; tapping
-     one opens that bucket as a scrollable scrapbook. Check-ins join later.
+   - **You** (widgets): a Today widget plus one card per collection. Cards are summaries;
+     tapping one opens that collection as a scrollable scrapbook. Check-ins join later.
+   - Pane names are placeholders; Christian wants softer words. Decided in the design pass.
    - **Reflect**: "this week so far" (counts, a few recent photos, one line from the partner)
      until reflection unlocks after ~7 days; then reflections and insights live here.
    A bottom bar is the primary navigation (reliable on iOS, deep-linkable from notifications);
@@ -83,7 +91,7 @@ Trust/privacy basics are kept (RLS, private storage, export in M6) but aren't th
 - **M0** Repo scaffold, CI, docs
 - **M1** Supabase schema + migrations + RLS, magic-link login, deploy to Vercel, install on phone
 - **M2** Quick capture (text + photo), saved for real. Christian starts logging.
-- **M3** Design pass (widget home, Today, avatar), then build; AI auto-sort into buckets
+- **M3** Shell (three panes) → collections in your words → design pass (look, companion) → AI auto-sort
 - **M4** Check-ins: web push, random-time scheduler (Supabase pg_cron), quick reply
 - **M5** Reflection + next step/insight + keeping pace with goals
 - **M6** Polish, data export, prompt tuning from real use

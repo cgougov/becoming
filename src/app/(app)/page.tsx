@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { createClient, getUser } from "@/lib/supabase/server";
+import { requireUser } from "@/lib/session";
 import { CaptureForm } from "./capture/capture-form";
 import { TodayList } from "./capture/today-list";
 import { HomeView } from "./home-view";
@@ -13,11 +13,9 @@ export default function CapturePage() {
 }
 
 async function SignedInCapture() {
-  const user = await getUser();
-  if (!user) return <HomeView />;
-  const supabase = await createClient();
-  const { data: profile } = await supabase.from("profiles").select("timezone").eq("id", user.id).maybeSingle();
-  const timeZone = profile?.timezone ?? "America/New_York";
+  const session = await requireUser();
+  if (!session) return <HomeView />;
+  const { user, timeZone } = session;
 
   return (
     <HomeView
