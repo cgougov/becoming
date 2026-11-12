@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { adjacentPane, classifySwipe, paneIndexForPath } from "./panes";
 
 describe("paneIndexForPath", () => {
-  it("maps paths to panes, including nested bucket pages", () => {
+  it("maps paths to panes, including nested collection pages", () => {
     expect(paneIndexForPath("/")).toBe(0);
     expect(paneIndexForPath("/you")).toBe(1);
     expect(paneIndexForPath("/you/goals")).toBe(1);

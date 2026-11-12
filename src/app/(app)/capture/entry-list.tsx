@@ -7,7 +7,7 @@ export interface EntryRow {
   body: string | null;
   photo_path: string | null;
   captured_at: string;
-  bucket_id: string | null;
+  collection_id: string | null;
 }
 
 export async function signedPhotoUrls(paths: string[]): Promise<Map<string, string>> {

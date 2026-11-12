@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 2026-11-12 (M3 shell)_
+_Last updated: 2026-11-12 (M3 collections)_
 
 ## Done
 
@@ -71,12 +71,25 @@ Decided with Christian 2026-11-12 (see PRODUCT.md "Three panes" and DECISIONS):
   and an openly-AI note on when reflection unlocks.
 - Cache Components: anything reading `cookies()`, `params` or `usePathname()` sits in `<Suspense>`.
 
+## M3 step 2 — collections in your words ✅ (PR #7, stacked on #6)
+
+- Migration renames `buckets` → `collections`, adds `origin` (suggested/user/partner) and
+  `profiles.setup_completed_at`; new users no longer get preset collections.
+  **Christian must run `npx supabase db push --remote` after pulling.** His existing three
+  rows survive; he'll be sent through `/start` once (duplicates are ignored).
+- `/start`: "What do you want to keep track of?" with 12 tappable suggestions + free text;
+  "start with nothing" allowed. `requireUser()` in `src/lib/session.ts` gates every pane.
+- You pane: "Keep track of something new…" input. Unsorted link reads "not filed yet".
+- Pure logic in `src/lib/collections.ts` with tests (slugify, name rules, initial rows).
+
 ## Next
 
-1. **Christian tries the shell locally** and decides whether swipe stays.
-2. **M3 step 2 — design pass.** Typography, color, spacing, the companion's look. This is
+1. **Christian tries #6 + #7 locally** (pull, `db push --remote`, `npm run dev`), decides
+   whether swipe stays, and tells us the words he'd use for the panes.
+2. **M3 step 3 — design pass.** Typography, color, spacing, the companion's look. This is
    where UI quality gets decided; do it as a conversation, with mockups, before code.
-3. **M3 step 3 — AI auto-sort** into buckets (first Claude API use; needs the key).
+3. **M3 step 4 — the partner, first contact:** auto-file captures into collections and propose
+   new ones (first Claude API use; needs the key). Then talk-to-it setup.
 4. Deploy (Vercel + redirect URLs + Home Screen install) once the shell feels right.
 
 ### Earlier notes

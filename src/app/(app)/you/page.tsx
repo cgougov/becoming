@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { Pane } from "@/components/pane";
-import { createClient, getUser } from "@/lib/supabase/server";
-import { BucketCards } from "../capture/bucket-cards";
+import { requireUser } from "@/lib/session";
+import { CollectionCards } from "../capture/collection-cards";
+import { NewCollectionForm } from "./new-collection-form";
 import { TodayWidget } from "./today-widget";
 
 export default function YouPage() {
@@ -15,15 +16,14 @@ export default function YouPage() {
 }
 
 async function Widgets() {
-  const user = await getUser();
-  if (!user) return null;
-  const supabase = await createClient();
-  const { data: profile } = await supabase.from("profiles").select("timezone").eq("id", user.id).maybeSingle();
-  const timeZone = profile?.timezone ?? "America/New_York";
+  const session = await requireUser();
+  if (!session) return null;
+  const { user, timeZone } = session;
   return (
     <>
       <TodayWidget userId={user.id} timeZone={timeZone} />
-      <BucketCards userId={user.id} />
+      <CollectionCards userId={user.id} />
+      <NewCollectionForm />
       <form action="/auth/signout" method="post" className="mt-auto flex items-center justify-between text-sm opacity-60">
         <span>{user.email}</span>
         <button type="submit" className="underline">
