@@ -1,7 +1,7 @@
 # Becoming — working rules for Claude
 
 Becoming is a phone-first web app (installable PWA): **a running partner for your life**.
-You capture things in seconds (text, photos), it sorts them into buckets (Goals, Taste, People),
+You capture things in seconds (text, photos), it files them into collections you named yourself,
 checks in with you at random moments, and after a week of logging helps you reflect and choose
 a small next step. Single user (Christian) for v1. The social layer comes later.
 
