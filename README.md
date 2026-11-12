@@ -24,7 +24,7 @@ Schema lives in `supabase/migrations/` and is applied with the Supabase CLI; nev
 ```bash
 npx supabase login
 npx supabase link --project-ref <project-ref>
-npx supabase db push
+npx supabase db push --remote   # --remote targets the linked project, not local Docker
 ```
 
 ## Install on iPhone

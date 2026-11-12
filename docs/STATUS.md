@@ -33,7 +33,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_EC4q6STXYgve31zaRk1G_w_u2XdEX8_
 The Supabase API is not reachable from Claude Code cloud sessions, so `db push` runs on Christian's Mac.
 
 Remaining:
-1. On the Mac, from the repo: `npx supabase login && npx supabase link --project-ref rwajpzussyvjgezvwkly && npx supabase db push`
+1. On the Mac, from the repo: `npx supabase login && npx supabase link --project-ref rwajpzussyvjgezvwkly && npx supabase db push --remote`
    to apply the migration (never edit the schema by hand).
 2. Dashboard → Authentication → URL Configuration: add `http://localhost:3000/**` and, once
    Vercel exists, `https://<app>.vercel.app/**` to redirect URLs; set Site URL to the Vercel URL.
