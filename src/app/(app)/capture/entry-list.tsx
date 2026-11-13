@@ -1,7 +1,7 @@
 import { dotColor } from "@/lib/collections";
 import { formatTimeInTimeZone } from "@/lib/entries/time";
 import { createClient } from "@/lib/supabase/server";
-import { DeleteEntryButton } from "./delete-entry-button";
+import { EntryLine } from "./entry-line";
 
 export interface EntryRow {
   id: string;
@@ -21,7 +21,7 @@ export async function signedPhotoUrls(paths: string[]): Promise<Map<string, stri
   );
 }
 
-/** Kept things as quiet white cards: photo as a rounded thumb, a dot for the collection. */
+/** Kept things as lines on a page: editable in place, a dot + filing status, a time. */
 export async function EntryList({
   entries,
   timeZone,
@@ -37,31 +37,22 @@ export async function EntryList({
   if (entries.length === 0) return <p className="text-sm text-muted">{empty}</p>;
 
   return (
-    <ul className="flex flex-col gap-2.5">
+    <ul className="flex flex-col divide-y divide-foreground/[0.06]">
       {entries.map((e) => {
-        const url = e.photo_path ? urlFor.get(e.photo_path) : undefined;
         const at = new Date(e.captured_at);
         const stamp = showDate
           ? new Intl.DateTimeFormat("en-US", { timeZone, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(at)
           : formatTimeInTimeZone(at, timeZone);
-        const slug = e.collection?.slug ?? null;
         return (
-          <li key={e.id} className="group flex items-center gap-3 rounded-card bg-surface p-3 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-            {url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={url} alt="" className="h-[72px] w-[72px] flex-none rounded-2xl object-cover" loading="lazy" />
-            )}
-            <div className="flex min-w-0 flex-1 flex-col gap-1">
-              {e.body && <p className="whitespace-pre-wrap text-[15px] font-medium leading-[1.35]">{e.body}</p>}
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-muted">
-                <span className="h-[7px] w-[7px] rounded-full" style={{ background: dotColor(slug) }} />
-                <span>{e.collection?.name ? `${e.collection.name} · ` : ""}{stamp}</span>
-                <span className="ml-auto">
-                  <DeleteEntryButton id={e.id} />
-                </span>
-              </div>
-            </div>
-          </li>
+          <EntryLine
+            key={e.id}
+            id={e.id}
+            body={e.body}
+            photoUrl={e.photo_path ? urlFor.get(e.photo_path) : undefined}
+            stamp={stamp}
+            dot={dotColor(e.collection?.slug ?? null)}
+            status={e.collection?.name ?? "Filing tonight"}
+          />
         );
       })}
     </ul>

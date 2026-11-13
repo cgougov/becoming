@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { BottomBar } from "@/components/bottom-bar";
-import { Companion } from "@/components/companion";
+import { CompanionMount } from "@/components/companion-mount";
 import { SwipePanes } from "@/components/swipe-panes";
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
@@ -10,7 +10,9 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
       <Suspense fallback={<div className="flex min-h-full flex-1 flex-col">{children}</div>}>
         <SwipePanes>{children}</SwipePanes>
       </Suspense>
-      <Companion />
+      <Suspense fallback={null}>
+        <CompanionMount />
+      </Suspense>
       <Suspense>
         <BottomBar />
       </Suspense>

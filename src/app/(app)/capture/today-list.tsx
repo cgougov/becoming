@@ -26,10 +26,7 @@ export async function TodayList({ userId, timeZone }: { userId: string; timeZone
 
   return (
     <section className="flex flex-col gap-3" aria-label="Kept today">
-      <div className="flex items-baseline justify-between text-[13px] font-semibold text-muted">
-        <h2>Kept today</h2>
-        <span>{entries.length || ""}</span>
-      </div>
+      <h2 className="text-[13px] font-semibold text-muted">Today</h2>
       {error ? (
         <p className="text-sm text-red-600" role="alert">
           Couldn&apos;t load today ({error.message}).

@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 2026-11-12 (M3 design: Keep)_
+_Last updated: 2026-11-13 (M3 rhythm)_
 
 ## Done
 
@@ -98,7 +98,36 @@ PRODUCT.md. Built:
   restyled to match.
 - `dotColor(slug)` is a stable hash until collections get a `color` column.
 
+## M3 step 4 — rhythm: intention, week dots, companion moods, glass bar ✅ (PR #11, on #10)
+
+PRODUCT.md "Intentionality" items 2, 3, 4:
+- **Morning intention** (`intentions` table, migration `20261113000000`): on Keep, a one-line
+  input between 05:00 and 11:00 local; once set it's pinned all day with a check and a clear.
+  Shows in the Today chip on Yours too. Rules in `src/lib/intention.ts` (tested).
+  **Christian: `npx supabase db push --remote` after pulling.**
+- **Week dots** on Yours: Mon–Sun, filled on days you kept something, today ringed, no counter.
+- **Companion moods** (`src/lib/companion.ts`): `fresh` (never kept: says "hi." once),
+  `curious` (3+ quiet days: quicker bob, wider eyes, says nothing), `idle`. Read server-side
+  in `CompanionMount`.
+- **Glass bar**: translucent, blurred, saturated. First try at the "glass" note.
+- `docs/PRODUCT.md`: identity + references section; "the partner gives"; BEHAVIOR.md planned.
+
+## M3 step 5 — today's page: edit in place ✅ (PR #12, on #11)
+
+- Kept things render as lines on a page (dividers, no cards). Tap text to edit in place;
+  blur/⌘↩ saves, Esc cancels; emptying a text-only line removes it; photos get captions.
+  `updateEntryBody` action. Status reads the collection name or "Filing tonight".
+- "Not filed yet" is gone everywhere; `/you/unsorted` is titled "Filing tonight".
+- PRODUCT.md: "Notes-app feel, item structure".
+
 ## Next
+
+1. `docs/BEHAVIOR.md`: evidence-backed principles mapped to the app (Claude drafts, Christian reviews).
+2. Deploy + Home Screen install, then **the daily moment** (M4 web push + pg_cron).
+3. **Partner, first contact** (Anthropic key): auto-file, propose collections, lenses, "the partner gives".
+4. Companion character pass.
+
+### Earlier
 
 1. **Christian uses it for a few days.** Then: companion character pass (circle, cute, simple),
    and the lenses concept for Look back (needs the API).

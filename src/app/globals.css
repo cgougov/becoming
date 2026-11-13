@@ -52,10 +52,11 @@ body {
   75% { transform: rotate(8deg) scale(1.06); }
 }
 .anim-bob { animation: bob 3.2s ease-in-out infinite; }
+.anim-bob-quick { animation: bob 1.6s ease-in-out infinite; }
 .anim-blink { transform-origin: center; animation: blink 4.5s infinite; }
 .anim-pop { animation: pop 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
 .anim-rise { animation: rise 0.35s ease-out; }
 .anim-wiggle { animation: wiggle 0.5s ease-in-out; }
 @media (prefers-reduced-motion: reduce) {
-  .anim-bob, .anim-blink, .anim-pop, .anim-rise, .anim-wiggle { animation: none; }
+  .anim-bob, .anim-bob-quick, .anim-blink, .anim-pop, .anim-rise, .anim-wiggle { animation: none; }
 }
