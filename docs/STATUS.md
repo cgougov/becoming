@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 2026-11-13 (M3 rhythm)_
+_Last updated: 2026-11-13 (M3 craft)_
 
 ## Done
 
@@ -120,9 +120,21 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
 - "Not filed yet" is gone everywhere; `/you/unsorted` is titled "Filing tonight".
 - PRODUCT.md: "Notes-app feel, item structure".
 
+## M3 step 6 — craft pass (Claude's design turn) ✅ (PR #14)
+
+- Palette: pure white / near-black; dark follows the phone (`prefers-color-scheme`); the
+  companion is the one accent; the Keep button is ink, not accent.
+- Photos full-bleed on Keep (edge to edge, up to 70vh); collection tiles get a cover from their
+  latest photo with a dark gradient for the name.
+- Pressed states on everything tappable; panes animate in; tap highlight removed.
+- Subtraction: week dots moved to Look back; the intention line collapses to
+  "+ one thing for today" until tapped; bigger capture type.
+- Days close: only today's lines are editable (annotations come with the partner).
+
 ## Next
 
-1. `docs/BEHAVIOR.md`: evidence-backed principles mapped to the app (Claude drafts, Christian reviews).
+1. **Deploy** (Christian: Vercel import + env vars; Supabase redirect URLs) → iPhone Home Screen.
+2. `docs/BEHAVIOR.md`: evidence-backed principles mapped to the app (Claude drafts, Christian reviews).
 2. Deploy + Home Screen install, then **the daily moment** (M4 web push + pg_cron).
 3. **Partner, first contact** (Anthropic key): auto-file, propose collections, lenses, "the partner gives".
 4. Companion character pass.

@@ -4,7 +4,6 @@ import { requireUser } from "@/lib/session";
 import { CollectionCards } from "../capture/collection-cards";
 import { NewCollectionForm } from "./new-collection-form";
 import { TodayWidget } from "./today-widget";
-import { WeekDots } from "./week-dots";
 
 export default function YouPage() {
   return (
@@ -22,7 +21,6 @@ async function Widgets() {
   const { user, timeZone } = session;
   return (
     <>
-      <WeekDots userId={user.id} timeZone={timeZone} />
       <TodayWidget userId={user.id} timeZone={timeZone} />
       <CollectionCards userId={user.id} />
       <NewCollectionForm />

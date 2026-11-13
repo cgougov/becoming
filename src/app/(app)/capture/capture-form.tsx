@@ -83,13 +83,13 @@ export function CaptureForm({ userId }: { userId: string }) {
         placeholder="What's on your mind."
         rows={3}
         enterKeyHint="done"
-        className="w-full resize-none bg-transparent text-[26px] font-medium leading-[1.25] tracking-[-0.02em] outline-none placeholder:text-foreground/30"
+        className="w-full resize-none bg-transparent text-[28px] font-semibold leading-[1.2] tracking-[-0.025em] outline-none placeholder:text-foreground/30"
       />
 
       {preview && (
         <div className="relative">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={preview} alt="" className="max-h-56 w-full rounded-card object-cover" />
+          <img src={preview} alt="" className="-mx-6 max-h-[60vh] w-[calc(100%+3rem)] max-w-none object-cover" />
           <button
             type="button"
             onClick={() => pickPhoto(null)}
@@ -129,7 +129,7 @@ export function CaptureForm({ userId }: { userId: string }) {
         <button
           type="submit"
           disabled={!canSave}
-          className="ml-auto h-11 rounded-full bg-accent px-6 text-[15px] font-bold text-foreground transition-opacity disabled:opacity-40"
+          className="ml-auto h-12 rounded-full bg-foreground px-7 text-[15px] font-bold text-background disabled:opacity-30"
         >
           {pending ? "Keeping…" : "Keep"}
         </button>

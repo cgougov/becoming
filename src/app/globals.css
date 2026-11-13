@@ -1,14 +1,24 @@
 @import "tailwindcss";
 @import "@fontsource-variable/plus-jakarta-sans";
 
-/* Round-4 language (docs/PRODUCT.md): warm white, charcoal, one accent. Dark follows the phone later. */
+/* Craft pass (docs/PRODUCT.md "Honest evaluation"): pure white / near-black, photos are the
+   color, the companion is the one accent. Dark follows the phone. */
 :root {
-  --background: #fbfaf7;
-  --foreground: #17171c;
-  --muted: #8a8a94;
+  --background: #ffffff;
+  --foreground: #0f0f12;
+  --muted: #8e8e96;
   --surface: #ffffff;
-  --chip: #f0efeb;
-  --accent: #ff7a59;
+  --chip: #f3f3f5;
+  --accent: #ff6a3d;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000000;
+    --foreground: #f4f4f5;
+    --muted: #8e8e96;
+    --surface: #121214;
+    --chip: #1a1a1d;
+  }
 }
 
 @theme inline {
@@ -26,7 +36,17 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
 }
+/* Everything tappable feels physical. */
+button, a, label { transition: transform 120ms ease, opacity 120ms ease; }
+button:active, a:active, label:active { transform: scale(0.97); }
+@keyframes pane-in {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.anim-pane { animation: pane-in 220ms ease-out; }
 
 /* Companion motion. Respect reduced motion. */
 @keyframes bob {
@@ -58,5 +78,6 @@ body {
 .anim-rise { animation: rise 0.35s ease-out; }
 .anim-wiggle { animation: wiggle 0.5s ease-in-out; }
 @media (prefers-reduced-motion: reduce) {
-  .anim-bob, .anim-bob-quick, .anim-blink, .anim-pop, .anim-rise, .anim-wiggle { animation: none; }
+  .anim-bob, .anim-bob-quick, .anim-blink, .anim-pop, .anim-rise, .anim-wiggle, .anim-pane { animation: none; }
+  button, a, label { transition: none; }
 }

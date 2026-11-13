@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useTransition } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { MAX_INTENTION } from "@/lib/intention";
 import { clearIntention, setIntention, toggleIntentionDone, type IntentionState } from "./actions";
 
@@ -17,6 +17,7 @@ export interface Intention {
 export function IntentionLine({ intention }: { intention: Intention | null }) {
   const [state, action, pending] = useActionState<IntentionState, FormData>(setIntention, { status: "idle" });
   const [busy, start] = useTransition();
+  const [open, setOpen] = useState(false);
 
   if (intention) {
     const done = !!intention.done_at;
@@ -48,6 +49,18 @@ export function IntentionLine({ intention }: { intention: Intention | null }) {
     );
   }
 
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="self-start rounded-full bg-chip px-3.5 py-2 text-[13px] font-semibold text-muted"
+      >
+        + one thing for today
+      </button>
+    );
+  }
+
   return (
     <form action={action} className="flex items-center gap-2">
       <label htmlFor="intention" className="sr-only">
@@ -59,6 +72,7 @@ export function IntentionLine({ intention }: { intention: Intention | null }) {
         maxLength={MAX_INTENTION}
         placeholder="One thing for today?"
         autoComplete="off"
+        autoFocus
         className="h-10 min-w-0 flex-1 rounded-full bg-chip px-4 text-[15px] font-medium outline-none placeholder:text-muted focus:ring-2 focus:ring-accent/60"
       />
       <button

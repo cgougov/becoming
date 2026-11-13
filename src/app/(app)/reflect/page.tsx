@@ -4,10 +4,11 @@ import { startOfWeekInTimeZone } from "@/lib/entries/time";
 import { requireUser } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "../capture/entry-list";
+import { WeekDots } from "../you/week-dots";
 
 export default function ReflectPage() {
   return (
-    <Pane big title="Look back" aside="This week">
+    <Pane big title="Look back" aside="Last 7 days">
       <Suspense fallback={<p className="text-sm opacity-50">Loading…</p>}>
         <WeekSoFar />
       </Suspense>
@@ -41,8 +42,9 @@ async function WeekSoFar() {
 
   return (
     <>
+      <WeekDots userId={user.id} timeZone={timeZone} />
       <section className="grid grid-cols-3 gap-2" aria-label="This week">
-        <Stat label="captures" value={entries.length} />
+        <Stat label="kept" value={entries.length} />
         <Stat label="photos" value={entries.filter((e) => e.photo_path).length} />
         <Stat label={days === 1 ? "day" : "days"} value={days} />
       </section>
