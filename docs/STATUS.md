@@ -112,6 +112,14 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
 - **Glass bar**: translucent, blurred, saturated. First try at the "glass" note.
 - `docs/PRODUCT.md`: identity + references section; "the partner gives"; BEHAVIOR.md planned.
 
+## M3 step 5 — today's page: edit in place ✅ (PR #12, on #11)
+
+- Kept things render as lines on a page (dividers, no cards). Tap text to edit in place;
+  blur/⌘↩ saves, Esc cancels; emptying a text-only line removes it; photos get captions.
+  `updateEntryBody` action. Status reads the collection name or "Filing tonight".
+- "Not filed yet" is gone everywhere; `/you/unsorted` is titled "Filing tonight".
+- PRODUCT.md: "Notes-app feel, item structure".
+
 ## Next
 
 1. `docs/BEHAVIOR.md`: evidence-backed principles mapped to the app (Claude drafts, Christian reviews).

@@ -5,6 +5,7 @@ import { Pane } from "@/components/pane";
 import { requireUser } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { EntryList, type EntryRow } from "../../capture/entry-list";
+import { withCollections } from "../../capture/today-list";
 
 export default function CollectionPage({ params }: PageProps<"/you/[slug]">) {
   return (
@@ -23,7 +24,7 @@ async function CollectionBody({ params }: Pick<PageProps<"/you/[slug]">, "params
 
   const { data: collection } =
     slug === "unsorted"
-      ? { data: { id: null, name: "Unsorted", description: "Captures that haven't found a collection yet." } }
+      ? { data: { id: null, name: "Filing tonight", description: "Things the partner will file at the end of the day. Tap any to edit." } }
       : await supabase.from("collections").select("id, name, description").eq("owner_id", user.id).eq("slug", slug).maybeSingle();
   if (!collection) notFound();
 
@@ -41,7 +42,7 @@ async function CollectionBody({ params }: Pick<PageProps<"/you/[slug]">, "params
       <Link href="/you" className="-mt-4 text-sm opacity-60 underline-offset-2 hover:underline">
         ← You
       </Link>
-      <EntryList entries={(data ?? []) as EntryRow[]} timeZone={timeZone} showDate />
+      <EntryList entries={await withCollections(user.id, (data ?? []) as EntryRow[])} timeZone={timeZone} showDate />
     </Pane>
   );
 }

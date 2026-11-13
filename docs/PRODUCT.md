@@ -100,6 +100,15 @@ not a blob; its character gets its own pass later.
 - **Behavioral principles** get their own doc (`docs/BEHAVIOR.md`): only what has evidence,
   with sources, each mapped to where it shows up in the app.
 
+## Notes-app feel, item structure (Christian, 2026-11-13)
+
+Why here instead of Notes: this is your notes app, plus sorting, plus (later) social.
+Nothing is locked: tap any kept thing to edit in place, add to it, delete it, move it. Keep
+reads as today's page (lines, not cards). Underneath, each thing keeps its time and, once
+filed, a collection; that is the only structure and it stays invisible until Look back or Yours
+needs it. Filing is a suggestion you can change with a tap, never a lock. End of day, the
+partner files what it can and leaves the rest with a one-tap chooser ("Filing tonight").
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.
