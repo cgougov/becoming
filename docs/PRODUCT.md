@@ -64,6 +64,34 @@ later), monochrome base, color only from the user's photos and one accent on the
 active states, collections marked by a small dot not a tinted tile. The companion is a **circle**,
 not a blob; its character gets its own pass later.
 
+## Identity and references (Christian + Claude, 2026-11-12 evening)
+
+- **Moat = habit + consented data + (later) network.** The human aspect earns the habit; it is
+  not the moat on its own. Everything the model does is delivered through the companion, so the
+  intelligence reads as a character, not a feature. Success test: "the little guy who checks
+  in on me", not "an AI journal".
+- **Intentionality, in order:** (1) a daily moment, BeReal-style, at a random time in the
+  user's window; (2) a morning intention line on Keep, mornings only; (3) the companion reacts
+  to your rhythm (arrival after quiet days = curious, never sad); (4) a week of seven soft dots
+  on Yours, no counter; (5) curiosity about yourself from Look back. Never streaks.
+- **Kawaii companion, hopecore voice.** Round, big eyes, soft, a little clumsy; copy is
+  earnest and warm, "it's going to be okay", never ironic. This is the register for every
+  word the app says.
+- **Pinterest, gleaned:** keeping is an act of taste; collections get cover images from the
+  user's photos; Yours should look like boards you're proud of; never a blank state. Not
+  gleaned: the infinite feed. Our engagement is recognition, not discovery.
+- **A student's week:** capture in the gaps (between classes, gym, meals, 1 a.m.), under ten
+  seconds including unlock; camera-roll photo one tap; dictation works. Weekday = feed it,
+  weekend = it feeds you.
+- **Positive reinforcement, only what's supported:** immediate feedback (companion reaction),
+  variable rewards (reactions vary), implementation intentions (morning line), spaced
+  reflection (weekly Look back), self-affirmation (Yours). No overclaiming.
+- **How We Feel, gleaned:** one-tap, one-word check-ins and emotional granularity work. Ours is
+  an *optional* one-tap feeling after a keep (four soft colors, vanishes if ignored) that gives
+  lenses a mood signal. Never required, never during.
+- **Glass:** translucent layered surfaces over photos; try the bar first. It should feel
+  current and cool to be on.
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.
