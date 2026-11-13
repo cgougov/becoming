@@ -3,6 +3,7 @@ import { requireUser } from "@/lib/session";
 import { CaptureForm } from "./capture/capture-form";
 import { TodayList } from "./capture/today-list";
 import { HomeView } from "./home-view";
+import { TodayIntention } from "./intention/today-intention";
 
 export default function CapturePage() {
   return (
@@ -21,6 +22,11 @@ async function SignedInCapture() {
   return (
     <HomeView
       day={day}
+      intention={
+        <Suspense>
+          <TodayIntention userId={user.id} timeZone={timeZone} />
+        </Suspense>
+      }
       capture={<CaptureForm userId={user.id} />}
       today={
         <Suspense fallback={<p className="text-sm text-muted">Loading today…</p>}>

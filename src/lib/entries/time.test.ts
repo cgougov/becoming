@@ -47,3 +47,29 @@ describe("startOfWeekInTimeZone", () => {
     expect(startOfWeekInTimeZone(now, "America/New_York").toISOString()).toBe("2026-11-02T05:00:00.000Z");
   });
 });
+
+describe("localDay / localHour / weekDays", () => {
+  it("gives the local date and hour in New York", async () => {
+    const { localDay, localHour } = await import("./time");
+    const now = new Date("2026-11-13T03:30:00Z"); // Nov 12, 22:30 EST
+    expect(localDay(now, "America/New_York")).toBe("2026-11-12");
+    expect(localHour(now, "America/New_York")).toBe(22);
+  });
+
+  it("lists Monday through Sunday of the current week", async () => {
+    const { weekDays } = await import("./time");
+    const now = new Date("2026-11-13T17:00:00Z"); // Fri Nov 13
+    expect(weekDays(now, "America/New_York")).toEqual([
+      "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15",
+    ]);
+  });
+
+  it("is DST-safe across the fall change", async () => {
+    const { weekDays } = await import("./time");
+    const now = new Date("2026-10-30T12:00:00Z"); // Fri Oct 30; DST ends Sun Nov 1
+    const days = weekDays(now, "America/New_York");
+    expect(days[0]).toBe("2026-10-26");
+    expect(days[6]).toBe("2026-11-01");
+    expect(new Set(days).size).toBe(7);
+  });
+});

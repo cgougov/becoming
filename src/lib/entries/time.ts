@@ -38,3 +38,26 @@ export function startOfWeekInTimeZone(now: Date, timeZone: string): Date {
   for (let i = 0; i < offset; i++) d = startOfDayInTimeZone(new Date(d.getTime() - 1), timeZone);
   return d;
 }
+
+/** The user's local calendar day as YYYY-MM-DD (matches a Postgres `date`). */
+export function localDay(now: Date, timeZone: string): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+}
+
+/** Hour of day (0–23) in the user's timezone. */
+export function localHour(now: Date, timeZone: string): number {
+  return Number(new Intl.DateTimeFormat("en-US", { timeZone, hour: "2-digit", hourCycle: "h23" }).format(now));
+}
+
+/** The seven local days of the current week (Mon–Sun) as YYYY-MM-DD, for the rhythm dots. */
+export function weekDays(now: Date, timeZone: string): string[] {
+  const start = startOfWeekInTimeZone(now, timeZone);
+  const days: string[] = [];
+  let d = start;
+  for (let i = 0; i < 7; i++) {
+    days.push(localDay(d, timeZone));
+    // Jump into the next local day safely (26h) then snap to its midnight.
+    d = startOfDayInTimeZone(new Date(d.getTime() + 26 * 3600_000), timeZone);
+  }
+  return days;
+}

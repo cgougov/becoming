@@ -40,3 +40,17 @@ export async function deleteEntry(id: string): Promise<CaptureResult> {
   revalidatePath("/");
   return { ok: true };
 }
+
+/** Edit a kept thing in place. Nothing is locked. */
+export async function updateEntryBody(id: string, body: string): Promise<CaptureResult> {
+  const text = body.trim() || null;
+  const supabase = await createClient();
+  const { data: entry } = await supabase.from("entries").select("photo_path").eq("id", id).maybeSingle();
+  if (!entry) return { ok: false, message: "That one's gone." };
+  if (!text && !entry.photo_path) return deleteEntry(id); // emptied a text-only item: it's a delete
+  const { error } = await supabase.from("entries").update({ body: text }).eq("id", id);
+  if (error) return { ok: false, message: error.message };
+  revalidatePath("/");
+  revalidatePath("/you");
+  return { ok: true };
+}

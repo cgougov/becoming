@@ -55,7 +55,7 @@ export async function CollectionCards({ userId }: { userId: string }) {
       })}
       {unsorted > 0 && (
         <Link href="/you/unsorted" className="col-span-2 text-xs font-semibold text-muted underline-offset-2 hover:underline">
-          {unsorted} not filed yet
+          {unsorted} filing tonight
         </Link>
       )}
     </section>
