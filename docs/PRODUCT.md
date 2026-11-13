@@ -91,6 +91,14 @@ not a blob; its character gets its own pass later.
   lenses a mood signal. Never required, never during.
 - **Glass:** translucent layered surfaces over photos; try the bar first. It should feel
   current and cool to be on.
+- **The partner gives, not just takes** (Christian, 2026-11-13). In a busy week there may be
+  nothing to log. Then the partner hands you one small thing that serves a goal you named: a
+  six-minute read, a video, an idea. Keeping or doing it counts. One thing, never a feed;
+  optional; always tied to a collection or goal of yours. Needs the API.
+- **The companion is the running partner** helping you reach the version of yourself you
+  chose. Yours is the Pinterest board of who you are; keeping is pinning yourself.
+- **Behavioral principles** get their own doc (`docs/BEHAVIOR.md`): only what has evidence,
+  with sources, each mapped to where it shows up in the app.
 
 ## Principles
 
