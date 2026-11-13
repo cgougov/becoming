@@ -28,7 +28,7 @@ export function StartForm() {
             <label
               key={c.slug}
               className={`cursor-pointer select-none rounded-full border px-3 py-1.5 text-sm transition-colors ${
-                on ? "border-foreground bg-foreground text-background" : "border-current/20 hover:border-current/50"
+                on ? "border-foreground bg-foreground text-background" : "border-foreground/15 bg-surface hover:border-foreground/40"
               }`}
               title={c.hint}
             >
@@ -65,9 +65,9 @@ export function StartForm() {
             }}
             maxLength={MAX_COLLECTION_NAME}
             placeholder="e.g. soccer games, café finds, letters to write"
-            className="flex-1 rounded-xl border border-current/20 bg-transparent px-3 py-2 text-base outline-none focus:border-current/50"
+            className="h-11 flex-1 rounded-full border-[1.5px] border-dashed border-foreground/20 bg-transparent px-4 text-[15px] outline-none focus:border-foreground/50"
           />
-          <button type="button" onClick={addCustom} className="rounded-xl border border-current/20 px-3 text-sm">
+          <button type="button" onClick={addCustom} className="h-11 rounded-full bg-foreground px-4 text-sm font-semibold text-background">
             Add
           </button>
         </div>
@@ -103,7 +103,7 @@ function Submit({ total }: { total: number }) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-xl bg-foreground px-4 py-3 font-medium text-background disabled:opacity-50"
+        className="h-12 rounded-full bg-accent font-bold text-foreground disabled:opacity-50"
       >
         {pending ? "Setting up…" : total === 0 ? "Start with nothing, I'll add as I go" : `Start with ${total}`}
       </button>

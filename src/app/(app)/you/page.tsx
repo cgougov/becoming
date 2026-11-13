@@ -7,7 +7,7 @@ import { TodayWidget } from "./today-widget";
 
 export default function YouPage() {
   return (
-    <Pane title="You" subtitle="What you've been keeping.">
+    <Pane big title="Yours" subtitle="What you keep track of.">
       <Suspense fallback={<p className="text-sm opacity-50">Loading…</p>}>
         <Widgets />
       </Suspense>
@@ -24,7 +24,7 @@ async function Widgets() {
       <TodayWidget userId={user.id} timeZone={timeZone} />
       <CollectionCards userId={user.id} />
       <NewCollectionForm />
-      <form action="/auth/signout" method="post" className="mt-auto flex items-center justify-between text-sm opacity-60">
+      <form action="/auth/signout" method="post" className="mt-auto flex items-center justify-between text-[13px] text-muted">
         <span>{user.email}</span>
         <button type="submit" className="underline">
           Sign out

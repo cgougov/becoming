@@ -6,7 +6,7 @@ describe("HomeView (capture pane)", () => {
   it("renders the app name and a sign-in hint when there is no session", () => {
     render(<HomeView />);
     expect(screen.getByRole("heading", { level: 1, name: "Becoming" })).toBeTruthy();
-    expect(screen.getByText(/sign in to start capturing/i)).toBeTruthy();
+    expect(screen.getByText(/sign in to start keeping/i)).toBeTruthy();
   });
 
   it("renders the slots it is given", () => {

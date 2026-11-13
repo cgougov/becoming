@@ -16,12 +16,14 @@ async function SignedInCapture() {
   const session = await requireUser();
   if (!session) return <HomeView />;
   const { user, timeZone } = session;
+  const day = new Intl.DateTimeFormat("en-US", { timeZone, weekday: "long" }).format(new Date());
 
   return (
     <HomeView
+      day={day}
       capture={<CaptureForm userId={user.id} />}
       today={
-        <Suspense fallback={<p className="text-sm opacity-50">Loading today…</p>}>
+        <Suspense fallback={<p className="text-sm text-muted">Loading today…</p>}>
           <TodayList userId={user.id} timeZone={timeZone} />
         </Suspense>
       }

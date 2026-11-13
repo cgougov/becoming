@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 2026-11-12 (M3 collections)_
+_Last updated: 2026-11-12 (M3 design: Keep)_
 
 ## Done
 
@@ -82,7 +82,30 @@ Decided with Christian 2026-11-12 (see PRODUCT.md "Three panes" and DECISIONS):
 - You pane: "Keep track of something new…" input. Unsorted link reads "not filed yet".
 - Pure logic in `src/lib/collections.ts` with tests (slugify, name rules, initial rows).
 
+## M3 step 3 — design pass, round 4 language in code ✅ (PR #10)
+
+Four mockup rounds on the Design canvas ("Becoming — design directions"); decisions in
+PRODUCT.md. Built:
+- Theme: warm white / charcoal / one accent (`globals.css` tokens; Plus Jakarta Sans via
+  `@fontsource-variable`, no Google Fonts at build). Dark theme follows the phone later.
+- **Keep**: big text box as the hero, photo button, accent Keep pill; "Kept today" as white
+  cards with a collection dot. Pane names are now Keep · Yours · Look back (icons only in the
+  bar, accent dot under the active one).
+- **Companion** (`src/components/companion.tsx`): accent circle that bobs and blinks; on a
+  successful keep the form fires `becoming:kept` and it wiggles + pops a one-word reaction.
+  Reduced-motion respected. Character pass still to do.
+- Yours tiles (white, dot, count, latest line), Today chip, Look back tiles, start + login
+  restyled to match.
+- `dotColor(slug)` is a stable hash until collections get a `color` column.
+
 ## Next
+
+1. **Christian uses it for a few days.** Then: companion character pass (circle, cute, simple),
+   and the lenses concept for Look back (needs the API).
+2. **Partner, first contact** (Anthropic key): auto-file captures, propose collections, lenses.
+3. Deploy + Home Screen install once it feels right on the phone.
+
+### Earlier
 
 1. **Christian tries #6 + #7 locally** (pull, `db push --remote`, `npm run dev`), decides
    whether swipe stays, and tells us the words he'd use for the panes.

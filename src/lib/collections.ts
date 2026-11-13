@@ -74,3 +74,16 @@ export function buildInitialCollections(
   }
   return out;
 }
+
+/**
+ * A collection's dot color. Deterministic from the slug until the user picks one
+ * (a `color` column can come later; the UI only needs a stable, pleasant hue).
+ */
+export const DOT_COLORS = ["#5ad1a5", "#e0a06a", "#9c8cf0", "#7aa7ff", "#f08cab", "#f2cf5a", "#6fc3df", "#c9a0dc"] as const;
+
+export function dotColor(slug: string | null | undefined): string {
+  if (!slug) return "#c8c8d0"; // unsorted
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return DOT_COLORS[h % DOT_COLORS.length];
+}

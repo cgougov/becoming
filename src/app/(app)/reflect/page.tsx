@@ -7,7 +7,7 @@ import { signedPhotoUrls } from "../capture/entry-list";
 
 export default function ReflectPage() {
   return (
-    <Pane title="Reflect" subtitle="This week so far.">
+    <Pane big title="Look back" aside="This week">
       <Suspense fallback={<p className="text-sm opacity-50">Loading…</p>}>
         <WeekSoFar />
       </Suspense>
@@ -41,23 +41,23 @@ async function WeekSoFar() {
 
   return (
     <>
-      <section className="grid grid-cols-3 gap-3" aria-label="This week">
+      <section className="grid grid-cols-3 gap-2" aria-label="This week">
         <Stat label="captures" value={entries.length} />
         <Stat label="photos" value={entries.filter((e) => e.photo_path).length} />
         <Stat label={days === 1 ? "day" : "days"} value={days} />
       </section>
 
       {photos.length > 0 && (
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-1.5">
           {photos.map((p) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={p} src={urlFor.get(p)} alt="" className="aspect-square w-full rounded-xl object-cover" loading="lazy" />
+            <img key={p} src={urlFor.get(p)} alt="" className="aspect-square w-full rounded-2xl object-cover" loading="lazy" />
           ))}
         </div>
       )}
 
-      <section className="rounded-2xl border border-current/10 bg-current/[.03] p-4 text-sm leading-relaxed">
-        <p className="mb-1 text-xs uppercase tracking-wide opacity-50">From your partner (an AI)</p>
+      <section className="mt-auto rounded-card bg-foreground p-4 text-[14px] leading-relaxed text-background">
+        <p className="mb-1 text-xs font-semibold text-background/50">From your partner · an AI</p>
         {unlockIn > 0 ? (
           <p>
             I&apos;ll have a real question for you after about a week of logging — roughly {unlockIn} more{" "}
@@ -73,9 +73,9 @@ async function WeekSoFar() {
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-2xl border border-current/10 p-3 text-center">
-      <div className="text-2xl font-semibold tabular-nums">{value}</div>
-      <div className="text-xs opacity-50">{label}</div>
+    <div className="flex flex-col gap-0.5 rounded-2xl bg-chip p-3">
+      <div className="text-[22px] font-semibold tabular-nums tracking-[-0.02em]">{value}</div>
+      <div className="text-xs text-muted">{label}</div>
     </div>
   );
 }

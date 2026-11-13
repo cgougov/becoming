@@ -23,6 +23,83 @@ user?" If not, it belongs to the social layer, later.
 This is also why UI and the feeling of using it matter as much as any feature: for a solo
 product, the experience *is* the retention.
 
+## Distinctly human and homey (Christian, 2026-11-12)
+
+As AI agents get better at remembering and tracking on their own, "an app that remembers
+things about you" stops being a differentiator. What won't commoditize is how it *feels*:
+Becoming should feel distinctly human and homey, a place rather than a feature. That is the
+bar for every design choice.
+
+Design direction agreed after two rounds of mockups:
+- **Modern, natural, a little sexy.** Curves over corners, movement over static, warmth over
+  minimalism. Simple like BeReal, fun like Duolingo, never as dense as Whoop. If it's boring,
+  it's wrong; if it's complex, it's wrong.
+- **Capture opens clean.** Just the box and what you kept. No greeting, no prompt, no agenda
+  on the first screen. Direction and encouragement come from the companion's presence and from
+  Look back, not from text at the top of Capture.
+- **The companion is ambient, not chatty.** It pops, moves, reacts. It does not open every
+  screen with a question. It speaks rarely, and when it does it matters.
+- **Yours** (collections as colored tiles) is right. Keep refining, don't rethink.
+- **Look back** leads with insights the app tracks automatically, through lenses the user chose
+  ("how does the gym affect my mood", "am I seeing people enough"). The reflection
+  conversation sits at the bottom, not the top.
+
+## Benefit from better models, don't get replaced by them (Christian, 2026-11-12)
+
+Models will keep getting better at remembering, noticing and advising. Becoming must get
+*better* when that happens, not obsolete. Rules for building:
+- **The partner's intelligence is swappable.** One module (`src/lib/partner/`) talks to the
+  model; nothing else knows which model. A better model = a better Becoming, overnight.
+- **Accumulate what models can't conjure:** years of captures, collections in the user's
+  words, lenses they chose, next steps accepted or skipped. Structured, personal, consented.
+  Every schema choice should make that record richer for whatever reads it later.
+- **The feel is ours.** Character, motion, homeyness, the companion. A lab ships a chat box,
+  not a place you'd want to live.
+- **Later, the social graph:** who trusts whom with what. No model improvement produces it.
+- **Never write cleverness the model will do better next year; always write structure the
+  model will need forever.** No bespoke ML, no hand-tuned heuristics where a prompt will do.
+
+Design decisions 2026-11-12, after round 4: **light theme** by default (dark follows the phone
+later), monochrome base, color only from the user's photos and one accent on the companion and
+active states, collections marked by a small dot not a tinted tile. The companion is a **circle**,
+not a blob; its character gets its own pass later.
+
+## Identity and references (Christian + Claude, 2026-11-12 evening)
+
+- **Moat = habit + consented data + (later) network.** The human aspect earns the habit; it is
+  not the moat on its own. Everything the model does is delivered through the companion, so the
+  intelligence reads as a character, not a feature. Success test: "the little guy who checks
+  in on me", not "an AI journal".
+- **Intentionality, in order:** (1) a daily moment, BeReal-style, at a random time in the
+  user's window; (2) a morning intention line on Keep, mornings only; (3) the companion reacts
+  to your rhythm (arrival after quiet days = curious, never sad); (4) a week of seven soft dots
+  on Yours, no counter; (5) curiosity about yourself from Look back. Never streaks.
+- **Kawaii companion, hopecore voice.** Round, big eyes, soft, a little clumsy; copy is
+  earnest and warm, "it's going to be okay", never ironic. This is the register for every
+  word the app says.
+- **Pinterest, gleaned:** keeping is an act of taste; collections get cover images from the
+  user's photos; Yours should look like boards you're proud of; never a blank state. Not
+  gleaned: the infinite feed. Our engagement is recognition, not discovery.
+- **A student's week:** capture in the gaps (between classes, gym, meals, 1 a.m.), under ten
+  seconds including unlock; camera-roll photo one tap; dictation works. Weekday = feed it,
+  weekend = it feeds you.
+- **Positive reinforcement, only what's supported:** immediate feedback (companion reaction),
+  variable rewards (reactions vary), implementation intentions (morning line), spaced
+  reflection (weekly Look back), self-affirmation (Yours). No overclaiming.
+- **How We Feel, gleaned:** one-tap, one-word check-ins and emotional granularity work. Ours is
+  an *optional* one-tap feeling after a keep (four soft colors, vanishes if ignored) that gives
+  lenses a mood signal. Never required, never during.
+- **Glass:** translucent layered surfaces over photos; try the bar first. It should feel
+  current and cool to be on.
+- **The partner gives, not just takes** (Christian, 2026-11-13). In a busy week there may be
+  nothing to log. Then the partner hands you one small thing that serves a goal you named: a
+  six-minute read, a video, an idea. Keeping or doing it counts. One thing, never a feed;
+  optional; always tied to a collection or goal of yours. Needs the API.
+- **The companion is the running partner** helping you reach the version of yourself you
+  chose. Yours is the Pinterest board of who you are; keeping is pinning yourself.
+- **Behavioral principles** get their own doc (`docs/BEHAVIOR.md`): only what has evidence,
+  with sources, each mapped to where it shows up in the app.
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.
