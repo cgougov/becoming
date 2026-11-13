@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { dotColor } from "@/lib/collections";
 import { createClient } from "@/lib/supabase/server";
+import { signedPhotoUrls } from "./entry-list";
 
 interface CollectionRow {
   id: string;
@@ -29,25 +30,32 @@ export async function CollectionCards({ userId }: { userId: string }) {
     if (!latest.has(row.collection_id)) latest.set(row.collection_id, row);
   }
   const unsorted = tally.get(null) ?? 0;
+  const covers = await signedPhotoUrls([...latest.values()].map((l) => l.photo_path).filter((p): p is string => !!p));
 
   return (
     <section className="grid grid-cols-2 gap-2.5" aria-label="Collections">
       {((collections ?? []) as CollectionRow[]).map((c) => {
         const last = latest.get(c.id);
+        const cover = last?.photo_path ? covers.get(last.photo_path) : undefined;
         return (
           <Link
             key={c.id}
             href={`/you/${c.slug}`}
-            className="flex min-h-[132px] flex-col justify-between rounded-card bg-surface p-3.5 shadow-[0_1px_2px_rgba(0,0,0,0.06)] transition-transform active:scale-[0.98]"
+            className="relative flex min-h-[148px] flex-col justify-between overflow-hidden rounded-card bg-chip p-3.5"
           >
-            <div className="flex items-baseline justify-between gap-2">
+            {cover && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+            )}
+            {cover && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />}
+            <div className={`relative flex items-baseline justify-between gap-2 ${cover ? "text-white" : ""}`}>
               <h2 className="flex items-center gap-2 text-[16px] font-semibold">
                 <span className="h-2 w-2 flex-none rounded-full" style={{ background: dotColor(c.slug) }} />
                 <span className="truncate">{c.name}</span>
               </h2>
-              <span className="text-[13px] font-semibold tabular-nums text-muted">{tally.get(c.id) ?? 0}</span>
+              <span className={`text-[13px] font-semibold tabular-nums ${cover ? "text-white/70" : "text-muted"}`}>{tally.get(c.id) ?? 0}</span>
             </div>
-            <p className="line-clamp-2 text-[13px] leading-[1.3] text-foreground/60">
+            <p className={`relative line-clamp-2 text-[13px] leading-[1.3] ${cover ? "text-white/85" : "text-foreground/60"}`}>
               {last?.body ?? (last?.photo_path ? "A photo." : (c.description ?? "Nothing yet."))}
             </p>
           </Link>

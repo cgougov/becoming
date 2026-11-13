@@ -34,7 +34,7 @@ export function BottomBar() {
   return (
     <nav
       aria-label="Panes"
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-white/40 bg-background/55 shadow-[0_-1px_0_rgba(0,0,0,0.04)] backdrop-blur-xl backdrop-saturate-150"
+      className="fixed inset-x-0 bottom-0 z-20 border-t border-foreground/[0.06] bg-background/60 backdrop-blur-xl backdrop-saturate-150"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <ul className="mx-auto flex h-[68px] max-w-md items-center justify-around">

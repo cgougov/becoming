@@ -1,5 +1,5 @@
 import { dotColor } from "@/lib/collections";
-import { formatTimeInTimeZone } from "@/lib/entries/time";
+import { formatTimeInTimeZone, localDay } from "@/lib/entries/time";
 import { createClient } from "@/lib/supabase/server";
 import { EntryLine } from "./entry-line";
 
@@ -34,6 +34,7 @@ export async function EntryList({
   empty?: string;
 }) {
   const urlFor = await signedPhotoUrls(entries.map((e) => e.photo_path).filter((p): p is string => !!p));
+  const today = localDay(new Date(), timeZone);
   if (entries.length === 0) return <p className="text-sm text-muted">{empty}</p>;
 
   return (
@@ -52,6 +53,7 @@ export async function EntryList({
             stamp={stamp}
             dot={dotColor(e.collection?.slug ?? null)}
             status={e.collection?.name ?? "Filing tonight"}
+            editable={localDay(at, timeZone) === today}
           />
         );
       })}

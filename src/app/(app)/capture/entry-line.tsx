@@ -14,6 +14,7 @@ export function EntryLine({
   stamp,
   dot,
   status,
+  editable = true,
 }: {
   id: string;
   body: string | null;
@@ -21,6 +22,8 @@ export function EntryLine({
   stamp: string;
   dot: string;
   status: string;
+  /** Days close: only today is editable; older things can be annotated later. */
+  editable?: boolean;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(body ?? "");
@@ -49,12 +52,14 @@ export function EntryLine({
   }
 
   return (
-    <li className={`group flex flex-col gap-2 py-3 ${pending ? "opacity-60" : ""}`}>
+    <li className={`group flex flex-col gap-2.5 py-4 ${pending ? "opacity-60" : ""}`}>
       {photoUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={photoUrl} alt="" className="max-h-72 w-full rounded-2xl object-cover" loading="lazy" />
+        <img src={photoUrl} alt="" className="-mx-6 max-h-[70vh] w-[calc(100%+3rem)] max-w-none object-cover" loading="lazy" />
       )}
-      {editing ? (
+      {!editable ? (
+        <p className={`whitespace-pre-wrap text-[17px] font-medium leading-[1.4] ${body ? "" : "text-muted"}`}>{body ?? ""}</p>
+      ) : editing ? (
         <textarea
           ref={ref}
           value={draft}
@@ -70,13 +75,13 @@ export function EntryLine({
           }}
           rows={1}
           aria-label="Edit"
-          className="w-full resize-none bg-transparent text-[16px] font-medium leading-[1.4] outline-none"
+          className="w-full resize-none bg-transparent text-[17px] font-medium leading-[1.4] outline-none"
         />
       ) : (
         <button
           type="button"
           onClick={() => setEditing(true)}
-          className={`w-full whitespace-pre-wrap text-left text-[16px] font-medium leading-[1.4] ${body ? "" : "text-muted"}`}
+          className={`w-full whitespace-pre-wrap text-left text-[17px] font-medium leading-[1.4] ${body ? "" : "text-muted"}`}
         >
           {body ?? (photoUrl ? "Add a caption…" : "")}
         </button>
@@ -86,16 +91,18 @@ export function EntryLine({
         <span>{status}</span>
         <span className="mx-1 opacity-50">·</span>
         <span>{stamp}</span>
-        <button
-          type="button"
-          onClick={() => {
-            if (confirm("Remove this?")) start(() => void deleteEntry(id));
-          }}
-          className="ml-auto opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100"
-          aria-label="Remove"
-        >
-          Remove
-        </button>
+        {editable && (
+          <button
+            type="button"
+            onClick={() => {
+              if (confirm("Remove this?")) start(() => void deleteEntry(id));
+            }}
+            className="ml-auto opacity-0 transition-opacity focus:opacity-100 group-hover:opacity-100"
+            aria-label="Remove"
+          >
+            Remove
+          </button>
+        )}
       </div>
     </li>
   );

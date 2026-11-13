@@ -14,7 +14,7 @@ export function Pane({
   children: React.ReactNode;
 }) {
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-7 px-7 pt-[max(3.5rem,env(safe-area-inset-top))] pb-[calc(6rem+env(safe-area-inset-bottom))]">
+    <main className="anim-pane mx-auto flex w-full max-w-md flex-1 flex-col gap-7 px-6 pt-[max(3.5rem,env(safe-area-inset-top))] pb-[calc(6rem+env(safe-area-inset-bottom))]">
       <header className="flex flex-col gap-1.5">
         <div className="flex items-end justify-between gap-4">
           <h1 className={big ? "text-[26px] font-bold leading-tight tracking-[-0.02em]" : "text-[15px] font-bold tracking-tight"}>{title}</h1>
