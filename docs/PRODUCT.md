@@ -108,6 +108,16 @@ reads as today's page (lines, not cards). Underneath, each thing keeps its time 
 filed, a collection; that is the only structure and it stays invisible until Look back or Yours
 needs it. Filing is a suggestion you can change with a tap, never a lock. End of day, the
 partner files what it can and leaves the rest with a one-tap chooser ("Filing tonight").
+**Days close** (Christian, 2026-11-13): once a day is over, what you kept can't be rewritten,
+only annotated: add a note to it later, from a later self. The record stays honest.
+
+## Honest evaluation, 2026-11-13 (Claude, at Christian's request)
+Less slick than BeReal, and color is ~20% of why. The rest: too many concepts on the first
+screen (BeReal is one idea); photos aren't the hero (should be full-bleed); built from defaults,
+not crafted (no transitions, pressed states, haptics); only seen in a desktop browser, never on
+a phone; off-white + coral reads "wellness app". Plan: deploy to the phone first, then palette
+(pure white / near-black, photos as the color, companion the one accent), then a subtraction
+pass on Keep, then a craft pass.
 
 ## Principles
 
