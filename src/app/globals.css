@@ -11,6 +11,7 @@
   --surface: #121214;
   --chip: #1a1a1d;
   --accent: #ff6a3d;
+  --kept: #5fd38d; /* a day you kept something: green, quietly */
 }
 
 @theme inline {
@@ -20,6 +21,7 @@
   --color-surface: var(--surface);
   --color-chip: var(--chip);
   --color-accent: var(--accent);
+  --color-kept: var(--kept);
   --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --radius-card: 22px;
 }

@@ -25,7 +25,7 @@ export async function WeekDots({ userId, timeZone }: { userId: string; timeZone:
         return (
           <div key={d} className="flex flex-col items-center gap-1.5">
             <span
-              className={`h-[10px] w-[10px] rounded-full ${on ? "bg-accent" : future ? "bg-transparent ring-1 ring-foreground/10" : "bg-foreground/10"} ${isToday && !on ? "ring-2 ring-accent/50" : ""}`}
+              className={`h-[10px] w-[10px] rounded-full ${on ? "bg-kept" : future ? "bg-transparent ring-1 ring-foreground/10" : "bg-foreground/10"} ${isToday && !on ? "ring-2 ring-accent/50" : ""}`}
             />
             <span className={`text-[10px] font-semibold ${isToday ? "text-foreground" : "text-muted"}`}>{labels[i]}</span>
           </div>

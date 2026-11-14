@@ -51,3 +51,12 @@ describe("dotColor", () => {
     expect(dotColor(null)).toBe("#c8c8d0");
   });
 });
+
+describe("emptyTileLine", () => {
+  it("uses the cute hint for suggested collections, else the user's words", async () => {
+    const { emptyTileLine } = await import("./collections");
+    expect(emptyTileLine("quotes", "things said that stuck")).toBe("someone said a good thing.");
+    expect(emptyTileLine("my-thing", "mine")).toBe("mine");
+    expect(emptyTileLine("my-thing", null)).toBe("nothing yet.");
+  });
+});
