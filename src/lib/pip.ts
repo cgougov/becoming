@@ -71,8 +71,10 @@ export function faceFor(mood: PipMood, day: string): Shape[] {
 }
 
 /** Resting mood from the clock and your rhythm. Never sad at you. */
-export function restingMood(localHour: number, cameBackAfterAWhile: boolean): PipMood {
+/** How Pip rests. After a check-in today, Pip wears how you said you feel (still dozes late). */
+export function restingMood(localHour: number, cameBackAfterAWhile: boolean, checked: PipMood | null = null): PipMood {
   if (localHour >= 0 && localHour < 5) return "sleepy";
+  if (checked) return checked;
   if (cameBackAfterAWhile) return "happy";
   return "calm";
 }

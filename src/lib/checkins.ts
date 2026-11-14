@@ -75,4 +75,29 @@ export const CHECKIN_LINES = [
   "off you go. I'll be right here.",
   "goodnight. tomorrow is new.",
   "goodnight. I'll keep these safe.",
+  "how are you, right now?",
+  "noted. I'll match you.",
 ];
+
+/**
+ * Which row an anytime check (the mood bar) updates. All day it's the daytime row ("morning"),
+ * so it never uses up the 10pm wind-down; after the wind-down it updates the evening row.
+ */
+export function anytimeKind(localHour: number): CheckKind {
+  return localHour >= 5 && localHour < 22 ? "morning" : "evening";
+}
+
+/** One word for the mood bar. */
+export function moodWord(mood: number): string {
+  if (mood < 20) return "heavy";
+  if (mood < 40) return "low";
+  if (mood < 60) return "okay";
+  if (mood < 80) return "good";
+  return "light";
+}
+
+export const MOOD_BAR_ASK = "how are you, right now?";
+
+export function barGoodbye(mood: number): string {
+  return mood < 30 ? "gently, then. I'm here." : "noted. I'll match you.";
+}

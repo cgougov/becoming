@@ -6,6 +6,7 @@ import { CaptureForm } from "./capture/capture-form";
 import { DaysList } from "./capture/days-list";
 import { HomeView } from "./home-view";
 import { CheckinCard } from "./checkin/checkin-card";
+import { MoodBar } from "./checkin/mood-bar";
 import { pendingCheck } from "./checkin/pending";
 import { TodayIntention } from "./intention/today-intention";
 import { PeopleNudge } from "./people-nudge";
@@ -43,6 +44,11 @@ async function SignedInCapture() {
     <HomeView
       day={day}
       moment={moment && <MomentLine moment={moment} phase={phase} timeZone={timeZone} seed={now.getDate() + now.getHours()} />}
+      moodBar={
+        <Suspense>
+          <MoodBar userId={user.id} timeZone={timeZone} />
+        </Suspense>
+      }
       checkin={
         <Suspense>
           <CheckinCard userId={user.id} timeZone={timeZone} />
