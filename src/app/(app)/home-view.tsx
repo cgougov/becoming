@@ -3,6 +3,7 @@ import { Pane } from "@/components/pane";
 
 /** Keep pane frame. Slots are filled with request-time data inside Suspense. */
 export function HomeView({
+  moodBar,
   checkin,
   nudge,
   moment,
@@ -11,6 +12,7 @@ export function HomeView({
   today,
   day,
 }: {
+  moodBar?: React.ReactNode;
   checkin?: React.ReactNode;
   nudge?: React.ReactNode;
   moment?: React.ReactNode;
@@ -21,6 +23,7 @@ export function HomeView({
 }) {
   return (
     <Pane title="Becoming" aside={day}>
+      {moodBar}
       {checkin}
       {nudge}
       {moment}

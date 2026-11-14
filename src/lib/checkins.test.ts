@@ -37,3 +37,18 @@ describe("Pip mirrors the sliders with set faces", () => {
     expect(goodThingPrompt("morning", 10).ask).toBe("one thing for today?");
   });
 });
+
+describe("mood bar", () => {
+  it("updates the daytime row all day, so the wind-down still comes at 10pm", async () => {
+    const { anytimeKind } = await import("./checkins");
+    expect(anytimeKind(9)).toBe("morning");
+    expect(anytimeKind(16)).toBe("morning");
+    expect(anytimeKind(21)).toBe("morning");
+    expect(anytimeKind(22)).toBe("evening");
+    expect(anytimeKind(2)).toBe("evening");
+  });
+  it("has one word per range", async () => {
+    const { moodWord } = await import("./checkins");
+    expect([10, 30, 50, 70, 90].map(moodWord)).toEqual(["heavy", "low", "okay", "good", "light"]);
+  });
+});

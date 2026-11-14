@@ -11,6 +11,8 @@ export const KEEPING_EVENT = "becoming:keeping";
 export const KEPT_EVENT = "becoming:kept";
 /** Fired when something kept reads as hard (the partner's tagging decides). Pip goes soft. */
 export const HARD_EVENT = "becoming:hard";
+/** Fired after a check-in: Pip rests in the mood you just gave. */
+export const MOOD_EVENT = "becoming:mood";
 
 type Motion = "bob" | "hop" | "spin" | "sway" | "breathe" | "giggle" | "skip" | "skip-twice";
 const MOTION_FOR: Record<PipMood, Motion> = { calm: "bob", happy: "bob", sleepy: "breathe", soft: "sway" };
@@ -20,7 +22,7 @@ const MOTION_FOR: Record<PipMood, Motion> = { calm: "bob", happy: "bob", sleepy:
  * mood. Hops when you come back, spins when you keep something, goes soft on hard things,
  * dozes after midnight, giggles when tapped. Never sad at you.
  */
-export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "back" | "normal"; day: string }) {
+export function Companion({ arrival = "normal", day, checked = null }: { arrival?: "fresh" | "back" | "normal"; day: string; checked?: PipMood | null }) {
   const legacyMood: Mood = arrival === "fresh" ? "fresh" : arrival === "back" ? "curious" : "idle";
   const [rest, setRest] = useState<PipMood>("calm");
   const [mood, setMood] = useState<PipMood>(arrival === "normal" ? "calm" : "happy");
@@ -32,14 +34,27 @@ export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "ba
   // Resting mood depends on the local clock, so it is decided in the browser.
   useEffect(() => {
     const t = setTimeout(() => {
-      const r = restingMood(new Date().getHours(), false);
+      const r = restingMood(new Date().getHours(), false, checked);
       setRest(r);
       setMood(r);
       setMotion(MOTION_FOR[r]);
       setLine(null);
     }, arrival === "normal" ? 0 : 2600);
     return () => clearTimeout(t);
-  }, [arrival]);
+  }, [arrival, checked]);
+
+  useEffect(() => {
+    function onMood(e: Event) {
+      const m = (e as CustomEvent<{ mood: PipMood }>).detail?.mood;
+      if (!m) return;
+      const r = restingMood(new Date().getHours(), false, m);
+      setRest(r);
+      setMood(r);
+      setMotion(r === "happy" ? "hop" : MOTION_FOR[r]);
+    }
+    window.addEventListener(MOOD_EVENT, onMood);
+    return () => window.removeEventListener(MOOD_EVENT, onMood);
+  }, []);
 
   const react = useCallback(
     (next: { mood: PipMood; motion: Motion; line: string | null; ms: number }) => {

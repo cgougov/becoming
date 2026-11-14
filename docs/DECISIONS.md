@@ -127,3 +127,10 @@ open the link first and use it up. The login now asks for the 6-digit code from 
 - Update (same day): tones are handed out by collection order, not by a hash of the name, so
   neighbors never share a color (the hash put three tiles on the same blue). Eight distinct hues,
   brighter tops; chips use their collection's tile tone. Dot on a gradient tile is white.
+
+## 2026-11-14 — The mood bar
+- A slim mood bar sits at the top of Today, always (hidden only while the morning or 10pm card
+  is up). Tap → sliders → "that's me". No text step: it's a ten-second log.
+- It writes the day's daytime row (`kind = morning`) all day, so it never uses up the 10pm
+  wind-down; after the wind-down it updates the evening row.
+- Pip rests in today's latest checked mood (still dozes after midnight), live via `MOOD_EVENT`.

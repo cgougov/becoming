@@ -1,3 +1,4 @@
+import { pipMoodFor } from "@/lib/checkins";
 import { arrivalMood, daysBetween } from "@/lib/companion";
 import { localDay } from "@/lib/entries/time";
 import { createClient, getUser } from "@/lib/supabase/server";
@@ -15,5 +16,15 @@ export async function CompanionMount() {
   const days = data ? daysBetween(new Date(), new Date(data.captured_at as string)) : null;
   const m = arrivalMood(days);
   const day = localDay(new Date(), profile?.timezone ?? "America/New_York");
-  return <Companion arrival={m === "fresh" ? "fresh" : m === "curious" ? "back" : "normal"} day={day} />;
+  // Today's latest check-in sets how Pip rests.
+  const { data: checks } = await supabase
+    .from("day_checks")
+    .select("kind, mood, energy")
+    .eq("owner_id", user.id)
+    .eq("day", day)
+    .eq("skipped", false)
+    .not("mood", "is", null);
+  const check = (checks ?? []).find((c) => c.kind === "evening") ?? (checks ?? [])[0];
+  const checked = check ? pipMoodFor(check.mood as number, (check.energy as number) ?? 50) : null;
+  return <Companion arrival={m === "fresh" ? "fresh" : m === "curious" ? "back" : "normal"} day={day} checked={checked} />;
 }
