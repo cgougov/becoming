@@ -10,7 +10,7 @@ export type CaptureResult = { ok: true } | { ok: false; message: string };
  * Save one entry. Nothing is required except that there's *something*: text or a photo.
  * Photos are uploaded by the browser straight to storage; we only get the path.
  */
-export async function createEntry(input: { body?: string; photoPath?: string | null }): Promise<CaptureResult> {
+export async function createEntry(input: { body?: string; photoPath?: string | null; momentId?: string | null }): Promise<CaptureResult> {
   const body = input.body?.trim() || null;
   const photoPath = input.photoPath || null;
   if (!body && !photoPath) return { ok: false, message: "Write something or add a photo." };
@@ -24,8 +24,15 @@ export async function createEntry(input: { body?: string; photoPath?: string | n
   // Belt and braces: storage RLS already enforces this, but never link someone else's object.
   if (photoPath && ownerFromPhotoPath(photoPath) !== user.id) return { ok: false, message: "Bad photo path." };
 
-  const { error } = await supabase.from("entries").insert({ owner_id: user.id, body, photo_path: photoPath, source: "capture" });
+  const { data: created, error } = await supabase
+    .from("entries")
+    .insert({ owner_id: user.id, body, photo_path: photoPath, source: input.momentId ? "check_in" : "capture" })
+    .select("id")
+    .maybeSingle();
   if (error) return { ok: false, message: error.message };
+  if (input.momentId && created) {
+    await supabase.from("moments").update({ status: "kept", entry_id: created.id }).eq("id", input.momentId).eq("owner_id", user.id).eq("status", "scheduled");
+  }
 
   revalidatePath("/");
   return { ok: true };

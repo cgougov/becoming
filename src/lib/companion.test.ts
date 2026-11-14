@@ -29,11 +29,11 @@ describe("reactions", () => {
 
   it("leans into context: photos, late night, coming back", async () => {
     const { reactionPool } = await import("./companion");
-    expect(reactionPool({ ...base, hasPhoto: true })).toContain("pretty");
-    expect(reactionPool({ ...base, localHour: 1 })).toContain("night note ♡");
-    expect(reactionPool({ ...base, mood: "curious" })).toContain("missed you ♡");
-    expect(reactionPool({ ...base, keptTodayBefore: 0 })).toContain("first one today");
-    expect(reactionPool(base)).not.toContain("missed you ♡");
+    expect(reactionPool({ ...base, hasPhoto: true })).toContain("how pretty.");
+    expect(reactionPool({ ...base, localHour: 1 })).toContain("it is very late. I am keeping it anyway.");
+    expect(reactionPool({ ...base, mood: "curious" })).toContain("oh! you're back.");
+    expect(reactionPool({ ...base, keptTodayBefore: 0 })).toContain("the first one today!");
+    expect(reactionPool(base)).not.toContain("oh! you're back.");
   });
 
   it("is deterministic given a seed", async () => {
