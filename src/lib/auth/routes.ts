@@ -2,7 +2,9 @@
  * Which paths are reachable without a session. Pure so it can be unit-tested
  * independently of the proxy.
  */
-const PUBLIC_PREFIXES = ["/login", "/auth/", "/manifest.webmanifest", "/icons/"] as const;
+// "/api/partner/tag" is the nightly Vercel Cron: it has no session and checks its own
+// CRON_SECRET bearer token, so the session gate must not bounce it to /login.
+const PUBLIC_PREFIXES = ["/login", "/auth/", "/manifest.webmanifest", "/icons/", "/api/partner/tag"] as const;
 
 export function isPublicPath(pathname: string): boolean {
   return PUBLIC_PREFIXES.some((p) => (p.endsWith("/") ? pathname.startsWith(p) : pathname === p));
