@@ -3,7 +3,7 @@ import { startOfDayInTimeZone } from "@/lib/entries/time";
 import { requireUser } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { CaptureForm } from "./capture/capture-form";
-import { TodayList } from "./capture/today-list";
+import { DaysList } from "./capture/days-list";
 import { HomeView } from "./home-view";
 import { TodayIntention } from "./intention/today-intention";
 import { MomentLine } from "./moment/moment-line";
@@ -46,7 +46,7 @@ async function SignedInCapture() {
       capture={<CaptureForm userId={user.id} keptToday={count ?? 0} momentId={live ? moment.id : null} />}
       today={
         <Suspense fallback={<p className="text-sm text-muted">Loading today…</p>}>
-          <TodayList userId={user.id} timeZone={timeZone} />
+          <DaysList userId={user.id} timeZone={timeZone} />
         </Suspense>
       }
     />

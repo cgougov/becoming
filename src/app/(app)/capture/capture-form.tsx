@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { KEPT_EVENT } from "@/components/companion";
+import { KEEPING_EVENT, KEPT_EVENT } from "@/components/companion";
 import { compressImage } from "@/lib/photos/compress";
 import { MAX_PHOTO_BYTES, photoObjectPath } from "@/lib/photos/path";
 import { createClient } from "@/lib/supabase/client";
-import { createEntry } from "./actions";
+import { createEntry, tagEntry } from "./actions";
 
 function Icon({ d }: { d: React.ReactNode }) {
   return (
@@ -52,11 +52,19 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
         });
         if (upErr) return setError(upErr.message);
       }
+      window.dispatchEvent(new Event(KEEPING_EVENT));
       const result = await createEntry({ body, photoPath, momentId });
       if (!result.ok) return setError(result.message);
       const detail = { hasPhoto: !!photo, hasText: body.trim().length > 0, keptTodayBefore: keptToday, moment: !!momentId };
       reset();
-      window.dispatchEvent(new CustomEvent(KEPT_EVENT, { detail }));
+      // The partner reads it; Pip speaks once it knows how it reads (or after 4s regardless).
+      const tone = result.id
+        ? await Promise.race([
+            tagEntry(result.id).then((r) => r.tone),
+            new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
+          ])
+        : null;
+      window.dispatchEvent(new CustomEvent(KEPT_EVENT, { detail: { ...detail, tone } }));
     });
   }
 

@@ -1,5 +1,5 @@
-import { dotColor } from "@/lib/collections";
 import { formatTimeInTimeZone, localDay } from "@/lib/entries/time";
+import { isReading, type Tag, type TagOptions } from "@/lib/entries/tags";
 import { createClient } from "@/lib/supabase/server";
 import { EntryLine } from "./entry-line";
 
@@ -8,9 +8,11 @@ export interface EntryRow {
   body: string | null;
   photo_path: string | null;
   captured_at: string;
-  collection_id: string | null;
-  collection?: { slug: string; name: string } | null;
+  tagged_at: string | null;
+  tags: Tag[];
 }
+
+export const ENTRY_FIELDS = "id, body, photo_path, captured_at, tagged_at";
 
 export async function signedPhotoUrls(paths: string[]): Promise<Map<string, string>> {
   if (paths.length === 0) return new Map();
@@ -21,24 +23,27 @@ export async function signedPhotoUrls(paths: string[]): Promise<Map<string, stri
   );
 }
 
-/** Kept things as lines on a page: editable in place, a dot + filing status, a time. */
+/** Kept things as lines on a page: tags under each, editable today, a time. */
 export async function EntryList({
   entries,
   timeZone,
+  options,
   showDate = false,
   empty = "Nothing here yet. Anything counts.",
 }: {
   entries: EntryRow[];
   timeZone: string;
+  options: TagOptions;
   showDate?: boolean;
   empty?: string;
 }) {
   const urlFor = await signedPhotoUrls(entries.map((e) => e.photo_path).filter((p): p is string => !!p));
-  const today = localDay(new Date(), timeZone);
+  const now = new Date();
+  const today = localDay(now, timeZone);
   if (entries.length === 0) return <p className="text-sm text-muted">{empty}</p>;
 
   return (
-    <ul className="flex flex-col divide-y divide-foreground/[0.06]">
+    <ul className="flex flex-col divide-y divide-foreground/[0.07]">
       {entries.map((e) => {
         const at = new Date(e.captured_at);
         const stamp = showDate
@@ -51,8 +56,9 @@ export async function EntryList({
             body={e.body}
             photoUrl={e.photo_path ? urlFor.get(e.photo_path) : undefined}
             stamp={stamp}
-            dot={dotColor(e.collection?.slug ?? null)}
-            status={e.collection?.name ?? "Filing tonight"}
+            tags={e.tags}
+            reading={isReading(e.tagged_at, e.captured_at, now)}
+            options={options}
             editable={localDay(at, timeZone) === today}
           />
         );
