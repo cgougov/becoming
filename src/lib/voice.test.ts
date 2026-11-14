@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import { ALL_COMPANION_LINES } from "./companion";
 import { CHECKIN_LINES } from "./checkins";
 import { MOMENT_ASKS, MOMENT_ENCOURAGEMENT, MOMENT_KEPT } from "./moment";
+import { NUDGE_LINES } from "./people";
 
 /** docs/VOICE.md, as a test: every line Pip can say must pass. */
-const LINES = [...ALL_COMPANION_LINES, ...MOMENT_ASKS, ...MOMENT_ENCOURAGEMENT, ...MOMENT_KEPT, ...CHECKIN_LINES];
+const LINES = [...ALL_COMPANION_LINES, ...MOMENT_ASKS, ...MOMENT_ENCOURAGEMENT, ...MOMENT_KEPT, ...CHECKIN_LINES, ...NUDGE_LINES.map((l) => l.replace("{name}", "Maya"))];
 
 const BANNED: [string, RegExp][] = [
   ["em/en dash", /[\u2013\u2014]/],

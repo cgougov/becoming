@@ -204,9 +204,25 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
 - "not now" hides it for the day. Lines in `src/lib/checkins.ts`, covered by the voice test.
 - Earlier the same day: Pip wittier lines + skip on a yay (#25); stale-file fix (#24).
 
+## Yours rebuilt + people pages ✅ (PR #27)
+
+- Migration `20261114300000_yours.sql`: `directions` (text, horizon week/month/year, photo,
+  archived), `collections.cover_path`. **`npx supabase db push --remote`.**
+- Yours: **who you're becoming** (direction cards with gradient or your photo, horizon chip,
+  add with a horizon, let go), **your people** (avatar row, close circle ringed first, "last
+  kept"), **collections** (gradient or cover or latest photo). Today chip removed.
+- `/you/person/<slug>`: avatar (photo optional), "keep close" toggle, "to ask or remember" note
+  (saves on blur), everything kept about them. `/you/everyone`: full list.
+- Today: at most one Pip nudge about a close-circle person quiet for 7+ days.
+- `PhotoPicker` (client upload to the private bucket → server action), `gradientFor`.
+- Not yet: Pip tagging entries to directions (so a direction can show what moved you).
+
 ## Next (positioning 2026-11-14, see PRODUCT.md "Positioning")
 
-Christian's order (2026-11-14): people pages + Yours rebuild → (annotations later).
+1. Pip tags directions; direction cards show "3 things this week".
+2. The Sunday letter.
+3. Pip's one suggestion on open + "a month ago today".
+4. Push for the moment / morning / wind-down. 5. Annotations. 6. No-setup onboarding.
 Push for the moment / morning / wind-down once the Home Screen install is in use.
 
 ### Earlier order

@@ -8,6 +8,7 @@ import { HomeView } from "./home-view";
 import { CheckinCard } from "./checkin/checkin-card";
 import { pendingCheck } from "./checkin/pending";
 import { TodayIntention } from "./intention/today-intention";
+import { PeopleNudge } from "./people-nudge";
 import { MomentLine } from "./moment/moment-line";
 import { ensureTodayMoment, phaseOf } from "./moment/today-moment";
 
@@ -45,6 +46,11 @@ async function SignedInCapture() {
       checkin={
         <Suspense>
           <CheckinCard userId={user.id} timeZone={timeZone} />
+        </Suspense>
+      }
+      nudge={
+        <Suspense>
+          <PeopleNudge userId={user.id} timeZone={timeZone} />
         </Suspense>
       }
       intention={

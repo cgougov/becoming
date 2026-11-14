@@ -46,7 +46,7 @@ export function normalizeCollectionName(raw: string): string | null {
 }
 
 /** Reserved slugs that can't be collection names (they're routes). */
-export const RESERVED_SLUGS = new Set(["unsorted", "new"]);
+export const RESERVED_SLUGS = new Set(["unsorted", "new", "person", "everyone"]);
 
 /**
  * Turn the first-open choices into rows to insert. Dedupes by slug, keeps the

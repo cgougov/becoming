@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { dotColor } from "@/lib/collections";
+import { gradientFor } from "@/lib/gradients";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "./entry-list";
 
@@ -10,13 +11,14 @@ interface CollectionRow {
   description: string | null;
   position: number;
   origin: "suggested" | "user" | "partner";
+  cover_path: string | null;
 }
 
 /** Collections as white tiles with a dot, a count and the latest thing kept. Tap opens the scrapbook. */
 export async function CollectionCards({ userId }: { userId: string }) {
   const supabase = await createClient();
   const [{ data: collections }, { data: tags }] = await Promise.all([
-    supabase.from("collections").select("id, slug, name, description, position, origin").eq("owner_id", userId).order("position"),
+    supabase.from("collections").select("id, slug, name, description, position, origin, cover_path").eq("owner_id", userId).order("position"),
     supabase.from("entry_tags").select("collection_id, entry_id").eq("owner_id", userId).eq("kind", "collection"),
   ]);
   // Collections are views of your days: count tags, and find each one's latest kept thing.
@@ -40,36 +42,42 @@ export async function CollectionCards({ userId }: { userId: string }) {
       if (e) latest.set(cid, { body: e.body as string | null, photo_path: e.photo_path as string | null });
     }
   }
-  const covers = await signedPhotoUrls([...latest.values()].map((l) => l.photo_path).filter((p): p is string => !!p));
+  const coverPaths = [
+    ...((collections ?? []) as CollectionRow[]).map((c) => c.cover_path),
+    ...[...latest.values()].map((l) => l.photo_path),
+  ].filter((p): p is string => !!p);
+  const covers = await signedPhotoUrls(coverPaths);
 
   return (
     <section className="grid grid-cols-2 gap-2.5" aria-label="Collections">
       {((collections ?? []) as CollectionRow[]).map((c) => {
         const last = latest.get(c.id);
-        const cover = last?.photo_path ? covers.get(last.photo_path) : undefined;
+        // Your own cover first, then the latest photo kept there, then a soft gradient.
+        const cover = (c.cover_path && covers.get(c.cover_path)) || (last?.photo_path ? covers.get(last.photo_path) : undefined);
         return (
           <Link
             key={c.id}
             href={`/you/${c.slug}`}
-            className="relative flex min-h-[148px] flex-col justify-between overflow-hidden rounded-card bg-chip p-3.5"
+            className="relative flex min-h-[148px] flex-col justify-between overflow-hidden rounded-card p-3.5 text-white"
+            style={cover ? undefined : { background: gradientFor(c.slug) }}
           >
             {cover && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
             )}
-            {cover && <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />}
-            <div className={`relative flex items-baseline justify-between gap-2 ${cover ? "text-white" : ""}`}>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
+            <div className="relative flex items-baseline justify-between gap-2">
               <h2 className="flex items-center gap-2 text-[16px] font-semibold">
                 <span className="h-2 w-2 flex-none rounded-full" style={{ background: dotColor(c.slug) }} />
                 <span className="truncate">{c.name}</span>
               </h2>
-              <span className={`text-[13px] font-semibold tabular-nums ${cover ? "text-white/70" : "text-muted"}`}>{tally.get(c.id) ?? 0}</span>
+              <span className="text-[13px] font-semibold tabular-nums text-white/70">{tally.get(c.id) ?? 0}</span>
             </div>
-            <p className={`relative line-clamp-2 text-[13px] leading-[1.3] ${cover ? "text-white/85" : "text-foreground/60"}`}>
-              {last?.body ?? (last?.photo_path ? "A photo." : (c.description ?? "Nothing yet."))}
+            <p className="relative line-clamp-2 text-[13px] leading-[1.3] text-white/85">
+              {last?.body ?? (last?.photo_path ? "a photo." : (c.description ?? "nothing yet."))}
             </p>
             {c.origin === "partner" && (
-              <span className={`relative mt-1 text-[11px] font-semibold ${cover ? "text-white/70" : "text-accent"}`}>started by your partner</span>
+              <span className="relative mt-1 text-[11px] font-semibold text-white/70">started by your partner</span>
             )}
           </Link>
         );
