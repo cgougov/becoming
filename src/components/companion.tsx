@@ -1,85 +1,109 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FRESH_HELLO, pickReaction, type Mood } from "@/lib/companion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FRESH_HELLO, HARD_LINE, TAP_LINES, pickReaction, type Mood } from "@/lib/companion";
+import { restingMood, type PipMood } from "@/lib/pip";
+import { PipFace } from "./pip-face";
 
-/** Fired by the capture form after a successful keep. The companion reacts to it. */
+/** Fired by the capture form after a successful keep. Pip reacts to it. */
 export const KEPT_EVENT = "becoming:kept";
+/** Fired when something kept reads as hard (the partner's tagging decides). Pip goes soft. */
+export const HARD_EVENT = "becoming:hard";
 
+type Motion = "bob" | "hop" | "spin" | "sway" | "breathe" | "giggle";
+const MOTION_FOR: Record<PipMood, Motion> = { calm: "bob", happy: "bob", sleepy: "breathe", soft: "sway" };
 
 /**
- * The companion: a circle that idles (bob, blink) and pops a one-word reaction when you
- * keep something. Ambient, not chatty (docs/PRODUCT.md). Character pass comes later.
+ * Pip: ambient, not chatty. Switches between set faces with a bounce; the body color is the
+ * mood. Hops when you come back, spins when you keep something, goes soft on hard things,
+ * dozes after midnight, giggles when tapped. Never sad at you.
  */
-export function Companion({ mood = "idle" }: { mood?: Mood }) {
-  const [reaction, setReaction] = useState<string | null>(mood === "fresh" ? FRESH_HELLO : null);
-  const [wiggle, setWiggle] = useState(false);
+export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "back" | "normal"; day: string }) {
+  const legacyMood: Mood = arrival === "fresh" ? "fresh" : arrival === "back" ? "curious" : "idle";
+  const [rest, setRest] = useState<PipMood>("calm");
+  const [mood, setMood] = useState<PipMood>(arrival === "normal" ? "calm" : "happy");
+  const [motion, setMotion] = useState<Motion>(arrival === "normal" ? "bob" : "hop");
+  const [line, setLine] = useState<string | null>(arrival === "fresh" ? FRESH_HELLO : null);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const lastLine = useRef<string | null>(null);
+
+  // Resting mood depends on the local clock, so it is decided in the browser.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const r = restingMood(new Date().getHours(), false);
+      setRest(r);
+      setMood(r);
+      setMotion(MOTION_FOR[r]);
+      setLine(null);
+    }, arrival === "normal" ? 0 : 2600);
+    return () => clearTimeout(t);
+  }, [arrival]);
+
+  const react = useCallback(
+    (next: { mood: PipMood; motion: Motion; line: string | null; ms: number }) => {
+      clearTimeout(timer.current);
+      setMood(next.mood);
+      setMotion(next.motion);
+      setLine(next.line);
+      if (next.line) lastLine.current = next.line;
+      timer.current = setTimeout(() => {
+        setMood(rest);
+        setMotion(MOTION_FOR[rest]);
+        setLine(null);
+      }, next.ms);
+    },
+    [rest],
+  );
 
   useEffect(() => {
-    // A first-ever hello fades on its own; a curious arrival says nothing, it just perks up.
-    if (mood === "fresh") {
-      const t = setTimeout(() => setReaction(null), 2400);
-      return () => clearTimeout(t);
-    }
-  }, [mood]);
-
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let last: string | null = null;
     function onKept(e: Event) {
       const d = (e as CustomEvent<{ hasPhoto?: boolean; hasText?: boolean; keptTodayBefore?: number; moment?: boolean }>).detail ?? {};
-      const next = pickReaction(
+      const said = pickReaction(
         {
           hasPhoto: !!d.hasPhoto,
           hasText: !!d.hasText,
           localHour: new Date().getHours(),
           keptTodayBefore: d.keptTodayBefore ?? 1,
-          mood,
+          mood: legacyMood,
           moment: !!d.moment,
         },
-        last,
+        lastLine.current,
       );
-      last = next;
-      setReaction(next);
-      setWiggle(true);
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        setReaction(null);
-        setWiggle(false);
-      }, 2400);
+      react({ mood: "happy", motion: "spin", line: said, ms: 2400 });
+    }
+    function onHard() {
+      react({ mood: "soft", motion: "sway", line: HARD_LINE, ms: 6000 });
     }
     window.addEventListener(KEPT_EVENT, onKept);
+    window.addEventListener(HARD_EVENT, onHard);
     return () => {
       window.removeEventListener(KEPT_EVENT, onKept);
-      clearTimeout(timer);
+      window.removeEventListener(HARD_EVENT, onHard);
     };
-  }, [mood]);
+  }, [legacyMood, react]);
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  function tap() {
+    const options = TAP_LINES.filter((l) => l !== lastLine.current);
+    react({ mood: "happy", motion: "giggle", line: options[Math.floor(Math.random() * options.length)], ms: 1600 });
+  }
 
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none fixed right-6 z-10 h-16 w-16"
-      style={{ bottom: "calc(5.25rem + env(safe-area-inset-bottom))" }}
-    >
-      <div className={`relative h-full w-full ${wiggle ? "anim-wiggle" : mood === "curious" ? "anim-bob-quick" : "anim-bob"}`}>
-        <div className="absolute inset-0 rounded-full bg-accent" />
-        <svg viewBox="0 0 64 64" className="relative h-full w-full" fill="none">
-          <g className="anim-blink" style={{ transformOrigin: "24px 32px" }}>
-            <ellipse cx="24" cy="32" rx={mood === "curious" ? 3.4 : 2.9} ry={mood === "curious" ? 4.2 : 3.4} fill="#17171c" />
-          </g>
-          <g className="anim-blink" style={{ transformOrigin: "40px 32px", animationDelay: "0.1s" }}>
-            <ellipse cx="40" cy="32" rx={mood === "curious" ? 3.4 : 2.9} ry={mood === "curious" ? 4.2 : 3.4} fill="#17171c" />
-          </g>
-          <path d="M26 40.5c3 2.6 9 2.6 12 0" stroke="#17171c" strokeWidth="2.2" strokeLinecap="round" />
-          <ellipse cx="17" cy="38.5" rx="3.4" ry="2" fill="#fff" fillOpacity="0.5" />
-          <ellipse cx="47" cy="38.5" rx="3.4" ry="2" fill="#fff" fillOpacity="0.5" />
-        </svg>
-        {reaction && (
-          <div className="anim-pop absolute right-[4.5rem] top-1 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-[13px] font-bold text-background">
-            {reaction}
-          </div>
-        )}
-      </div>
+    <div className="fixed right-5 z-10 h-16 w-16" style={{ bottom: "calc(5.25rem + env(safe-area-inset-bottom))" }}>
+      <button type="button" onClick={tap} aria-label="Pip" className="relative block h-full w-full">
+        <span key={motion + mood} className={`block h-full w-full anim-${motion}`}>
+          <PipFace mood={mood} day={day} size={64} />
+        </span>
+      </button>
+      {line && (
+        <div
+          role="status"
+          className="anim-pop pointer-events-none absolute right-[4.5rem] top-1 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-[13px] font-bold text-background"
+        >
+          {line}
+        </div>
+      )}
     </div>
   );
 }

@@ -53,9 +53,11 @@ const LATE = ["it is very late. I am keeping it anyway.", "you should be asleep.
 const EARLY = ["you're up early. so am I, apparently.", "good morning ♡", "an early one! how industrious."];
 const BACK = ["oh! you're back.", "I kept everything exactly where you left it.", "hello again. I hoped you'd come.", "there you are! hello hello."];
 export const FRESH_HELLO = "oh! hello. I'm Pip.";
+export const TAP_LINES = ["hee. that tickles.", "oh! hello.", "yes? I'm here.", "boop."];
+export const HARD_LINE = "oh no. I'm sorry.";
 
 /** Every curated line Pip can say, for the voice test. */
-export const ALL_COMPANION_LINES = [...GENERAL, ...PHOTO, ...FIRST_TODAY, ...MANY_TODAY, ...LATE, ...EARLY, ...BACK, FRESH_HELLO];
+export const ALL_COMPANION_LINES = [...GENERAL, ...PHOTO, ...FIRST_TODAY, ...MANY_TODAY, ...LATE, ...EARLY, ...BACK, FRESH_HELLO, ...TAP_LINES, HARD_LINE];
 
 export function reactionPool(ctx: KeptContext): string[] {
   const pool: string[] = [];
