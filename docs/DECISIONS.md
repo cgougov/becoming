@@ -101,3 +101,10 @@ honest). It may start one collection a night, only from three or more unfiled th
 tile says so. Nightly run is Vercel Cron (Hobby allows daily, which is all filing needs);
 pg_cron is still the plan for random check-ins (M4), which need sub-daily scheduling.
 Model: Haiku 5.5 by default; filing is classification and cost matters more than nuance.
+
+### 2026-11-14 — Sign in with an emailed code, not just a link
+Magic links (PKCE) only work in the browser that requested them. On iOS the Home Screen app,
+Safari and mail apps' in-app browsers keep separate storage, and school mail scanners can
+open the link first and use it up. The login now asks for the 6-digit code from the email
+(`verifyOtp`, type "email"), with the link still working where it can. Requires the Supabase
+"Magic Link" email template to include `{{ .Token }}`.
