@@ -165,6 +165,16 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
   banned patterns (em dashes, "journey", contrast-reveals, therapy-speak, emoji, length).
 - Black by default (`color-scheme: dark`, theme/manifest colors).
 
+## Pip, round 7 in code ✅ (PR #20)
+
+- `src/lib/pip.ts`: four face families (mochi, bean, smiley, kitty) as data, rotating by local
+  day; soft = Bean's soft face always; `MOOD_COLORS` (calm coral, happy yellow, sleepy lilac,
+  soft blue); `restingMood` (sleepy 00–05, happy on return). Tested.
+- `PipFace` renders it; the body color fades between moods; faces swap with a bounce.
+- `Companion`: hops on return (then settles), spins + speaks on keep, `HARD_EVENT` → soft blue,
+  sways, "oh no. I'm sorry." (fired by tagging in the next PR), giggles when tapped.
+- Pip's face replaces the plain accent dots on Look back and the moment card.
+
 ## Next (positioning 2026-11-14, see PRODUCT.md "Positioning")
 
 1. Today's page with live tags. 2. People pages + nudges. 3. 10pm wind-down. 4. Yours as the scrapbook of you. 5. Sunday letter. 6. Zero-friction onboarding. Then ten real people.
