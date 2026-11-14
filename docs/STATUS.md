@@ -1,6 +1,15 @@
 # Status
 
-_Last updated: 2026-11-14 (M4 part 1: daily moment)_
+_Last updated: 2026-11-14 (health check)_
+
+## Health check — 2026-11-14 ✅
+
+- ✅ Code: `npm run check` green (155 tests), main = what's live.
+- ✅ Database: all 12 tables live on Supabase incl. `day_checks`, `directions`, `collections.cover_path`; RLS returns nothing without a session.
+- ✅ Vercel: production on #27, redeployed after `ANTHROPIC_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` were added.
+- ✅ Sign-in: emailed code via Resend (hello@christiangougov.com); signed-out pages redirect to /login.
+- 🔧 Fixed: the nightly cron (`/api/partner/tag`) was being redirected to /login by the session gate, so it never ran. Now public; it checks its own secret.
+- Not set (fine): `ANTHROPIC_MODEL` (defaults in code), VAPID keys (push not built yet).
 
 ## Done
 

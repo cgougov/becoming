@@ -15,6 +15,12 @@ describe("isPublicPath", () => {
     expect(isPublicPath("/today")).toBe(false);
     expect(isPublicPath("/loginx")).toBe(false);
   });
+
+  it("lets the nightly cron through (it checks its own secret), and nothing else under /api", () => {
+    expect(isPublicPath("/api/partner/tag")).toBe(true);
+    expect(isPublicPath("/api/partner/tagx")).toBe(false);
+    expect(isPublicPath("/api/other")).toBe(false);
+  });
 });
 
 describe("safeNextPath", () => {
