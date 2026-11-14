@@ -15,8 +15,9 @@ export async function getTodayIntention(userId: string, timeZone: string): Promi
 }
 
 /** Shows the line in the morning window, or all day once an intention is set. */
-export async function TodayIntention({ userId, timeZone }: { userId: string; timeZone: string }) {
+export async function TodayIntention({ userId, timeZone, hidePrompt = false }: { userId: string; timeZone: string; hidePrompt?: boolean }) {
   const intention = await getTodayIntention(userId, timeZone);
+  if (!intention && hidePrompt) return null;
   if (!showIntentionPrompt(localHour(new Date(), timeZone), !!intention)) return null;
   return <IntentionLine intention={intention} />;
 }

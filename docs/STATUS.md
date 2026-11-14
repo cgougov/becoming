@@ -192,7 +192,24 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
 - Removed: File now, "Filing tonight", nightly filing, `/you/unsorted`. The nightly cron is now
   a safety net that tags anything never read (`/api/partner/tag`).
 
+## Morning check-in + 10pm wind-down ✅ (PR #26)
+
+- `day_checks` (migration `20261114200000`): mood, energy (0–100, private), skipped, the good
+  thing's entry. **`npx supabase db push --remote`.**
+- Morning 5–11: card with a Pip hello ("good morning. today has potential. I checked."); open →
+  mood + energy sliders with Pip mirroring (set faces + mood color), then "one thing for today?"
+  which becomes the intention. The separate intention chip hides while it's due.
+- Wind-down 22–04 (after midnight files under the day that ended): same sliders, then "one good
+  thing from today?" ("even a tiny good thing?" on a heavy day); kept as an entry and tagged.
+- "not now" hides it for the day. Lines in `src/lib/checkins.ts`, covered by the voice test.
+- Earlier the same day: Pip wittier lines + skip on a yay (#25); stale-file fix (#24).
+
 ## Next (positioning 2026-11-14, see PRODUCT.md "Positioning")
+
+Christian's order (2026-11-14): people pages + Yours rebuild → (annotations later).
+Push for the moment / morning / wind-down once the Home Screen install is in use.
+
+### Earlier order
 
 1. Today's page with live tags. 2. People pages + nudges. 3. 10pm wind-down. 4. Yours as the scrapbook of you. 5. Sunday letter. 6. Zero-friction onboarding. Then ten real people.
 

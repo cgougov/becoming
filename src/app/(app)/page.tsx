@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { CaptureForm } from "./capture/capture-form";
 import { DaysList } from "./capture/days-list";
 import { HomeView } from "./home-view";
+import { CheckinCard } from "./checkin/checkin-card";
+import { pendingCheck } from "./checkin/pending";
 import { TodayIntention } from "./intention/today-intention";
 import { MomentLine } from "./moment/moment-line";
 import { ensureTodayMoment, phaseOf } from "./moment/today-moment";
@@ -30,6 +32,8 @@ async function SignedInCapture() {
     .eq("owner_id", user.id)
     .gte("captured_at", startOfDayInTimeZone(now, timeZone).toISOString());
 
+  const due = await pendingCheck(user.id, timeZone);
+  const morningPending = due?.kind === "morning"; // the morning check-in asks for the one thing instead
   const moment = await ensureTodayMoment(user.id, timeZone);
   const phase = moment ? phaseOf(moment, now) : "passed";
   const live = !!moment && phase === "live" && moment.status === "scheduled";
@@ -38,9 +42,14 @@ async function SignedInCapture() {
     <HomeView
       day={day}
       moment={moment && <MomentLine moment={moment} phase={phase} timeZone={timeZone} seed={now.getDate() + now.getHours()} />}
+      checkin={
+        <Suspense>
+          <CheckinCard userId={user.id} timeZone={timeZone} />
+        </Suspense>
+      }
       intention={
         <Suspense>
-          <TodayIntention userId={user.id} timeZone={timeZone} />
+          <TodayIntention userId={user.id} timeZone={timeZone} hidePrompt={morningPending} />
         </Suspense>
       }
       capture={<CaptureForm userId={user.id} keptToday={count ?? 0} momentId={live ? moment.id : null} />}
