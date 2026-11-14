@@ -45,3 +45,14 @@ describe("normalizeEmail", () => {
     expect(normalizeEmail("a@b")).toBeNull();
   });
 });
+
+describe("normalizeOtp", () => {
+  it("keeps digits, tolerates spaces and dashes", async () => {
+    const { normalizeOtp } = await import("./routes");
+    expect(normalizeOtp("123456")).toBe("123456");
+    expect(normalizeOtp(" 123 456 ")).toBe("123456");
+    expect(normalizeOtp("123-456")).toBe("123456");
+    expect(normalizeOtp("12345")).toBeNull();
+    expect(normalizeOtp("abcdef")).toBeNull();
+  });
+});

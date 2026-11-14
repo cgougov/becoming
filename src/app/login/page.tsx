@@ -8,7 +8,7 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-8 px-6 pb-10 pt-[max(3rem,env(safe-area-inset-top))]">
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold tracking-tight">Becoming</h1>
-        <p className="text-base opacity-70">Sign in with a link. No password to remember.</p>
+        <p className="text-base opacity-70">Sign in with a code from your email. No password.</p>
       </header>
 
       <Suspense>
