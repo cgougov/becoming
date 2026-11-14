@@ -20,6 +20,8 @@ export interface TaggingResult {
 export const MAX_COLLECTION_TAGS = 2;
 export const MAX_PEOPLE_TAGS = 4;
 export const MAX_PERSON_NAME = 40;
+/** Where things go when nothing else fits, if you have it. Nothing is ever left homeless. */
+export const CATCH_ALL_SLUG = "thoughts";
 
 export const TAGGING_SCHEMA = {
   type: "object",
@@ -74,6 +76,8 @@ export function cleanTaggingResult(raw: unknown, collections: TagCollection[], k
     outPeople.push(known.get(key) ?? name);
     if (outPeople.length >= MAX_PEOPLE_TAGS) break;
   }
+
+  if (outCols.length === 0 && slugs.has(CATCH_ALL_SLUG)) outCols.push(CATCH_ALL_SLUG);
 
   const tone: Tone = r.tone === "hard" || r.tone === "good" ? r.tone : "neutral";
   return { collections: outCols, people: outPeople, tone };

@@ -11,6 +11,7 @@ export interface SuggestedCollection {
 }
 
 export const SUGGESTED_COLLECTIONS: readonly SuggestedCollection[] = [
+  { slug: "thoughts", name: "Thoughts", hint: "loose thoughts. no filing needed." },
   { slug: "lifts", name: "Lifts", hint: "heavy things, lifted." },
   { slug: "places-i-ate", name: "Places I ate", hint: "good bites only." },
   { slug: "reading", name: "Reading", hint: "words, consumed." },

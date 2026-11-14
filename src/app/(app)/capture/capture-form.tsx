@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { KEEPING_EVENT, KEPT_EVENT } from "@/components/companion";
 import { compressImage } from "@/lib/photos/compress";
 import { MAX_PHOTO_BYTES, photoObjectPath } from "@/lib/photos/path";
@@ -15,6 +15,21 @@ function Icon({ d }: { d: React.ReactNode }) {
   );
 }
 
+const DRAFT_KEY = "becoming:draft";
+
+function saveDraft(text: string) {
+  try {
+    if (text) localStorage.setItem(DRAFT_KEY, text);
+    else localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // private mode or storage blocked: the draft just isn't remembered
+  }
+}
+
+/**
+ * Keep is one motion: type, hit return (or the arrow), done. Pip tags it after it's kept.
+ * What you're typing is remembered on this device, so closing the app never loses it.
+ */
 export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId: string; keptToday?: number; momentId?: string | null }) {
   const [body, setBody] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
@@ -22,6 +37,16 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const fileInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      try {
+        const d = localStorage.getItem(DRAFT_KEY);
+        if (d) setBody((b) => b || d);
+      } catch {}
+    }, 0);
+    return () => clearTimeout(t);
+  }, []);
 
   function pickPhoto(file: File | null) {
     setError(null);
@@ -32,6 +57,7 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
 
   function reset() {
     setBody("");
+    saveDraft("");
     pickPhoto(null);
     if (fileInput.current) fileInput.current.value = "";
   }
@@ -85,13 +111,20 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
       <textarea
         id="capture"
         value={body}
-        onChange={(e) => setBody(e.target.value)}
+        onChange={(e) => {
+          setBody(e.target.value);
+          saveDraft(e.target.value);
+        }}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submit();
+          // Return keeps it. Shift+Return for a new line.
+          if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+            e.preventDefault();
+            submit();
+          }
         }}
         placeholder={momentId ? "right now…" : "What's on your mind."}
         rows={3}
-        enterKeyHint="done"
+        enterKeyHint="send"
         className="w-full resize-none bg-transparent text-[28px] font-semibold leading-[1.2] tracking-[-0.025em] outline-none placeholder:text-foreground/30"
       />
 
@@ -135,13 +168,20 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
             onChange={(e) => pickPhoto(e.target.files?.[0] ?? null)}
           />
         </label>
-        <button
-          type="submit"
-          disabled={!canSave}
-          className="ml-auto h-12 rounded-full bg-foreground px-7 text-[15px] font-bold text-background disabled:opacity-30"
-        >
-          {pending ? "Keeping…" : "Keep"}
-        </button>
+        {pending ? (
+          <span className="ml-auto text-[13px] font-semibold text-muted">keeping…</span>
+        ) : (
+          (body.trim() || photo) && (
+            <button
+              type="submit"
+              disabled={!canSave}
+              aria-label="Keep"
+              className="anim-rise ml-auto flex h-11 w-11 items-center justify-center rounded-full bg-foreground text-background"
+            >
+              <Icon d={<path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" />} />
+            </button>
+          )
+        )}
       </div>
     </form>
   );

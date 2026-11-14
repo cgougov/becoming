@@ -134,3 +134,11 @@ open the link first and use it up. The login now asks for the 6-digit code from 
 - It writes the day's daytime row (`kind = morning`) all day, so it never uses up the 10pm
   wind-down; after the wind-down it updates the evening row.
 - Pip rests in today's latest checked mood (still dozes after midnight), live via `MOOD_EVENT`.
+
+## 2026-11-14 — Keeping is one motion; Thoughts is the catch-all
+- Return keeps (Shift+Return for a new line); the big Keep pill is gone, a small arrow appears
+  only when there's something to keep. Tagging still happens right after it's kept.
+- We did not auto-keep on a typing pause: half-finished thoughts would land on the day.
+  Instead the draft is remembered on the device, so closing the app never loses it.
+- "Thoughts" is a suggested collection and the catch-all: if nothing else fits and you have it,
+  Pip files there. Nothing is left untagged unless you don't want a catch-all.
