@@ -33,13 +33,7 @@ export function momentPhase(now: Date, at: Date): MomentPhase {
   return "passed";
 }
 
-/** The companion's lines for the moment. Kawaii, hopecore, never pressure. */
-export const MOMENT_ASKS = ["what's right now?", "this exact minute ♡", "quick, what's around you?", "one thing from right now", "look up. what do you see?"];
-export const MOMENT_ENCOURAGEMENT = [
-  "no rush. it counts whenever.",
-  "anything at all ♡",
-  "boring is allowed.",
-  "a photo is plenty.",
-  "you're doing it.",
-];
-export const MOMENT_KEPT = ["that's today ♡", "got the moment", "perfect, that's it", "kept it. go live."];
+/** Pip's lines for the moment (docs/VOICE.md). Never pressure; missing it is never mentioned. */
+export const MOMENT_ASKS = ["it's the moment! what's around you?", "quickly, what's right now?", "now, please. anything at all.", "look up. what do you see?", "this minute, if you don't mind."];
+export const MOMENT_ENCOURAGEMENT = ["no rush. it counts whenever.", "boring is allowed.", "a photo is plenty.", "anything at all is fine.", "I'm not grading it."];
+export const MOMENT_KEPT = ["right on time!", "that's today's moment. perfect.", "got it. now go back to it.", "oh good, I hoped you'd catch it."];

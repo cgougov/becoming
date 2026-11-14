@@ -158,8 +158,22 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
 - Voice lines in `src/lib/moment.ts` and `src/lib/companion.ts`.
 - Look back: the "From your partner · an AI" label is gone; the companion's face instead.
 
-## Next
+## Voice + black ✅ (PR #17, on #16)
 
+- Pip rewritten as a kawaii C-3PO everywhere (`src/lib/companion.ts`, `src/lib/moment.ts`,
+  `src/lib/partner/character.ts`); `docs/VOICE.md`; `src/lib/voice.test.ts` fails the build on
+  banned patterns (em dashes, "journey", contrast-reveals, therapy-speak, emoji, length).
+- Black by default (`color-scheme: dark`, theme/manifest colors).
+
+## Next (agreed 2026-11-14, see PRODUCT.md "Decisions 2026-11-14")
+
+1. Mock the 10pm wind-down (sliders + Pip's live face + one good thing) → build it.
+2. Today's page with live tags (replaces filing UI).
+3. Pip's one suggestion on open; Pip states (hop on return, spin, mirror, doze).
+4. People pages; directions; the weekly letter; resurfacing.
+5. M4 part 2: push for the moment and the wind-down (needs the phone install).
+
+### Earlier
 1. **Deploy** (Christian) → then **M4 part 2: push** (service worker, VAPID, a cron that sends
    the moment's tap; `notified_at`).
 2. **People as first-class** (relationships second brain).

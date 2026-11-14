@@ -135,6 +135,33 @@ feelings over time as a lens.
 **Companion: Pip** (big eyes, blush, nothing else). It should spin, change expression with
 what you kept, and say sorry when something is hard.
 
+## Decisions 2026-11-14 (after round 5)
+
+- **Day is home.** Today's page; earlier days below. Nothing needs filing.
+- **The partner tags as you keep**: collection, people, goal. Tap a tag to change or remove it.
+  Replaces File now, "Filing tonight" and the required collections picker.
+- **Collections and people are views** of your days, never folders. Anything that mentions a
+  person shows up on their page automatically (the relationships second brain).
+- **Directions, not goals.** In your own words, no progress bars or percentages; under each,
+  what you kept that moved you that way. A number only if you ask for one.
+- **The weekly letter** is Look back: a few specific sentences from Pip, photos, people, one question.
+- **Three touches a day, under two minutes**: the moment (random, daytime); the wind-down at
+  **10pm** (mood + energy sliders with Pip's face following live, then one good thing); Pip's
+  one suggestion whenever you open it. Plus resurfacing ("a month ago today").
+- **Pip mirrors you, with care**: sleepy when you're tired, soft and close when you're low
+  ("oh no. I'm sorry."), a hop when it's good, lights up when you come back. Never sad *at* you.
+  Spins on keep, giggles when tapped, eyes follow, dozes after midnight.
+- **Mental health, healthy version**: notice what lifts you; small good things; optional
+  feeling naming; kindness on hard days; people as the strongest lever; rest counts. Mood data
+  is private and never shown as a score. Distress → plainly an AI, 988.
+- **Redirect, don't just block** (later): an opt-in iOS Shortcuts automation opens Becoming when
+  you open Instagram/TikTok, with a memory, a friend to text or one good thing, and a
+  "continue" button. Real interception (Screen Time API) needs a native app.
+- **Facts and recommendations**: occasional, tied to your interests and directions; facts come
+  from a real source Pip can point to, never invented.
+- **Voice: a kawaii C-3PO.** See `docs/VOICE.md`; enforced by `src/lib/voice.test.ts`.
+- **Black by default.**
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.

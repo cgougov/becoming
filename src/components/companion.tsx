@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { pickReaction, type Mood } from "@/lib/companion";
+import { FRESH_HELLO, pickReaction, type Mood } from "@/lib/companion";
 
 /** Fired by the capture form after a successful keep. The companion reacts to it. */
 export const KEPT_EVENT = "becoming:kept";
@@ -12,7 +12,7 @@ export const KEPT_EVENT = "becoming:kept";
  * keep something. Ambient, not chatty (docs/PRODUCT.md). Character pass comes later.
  */
 export function Companion({ mood = "idle" }: { mood?: Mood }) {
-  const [reaction, setReaction] = useState<string | null>(mood === "fresh" ? "hi." : null);
+  const [reaction, setReaction] = useState<string | null>(mood === "fresh" ? FRESH_HELLO : null);
   const [wiggle, setWiggle] = useState(false);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export function Companion({ mood = "idle" }: { mood?: Mood }) {
           <ellipse cx="47" cy="38.5" rx="3.4" ry="2" fill="#fff" fillOpacity="0.5" />
         </svg>
         {reaction && (
-          <div className="anim-pop absolute -left-14 top-1 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-[13px] font-bold text-background">
+          <div className="anim-pop absolute right-[4.5rem] top-1 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-[13px] font-bold text-background">
             {reaction}
           </div>
         )}

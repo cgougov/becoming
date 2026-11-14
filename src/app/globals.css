@@ -1,24 +1,16 @@
 @import "tailwindcss";
 @import "@fontsource-variable/plus-jakarta-sans";
 
-/* Craft pass (docs/PRODUCT.md "Honest evaluation"): pure white / near-black, photos are the
-   color, the companion is the one accent. Dark follows the phone. */
+/* Black by default (Christian, 2026-11-14). Photos are the color; Pip is the one accent.
+   A light theme can come back later as a setting. */
 :root {
-  --background: #ffffff;
-  --foreground: #0f0f12;
+  color-scheme: dark;
+  --background: #000000;
+  --foreground: #f4f4f5;
   --muted: #8e8e96;
-  --surface: #ffffff;
-  --chip: #f3f3f5;
+  --surface: #121214;
+  --chip: #1a1a1d;
   --accent: #ff6a3d;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #f4f4f5;
-    --muted: #8e8e96;
-    --surface: #121214;
-    --chip: #1a1a1d;
-  }
 }
 
 @theme inline {
