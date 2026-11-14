@@ -5,7 +5,9 @@ import { Pane } from "@/components/pane";
 import { tagOptions, withTags } from "@/lib/entries/tags";
 import { requireUser } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
+import { PhotoPicker } from "@/components/photo-picker";
 import { ENTRY_FIELDS, EntryList, type EntryRow } from "../../capture/entry-list";
+import { setCollectionCover } from "../actions";
 
 export default function CollectionPage({ params }: PageProps<"/you/[slug]">) {
   return (
@@ -47,9 +49,12 @@ async function CollectionBody({ params }: Pick<PageProps<"/you/[slug]">, "params
 
   return (
     <Pane big title={collection.name} subtitle={collection.description ?? "from your days"}>
-      <Link href="/you" className="-mt-4 text-sm text-muted underline-offset-2 hover:underline">
-        ← yours
-      </Link>
+      <div className="-mt-4 flex items-center justify-between text-sm text-muted">
+        <Link href="/you" className="underline-offset-2 hover:underline">
+          ← yours
+        </Link>
+        <PhotoPicker userId={user.id} onPath={setCollectionCover.bind(null, collection.id)} label="set a cover photo" className="font-semibold" />
+      </div>
       <EntryList entries={entries} timeZone={timeZone} options={options} showDate empty="nothing tagged here yet." />
     </Pane>
   );
