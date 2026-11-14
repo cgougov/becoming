@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 2026-11-13 (M3 craft)_
+_Last updated: 2026-11-14 (M3 partner: filing)_
 
 ## Done
 
@@ -130,6 +130,20 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
 - Subtraction: week dots moved to Look back; the intention line collapses to
   "+ one thing for today" until tapped; bigger capture type.
 - Days close: only today's lines are editable (annotations come with the partner).
+
+## M3 step 7 — the partner's first job: filing ✅ (PR #15)
+
+- `src/lib/partner/`: `character.ts` (system prompt, one place), `client.ts` (the only module
+  that knows the model; `ANTHROPIC_MODEL`, default `claude-haiku-5-5`), `filing.ts` (prompt +
+  JSON schema + result cleaning, unit-tested), `run-filing.ts` (applies confident assignments
+  ≥0.6, creates at most one partner-proposed collection a night from ≥3 entries, `origin=partner`).
+- Structured output via `output_config.format` (json_schema); no beta header.
+- `/api/partner/file`: nightly job for all users, Vercel Cron at 04:00 UTC (`vercel.json`),
+  guarded by `CRON_SECRET`, uses the service-role key. "File now" button on Keep runs it for
+  the signed-in user under RLS.
+- Tiles show "started by your partner" for partner-origin collections.
+- Env needed: `ANTHROPIC_API_KEY` (local + Vercel), `ANTHROPIC_MODEL` (optional), `CRON_SECRET`
+  + `SUPABASE_SERVICE_ROLE_KEY` (Vercel only, for the cron). Documented in `.env.example`.
 
 ## Next
 

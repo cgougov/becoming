@@ -9,13 +9,14 @@ interface CollectionRow {
   name: string;
   description: string | null;
   position: number;
+  origin: "suggested" | "user" | "partner";
 }
 
 /** Collections as white tiles with a dot, a count and the latest thing kept. Tap opens the scrapbook. */
 export async function CollectionCards({ userId }: { userId: string }) {
   const supabase = await createClient();
   const [{ data: collections }, { data: entries }] = await Promise.all([
-    supabase.from("collections").select("id, slug, name, description, position").eq("owner_id", userId).order("position"),
+    supabase.from("collections").select("id, slug, name, description, position, origin").eq("owner_id", userId).order("position"),
     supabase
       .from("entries")
       .select("collection_id, body, photo_path, captured_at")
@@ -58,6 +59,9 @@ export async function CollectionCards({ userId }: { userId: string }) {
             <p className={`relative line-clamp-2 text-[13px] leading-[1.3] ${cover ? "text-white/85" : "text-foreground/60"}`}>
               {last?.body ?? (last?.photo_path ? "A photo." : (c.description ?? "Nothing yet."))}
             </p>
+            {c.origin === "partner" && (
+              <span className={`relative mt-1 text-[11px] font-semibold ${cover ? "text-white/70" : "text-accent"}`}>started by your partner</span>
+            )}
           </Link>
         );
       })}
