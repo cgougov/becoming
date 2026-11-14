@@ -1,6 +1,7 @@
 import { startOfDayInTimeZone } from "@/lib/entries/time";
 import { createClient } from "@/lib/supabase/server";
 import { EntryList, type EntryRow } from "./entry-list";
+import { FileNowButton } from "./file-now-button";
 
 /** Attach each entry's collection (slug, name) without a join, so a schema hiccup can't blank the list. */
 export async function withCollections(userId: string, rows: EntryRow[]): Promise<EntryRow[]> {
@@ -23,10 +24,14 @@ export async function TodayList({ userId, timeZone }: { userId: string; timeZone
     .order("captured_at", { ascending: false });
   if (error) console.error("TodayList:", error.message);
   const entries = await withCollections(userId, (data ?? []) as EntryRow[]);
+  const unfiled = entries.some((e) => !e.collection_id);
 
   return (
     <section className="flex flex-col gap-3" aria-label="Kept today">
-      <h2 className="text-[13px] font-semibold text-muted">Today</h2>
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-[13px] font-semibold text-muted">Today</h2>
+        {unfiled && <FileNowButton />}
+      </div>
       {error ? (
         <p className="text-sm text-red-600" role="alert">
           Couldn&apos;t load today ({error.message}).

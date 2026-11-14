@@ -15,7 +15,7 @@ function Icon({ d }: { d: React.ReactNode }) {
   );
 }
 
-export function CaptureForm({ userId }: { userId: string }) {
+export function CaptureForm({ userId, keptToday = 0 }: { userId: string; keptToday?: number }) {
   const [body, setBody] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -54,8 +54,9 @@ export function CaptureForm({ userId }: { userId: string }) {
       }
       const result = await createEntry({ body, photoPath });
       if (!result.ok) return setError(result.message);
+      const detail = { hasPhoto: !!photo, hasText: body.trim().length > 0, keptTodayBefore: keptToday };
       reset();
-      window.dispatchEvent(new Event(KEPT_EVENT));
+      window.dispatchEvent(new CustomEvent(KEPT_EVENT, { detail }));
     });
   }
 

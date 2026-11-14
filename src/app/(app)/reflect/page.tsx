@@ -58,16 +58,18 @@ async function WeekSoFar() {
         </div>
       )}
 
-      <section className="mt-auto rounded-card bg-foreground p-4 text-[14px] leading-relaxed text-background">
-        <p className="mb-1 text-xs font-semibold text-background/50">From your partner · an AI</p>
+      <section className="mt-auto flex items-start gap-3 rounded-card bg-chip p-4 text-[15px] leading-relaxed">
+        <span aria-hidden className="mt-0.5 inline-block h-6 w-6 flex-none rounded-full bg-accent" />
+        <div>
         {unlockIn > 0 ? (
           <p>
-            I&apos;ll have a real question for you after about a week of logging — roughly {unlockIn} more{" "}
-            {unlockIn === 1 ? "day" : "days"}. Until then this is just what your week looks like. No streaks, nothing to keep up.
+            I&apos;ll have a real question for you after about a week — {unlockIn} more {unlockIn === 1 ? "day" : "days"}. Until then,
+            this is just what your week looks like. Nothing to keep up.
           </p>
         ) : (
           <p>You&apos;ve been at this a week. Reflection questions arrive in the next build (M5).</p>
         )}
+        </div>
       </section>
     </>
   );

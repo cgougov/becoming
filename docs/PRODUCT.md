@@ -119,6 +119,22 @@ a phone; off-white + coral reads "wellness app". Plan: deploy to the phone first
 (pure white / near-black, photos as the color, companion the one accent), then a subtraction
 pass on Keep, then a craft pass.
 
+## Evaluation and direction, 2026-11-13 night (Claude, at Christian's request)
+Honest state: a nicer Notes app with a mascot. Students will use it when (1) it taps them once
+a day at a moment they'd otherwise scroll, (2) Sunday says something true they didn't notice,
+(3) it knows their people. Build order from here: deploy → **people as first-class** (a person
+has a page: last seen, into, things to ask, something owed; entries can mention a person; the
+partner notices silence) → Pip in code (spin, expressions from what you kept, "I'm sorry" for
+hard things) → daily moment → lenses + the Sunday question.
+
+Decided against (Christian's voice-memo idea, the half that doesn't fit): scoring mental health
+or prescribing exercises. The partner is not a therapist; observation ("your lift days read
+lighter"), never diagnosis. Kept: voice as a capture mode; a one-tap feeling after a keep;
+feelings over time as a lens.
+
+**Companion: Pip** (big eyes, blush, nothing else). It should spin, change expression with
+what you kept, and say sorry when something is hard.
+
 ## Principles
 
 1. **Seconds to capture.** Open, type or snap, done. No required fields.

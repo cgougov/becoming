@@ -54,3 +54,22 @@ export async function updateEntryBody(id: string, body: string): Promise<Capture
   revalidatePath("/you");
   return { ok: true };
 }
+
+/** "File now": run the partner's filing for the signed-in user on demand. */
+export async function fileNow(): Promise<{ ok: true; filed: number; proposed: string | null } | { ok: false; message: string }> {
+  const { runFilingFor } = await import("@/lib/partner/run-filing");
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, message: "Signed out." };
+  try {
+    const r = await runFilingFor(supabase, user.id);
+    if (r.skipped === "unconfigured") return { ok: false, message: "The partner isn't connected yet (no API key)." };
+    revalidatePath("/");
+    revalidatePath("/you");
+    return { ok: true, filed: r.filed, proposed: r.proposed };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : "Something went wrong." };
+  }
+}

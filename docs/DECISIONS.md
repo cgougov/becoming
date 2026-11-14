@@ -94,3 +94,10 @@ sort target for the AI; it will have to propose instead of assume.
 Talking to the partner to set things up is the goal, but it needs the API and prompt work.
 A picker with suggestions + free text gets the same data today with zero AI risk. The screen is
 the fallback even after chat exists.
+
+### 2026-11-14 — Filing: confidence threshold, one proposal a night, Vercel Cron not pg_cron
+The partner files only what it's ≥0.6 sure of and leaves the rest ("Filing tonight" stays
+honest). It may start one collection a night, only from three or more unfiled things, and the
+tile says so. Nightly run is Vercel Cron (Hobby allows daily, which is all filing needs);
+pg_cron is still the plan for random check-ins (M4), which need sub-daily scheduling.
+Model: Haiku 5.5 by default; filing is classification and cost matters more than nuance.
