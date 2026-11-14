@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { dotColor, emptyTileLine } from "@/lib/collections";
-import { gradientFor } from "@/lib/gradients";
+import { emptyTileLine } from "@/lib/collections";
+import { gradientOf, toneAt } from "@/lib/gradients";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "./entry-list";
 
@@ -50,7 +50,8 @@ export async function CollectionCards({ userId }: { userId: string }) {
 
   return (
     <section className="grid grid-cols-2 gap-2.5" aria-label="Collections">
-      {((collections ?? []) as CollectionRow[]).map((c) => {
+      {((collections ?? []) as CollectionRow[]).map((c, i) => {
+        const tone = toneAt(i);
         const last = latest.get(c.id);
         // Your own cover first, then the latest photo kept there, then a soft gradient.
         const cover = (c.cover_path && covers.get(c.cover_path)) || (last?.photo_path ? covers.get(last.photo_path) : undefined);
@@ -59,16 +60,16 @@ export async function CollectionCards({ userId }: { userId: string }) {
             key={c.id}
             href={`/you/${c.slug}`}
             className="relative flex min-h-[148px] flex-col justify-between overflow-hidden rounded-card p-3.5 text-white"
-            style={cover ? undefined : { background: gradientFor(c.slug) }}
+            style={cover ? undefined : { background: gradientOf(tone) }}
           >
             {cover && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
+            <div className={`absolute inset-0 bg-gradient-to-t ${cover ? "from-black/65 via-black/15" : "from-black/35 via-transparent"} to-transparent`} />
             <div className="relative flex items-baseline justify-between gap-2">
-              <h2 className="flex items-center gap-2 text-[16px] font-semibold">
-                <span className="h-2 w-2 flex-none rounded-full" style={{ background: dotColor(c.slug) }} />
+              <h2 className="flex items-center gap-2 text-[16px] font-semibold [text-shadow:0_1px_6px_rgba(0,0,0,0.25)]">
+                <span className="h-2 w-2 flex-none rounded-full" style={{ background: cover ? tone : "rgba(255,255,255,0.9)" }} />
                 <span className="truncate">{c.name}</span>
               </h2>
               <span className="text-[13px] font-semibold tabular-nums text-white/70">{tally.get(c.id) ?? 0}</span>

@@ -106,7 +106,7 @@ export function EntryLine({
                 t.kind === "person" ? "bg-[#5b8cff]/15 text-[#a9c1ff]" : "bg-chip text-foreground/80"
               }`}
             >
-              <span className="h-[7px] w-[7px] rounded-full" style={{ background: t.kind === "person" ? "#5b8cff" : dotColor(t.slug) }} />
+              <span className="h-[7px] w-[7px] rounded-full" style={{ background: t.kind === "person" ? "#5b8cff" : (t.tone ?? dotColor(t.slug)) }} />
               {t.label}
             </button>
           ))

@@ -124,3 +124,6 @@ open the link first and use it up. The login now asks for the 6-digit code from 
 - Week dots turn green (`--kept`) on days you kept something. Orange stays Pip's.
 - Tiles quote the latest thing tagged there ("…"); empty tiles get short, cute hints in Pip's
   voice instead of descriptive ones. Stored descriptions stay as they are (the tagger reads them).
+- Update (same day): tones are handed out by collection order, not by a hash of the name, so
+  neighbors never share a color (the hash put three tiles on the same blue). Eight distinct hues,
+  brighter tops; chips use their collection's tile tone. Dot on a gradient tile is white.

@@ -82,7 +82,7 @@ export function TagSheet({ entryId, tags, options, onClose }: { entryId: string;
           <div className="flex flex-wrap gap-2">
             {options.collections.map((c) => (
               <button key={c.id} type="button" aria-pressed={cols.has(c.id)} onClick={() => toggle(cols, c.id, setCols)} className={chip(cols.has(c.id))}>
-                <span className="h-2 w-2 rounded-full" style={{ background: dotColor(c.slug) }} />
+                <span className="h-2 w-2 rounded-full" style={{ background: c.tone ?? dotColor(c.slug) }} />
                 {c.name}
               </button>
             ))}
