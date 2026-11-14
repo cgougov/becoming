@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Mood } from "@/lib/companion";
+import { pickReaction, type Mood } from "@/lib/companion";
 
 /** Fired by the capture form after a successful keep. The companion reacts to it. */
 export const KEPT_EVENT = "becoming:kept";
 
-const REACTIONS = ["nice.", "kept.", "got it.", "love that.", "noted."];
 
 /**
  * The companion: a circle that idles (bob, blink) and pops a one-word reaction when you
@@ -26,8 +25,21 @@ export function Companion({ mood = "idle" }: { mood?: Mood }) {
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
-    function onKept() {
-      setReaction(REACTIONS[Math.floor(Math.random() * REACTIONS.length)]);
+    let last: string | null = null;
+    function onKept(e: Event) {
+      const d = (e as CustomEvent<{ hasPhoto?: boolean; hasText?: boolean; keptTodayBefore?: number }>).detail ?? {};
+      const next = pickReaction(
+        {
+          hasPhoto: !!d.hasPhoto,
+          hasText: !!d.hasText,
+          localHour: new Date().getHours(),
+          keptTodayBefore: d.keptTodayBefore ?? 1,
+          mood,
+        },
+        last,
+      );
+      last = next;
+      setReaction(next);
       setWiggle(true);
       clearTimeout(timer);
       timer = setTimeout(() => {
@@ -40,7 +52,7 @@ export function Companion({ mood = "idle" }: { mood?: Mood }) {
       window.removeEventListener(KEPT_EVENT, onKept);
       clearTimeout(timer);
     };
-  }, []);
+  }, [mood]);
 
   return (
     <div
