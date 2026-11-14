@@ -109,3 +109,9 @@ created on first mention. The person's own tags always win (setting tags replace
 Tagging also returns a tone so Pip can say sorry on hard things instead of "splendid." Pip
 therefore waits for the read (max 4 s) before speaking, and only spins in the meantime.
 Gave up: a single `collection_id` per entry; kept the column (deprecated) to avoid a risky drop.
+### 2026-11-14 — Sign in with an emailed code, not just a link
+Magic links (PKCE) only work in the browser that requested them. On iOS the Home Screen app,
+Safari and mail apps' in-app browsers keep separate storage, and school mail scanners can
+open the link first and use it up. The login now asks for the 6-digit code from the email
+(`verifyOtp`, type "email"), with the link still working where it can. Requires the Supabase
+"Magic Link" email template to include `{{ .Token }}`.

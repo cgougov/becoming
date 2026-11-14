@@ -24,3 +24,9 @@ export function normalizeEmail(raw: string): string | null {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return null;
   return email;
 }
+
+/** The emailed sign-in code: digits only, 6–10 long (Supabase's length is configurable). */
+export function normalizeOtp(raw: string): string | null {
+  const code = raw.replace(/\D/g, "");
+  return code.length >= 6 && code.length <= 10 ? code : null;
+}
