@@ -158,3 +158,10 @@ open the link first and use it up. The login now asks for the 6-digit code from 
 - Supabase pg_cron + pg_net call `/api/push/tick` every 5 minutes (free, already in the stack).
   Vercel Hobby cron runs once a day, which can't do random times. `push_sent` makes each nudge
   once-a-day even if ticks overlap. `web-push` (free, VAPID) sends; dead devices are forgotten.
+
+## 2026-11-14 — Onboarding is a one-minute talk with Pip, about becoming
+- Six screens, one thing each, all skippable: hi → "who do you want to become?" (saved as a
+  year direction) → what to keep (Thoughts, Small wins, People ticked) → one thing this week
+  (week direction) → "can I tap you on the shoulder?" (notifications, or Home Screen how-to)
+  → "now keep one thing." Lands on Today.
+- It leads with becoming, not features: the first real question is who you want to be.

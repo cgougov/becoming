@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { buildInitialCollections } from "@/lib/collections";
+import { normalizeDirection } from "@/lib/onboarding";
 import { createClient } from "@/lib/supabase/server";
 
 export async function completeSetup(formData: FormData): Promise<void> {
@@ -21,6 +22,13 @@ export async function completeSetup(formData: FormData): Promise<void> {
       .upsert(rows.map((r) => ({ ...r, owner_id: user.id })), { onConflict: "owner_id,slug", ignoreDuplicates: true });
     if (error) throw new Error(error.message);
   }
+  // "who do you want to become?" is a year direction; "one thing for this week" is a week one.
+  const directions = [
+    { text: normalizeDirection(formData.get("becoming")), horizon: "year" },
+    { text: normalizeDirection(formData.get("week")), horizon: "week" },
+  ].filter((d): d is { text: string; horizon: string } => !!d.text);
+  if (directions.length) await supabase.from("directions").insert(directions.map((d) => ({ ...d, owner_id: user.id })));
+
   const { error } = await supabase.from("profiles").update({ setup_completed_at: new Date().toISOString() }).eq("id", user.id);
   if (error) throw new Error(error.message);
 

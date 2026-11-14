@@ -1,11 +1,18 @@
-import { Pane } from "@/components/pane";
+import { connection } from "next/server";
+import { Suspense } from "react";
+import { localDay } from "@/lib/entries/time";
 import { StartForm } from "./start-form";
 
-/** First open. One question from the partner; collections in the user's words. */
+/** First open: Pip says hi, asks who you want to become, and gets you to your first keep. */
 export default function StartPage() {
   return (
-    <Pane big title="What do you want to keep track of?" subtitle="Pick a few, or say it your way. Nothing here is permanent.">
-      <StartForm />
-    </Pane>
+    <Suspense>
+      <Start />
+    </Suspense>
   );
+}
+
+async function Start() {
+  await connection();
+  return <StartForm pipDay={localDay(new Date(), "America/New_York")} />;
 }
