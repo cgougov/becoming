@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { RESERVED_SLUGS, normalizeCollectionName, slugify } from "@/lib/collections";
 import { createClient } from "@/lib/supabase/server";
+import { normalizePhone } from "@/lib/people";
 
 export type NewCollectionState = { status: "idle" } | { status: "error"; message: string } | { status: "ok" };
 
@@ -97,6 +98,16 @@ export async function setPersonNote(id: string, note: string): Promise<void> {
   const clean = note.trim().slice(0, 1000) || null;
   await c.supabase.from("people").update({ note: clean }).eq("id", id).eq("owner_id", c.user.id);
   revalidatePath("/you", "layout");
+}
+
+export async function setPersonPhone(id: string, raw: string): Promise<{ ok: boolean }> {
+  const c = await me();
+  if (!c) return { ok: false };
+  const phone = raw.trim() ? normalizePhone(raw) : null;
+  if (raw.trim() && !phone) return { ok: false };
+  const { error } = await c.supabase.from("people").update({ phone }).eq("id", id).eq("owner_id", c.user.id);
+  revalidatePath("/you", "layout");
+  return { ok: !error };
 }
 
 export async function setPersonPhoto(id: string, path: string): Promise<void> {

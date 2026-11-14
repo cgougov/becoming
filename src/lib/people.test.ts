@@ -47,3 +47,13 @@ describe("collection tones", () => {
     expect(toneAt(TONES.length)).toBe(TONES[0]);
   });
 });
+
+describe("reach out", () => {
+  it("normalizes numbers and builds one-tap links", async () => {
+    const { normalizePhone, reachLinks } = await import("./people");
+    expect(normalizePhone("(609) 555-0142")).toBe("6095550142");
+    expect(normalizePhone("+1 609 555 0142")).toBe("+16095550142");
+    expect(normalizePhone("hi")).toBeNull();
+    expect(reachLinks("+16095550142")).toEqual({ text: "sms:+16095550142", call: "tel:+16095550142", facetime: "facetime:+16095550142" });
+  });
+});

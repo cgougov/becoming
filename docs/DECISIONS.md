@@ -142,3 +142,11 @@ open the link first and use it up. The login now asks for the 6-digit code from 
   Instead the draft is remembered on the device, so closing the app never loses it.
 - "Thoughts" is a suggested collection and the catch-all: if nothing else fits and you have it,
   Pip files there. Nothing is left untagged unless you don't want a catch-all.
+
+## 2026-11-14 — Reaching out, not reading messages
+- Person pages get text / call / FaceTime buttons (`sms:`, `tel:`, `facetime:` links) once you
+  add their number. Making it easy to reach out is the part we can do now.
+- Reading iMessage to "understand relationships" isn't possible from a web app, and iPhone apps
+  can't read your messages at all (Apple doesn't allow it). Possible later: a Mac helper that
+  reads your local Messages history with your permission, or an iOS Shortcut that shares a
+  conversation into Becoming. Parked until after v1.
