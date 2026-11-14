@@ -157,8 +157,10 @@ what you kept, and say sorry when something is hard.
 - **Redirect, don't just block** (later): an opt-in iOS Shortcuts automation opens Becoming when
   you open Instagram/TikTok, with a memory, a friend to text or one good thing, and a
   "continue" button. Real interception (Screen Time API) needs a native app.
-- **Facts and recommendations**: occasional, tied to your interests and directions; facts come
-  from a real source Pip can point to, never invented.
+- **Facts and recommendations**: occasional (a fact at most every few days), tied to your
+  interests and directions. Facts come from Wikipedia's "Did you know" / "On this day" (free to
+  reuse with credit): fetched, the closest match picked by the partner, said in Pip's voice with
+  the source one tap away. Never invented. Guinness and similar are linked to, never copied.
 - **Voice: a kawaii C-3PO.** See `docs/VOICE.md`; enforced by `src/lib/voice.test.ts`.
 - **Black by default.**
 
