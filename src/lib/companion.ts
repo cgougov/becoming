@@ -25,6 +25,7 @@ export interface KeptContext {
   localHour: number;
   keptTodayBefore: number; // how many were already kept today, before this one
   mood: Mood;
+  moment?: boolean; // kept during the daily moment
 }
 
 const GENERAL = ["kept ♡", "yay", "love that", "got it", "nice one", "ooh", "noted, gently", "tiny win", "that's yours now", "mm, yes", "saved ✧", "good one"];
@@ -37,6 +38,7 @@ const BACK = ["missed you ♡", "welcome back", "there you are", "hi hi"];
 
 export function reactionPool(ctx: KeptContext): string[] {
   const pool: string[] = [];
+  if (ctx.moment) return ["that's today ♡", "got the moment", "perfect, that's it", "kept it. go live.", "right now, kept ♡"];
   if (ctx.mood === "curious") pool.push(...BACK, ...BACK); // weighted: it's glad you're back
   if (ctx.keptTodayBefore === 0) pool.push(...FIRST_TODAY);
   if (ctx.keptTodayBefore >= 4) pool.push(...MANY_TODAY);

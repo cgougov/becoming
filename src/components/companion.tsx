@@ -27,7 +27,7 @@ export function Companion({ mood = "idle" }: { mood?: Mood }) {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let last: string | null = null;
     function onKept(e: Event) {
-      const d = (e as CustomEvent<{ hasPhoto?: boolean; hasText?: boolean; keptTodayBefore?: number }>).detail ?? {};
+      const d = (e as CustomEvent<{ hasPhoto?: boolean; hasText?: boolean; keptTodayBefore?: number; moment?: boolean }>).detail ?? {};
       const next = pickReaction(
         {
           hasPhoto: !!d.hasPhoto,
@@ -35,6 +35,7 @@ export function Companion({ mood = "idle" }: { mood?: Mood }) {
           localHour: new Date().getHours(),
           keptTodayBefore: d.keptTodayBefore ?? 1,
           mood,
+          moment: !!d.moment,
         },
         last,
       );
