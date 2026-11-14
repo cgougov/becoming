@@ -28,40 +28,43 @@ export interface KeptContext {
   keptTodayBefore: number; // how many were already kept today, before this one
   mood: Mood;
   moment?: boolean; // kept during the daily moment
+  good?: boolean; // the partner read it as a good moment
 }
 
 // Pip's voice: a kawaii C-3PO (docs/VOICE.md). Short, mostly lowercase, a little formal and
 // fussy, easily delighted. Never AI cadence. test: src/lib/voice.test.ts checks every line.
 const GENERAL = [
-  "kept.",
-  "oh, lovely.",
-  "I have saved it. carefully.",
-  "noted!",
-  "oh my. good one.",
-  "filed away, safe and sound.",
-  "I'll remember that.",
-  "how nice.",
+  "kept. I shall guard it with my life.",
+  "filed under 'excellent decisions'.",
+  "oh my. how wonderfully specific.",
+  "noted. with enthusiasm.",
+  "by my calculations, that was a good one.",
+  "I have saved it. twice, to be safe.",
+  "how very human of you. I approve.",
+  "splendid. truly splendid.",
+  "another page for the scrapbook!",
+  "I'll remember that. it's my whole job.",
   "acknowledged ♡",
-  "yes. very good.",
-  "got it, got it.",
-  "splendid.",
+  "oh, lovely. lovely lovely.",
 ];
-const PHOTO = ["oh! a photograph.", "how pretty.", "I like this one very much.", "a picture. wonderful.", "ooh. let me look."];
-const FIRST_TODAY = ["the first one today!", "oh, hello. I was hoping you'd come by.", "there you are.", "good whenever-it-is."];
-const MANY_TODAY = ["goodness, what a full day.", "another! by my count, quite a lot.", "you are very busy. I am keeping up.", "more? splendid."];
+const PHOTO = ["oh! a photograph. how thrilling.", "I'm told this is called art. I agree.", "framed. metaphorically.", "a picture! I'll keep it very safe.", "ooh. let me look closer. lovely."];
+const FIRST_TODAY = ["the first one today! I was waiting.", "oh, hello. I've been very patient.", "there you are. the day may begin.", "good whenever-it-is."];
+const MANY_TODAY = ["goodness. you are a busy person.", "another! I'm running out of shelves.", "my, what a full day.", "you're on a roll. I'm keeping up."];
 const LATE = ["it is very late. I am keeping it anyway.", "you should be asleep. so should I.", "a midnight one. how mysterious.", "quietly saved. bed soon?"];
 const EARLY = ["you're up early. so am I, apparently.", "good morning ♡", "an early one! how industrious."];
-const BACK = ["oh! you're back.", "I kept everything exactly where you left it.", "hello again. I hoped you'd come.", "there you are! hello hello."];
+const BACK = ["oh! you're back. I kept everything tidy.", "I kept everything exactly where you left it.", "hello again. I hoped you'd come.", "there you are! hello hello."];
+const GOOD = ["oh! that sounds lovely.", "goodness, a good one!", "how wonderful. I'm doing a little dance.", "yay! (that's the technical term.)"];
 export const FRESH_HELLO = "oh! hello. I'm Pip.";
-export const TAP_LINES = ["hee. that tickles.", "oh! hello.", "yes? I'm here.", "boop."];
+export const TAP_LINES = ["hee. that tickles.", "oh! hello.", "yes? I'm here.", "boop. I'm told that's a greeting.", "please, I'm working. (I'm not.)"];
 export const HARD_LINE = "oh no. I'm sorry.";
 
 /** Every curated line Pip can say, for the voice test. */
-export const ALL_COMPANION_LINES = [...GENERAL, ...PHOTO, ...FIRST_TODAY, ...MANY_TODAY, ...LATE, ...EARLY, ...BACK, FRESH_HELLO, ...TAP_LINES, HARD_LINE];
+export const ALL_COMPANION_LINES = [...GENERAL, ...PHOTO, ...FIRST_TODAY, ...MANY_TODAY, ...LATE, ...EARLY, ...BACK, ...GOOD, FRESH_HELLO, ...TAP_LINES, HARD_LINE];
 
 export function reactionPool(ctx: KeptContext): string[] {
   const pool: string[] = [];
   if (ctx.moment) return [...MOMENT_KEPT];
+  if (ctx.good) pool.push(...GOOD, ...GOOD, ...GOOD);
   if (ctx.mood === "curious") pool.push(...BACK, ...BACK); // weighted: it's glad you're back
   if (ctx.keptTodayBefore === 0) pool.push(...FIRST_TODAY);
   if (ctx.keptTodayBefore >= 4) pool.push(...MANY_TODAY);

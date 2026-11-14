@@ -70,6 +70,15 @@ button:active, a:active, label:active { transform: scale(0.97); }
   65% { transform: translateY(-6px); }
 }
 @keyframes spin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+/* A happy little skip: Pip hops out to the left and back. */
+@keyframes skip {
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(-14px, -18px) rotate(-8deg); }
+  30% { transform: translate(-28px, 0) scale(1.06, 0.94); }
+  45% { transform: translate(-40px, -14px) rotate(6deg); }
+  60% { transform: translate(-28px, 0) scale(1.06, 0.94); }
+  80% { transform: translate(-10px, -8px); }
+}
 @keyframes sway {
   0%, 100% { transform: translateY(4px) rotate(-4deg); }
   50% { transform: translateY(7px) rotate(-2deg); }
@@ -95,6 +104,8 @@ button:active, a:active, label:active { transform: scale(0.97); }
 .anim-bob { animation: bob 3.2s ease-in-out infinite; }
 .anim-hop { animation: hop 0.8s ease-out 3; }
 .anim-spin { animation: spin 0.6s cubic-bezier(0.3, 0.8, 0.3, 1); }
+.anim-skip { animation: skip 1.4s ease-in-out 1; }
+.anim-skip-twice { animation: skip 1.4s ease-in-out 2; }
 .anim-sway { animation: sway 4s ease-in-out infinite; }
 .anim-breathe { animation: breathe 4.5s ease-in-out infinite; }
 .anim-giggle { animation: giggle 0.7s ease-in-out; }
@@ -105,6 +116,6 @@ button:active, a:active, label:active { transform: scale(0.97); }
 .anim-rise { animation: rise 0.35s ease-out; }
 .anim-wiggle { animation: wiggle 0.5s ease-in-out; }
 @media (prefers-reduced-motion: reduce) {
-  .anim-shimmer, .anim-bob, .anim-bob-quick, .anim-hop, .anim-spin, .anim-sway, .anim-breathe, .anim-giggle, .anim-face-swap, .anim-blink, .anim-pop, .anim-rise, .anim-wiggle, .anim-pane { animation: none; }
+  .anim-skip, .anim-skip-twice, .anim-shimmer, .anim-bob, .anim-bob-quick, .anim-hop, .anim-spin, .anim-sway, .anim-breathe, .anim-giggle, .anim-face-swap, .anim-blink, .anim-pop, .anim-rise, .anim-wiggle, .anim-pane { animation: none; }
   button, a, label { transition: none; }
 }

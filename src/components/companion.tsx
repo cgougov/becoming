@@ -12,7 +12,7 @@ export const KEPT_EVENT = "becoming:kept";
 /** Fired when something kept reads as hard (the partner's tagging decides). Pip goes soft. */
 export const HARD_EVENT = "becoming:hard";
 
-type Motion = "bob" | "hop" | "spin" | "sway" | "breathe" | "giggle";
+type Motion = "bob" | "hop" | "spin" | "sway" | "breathe" | "giggle" | "skip" | "skip-twice";
 const MOTION_FOR: Record<PipMood, Motion> = { calm: "bob", happy: "bob", sleepy: "breathe", soft: "sway" };
 
 /**
@@ -66,7 +66,7 @@ export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "ba
     function onKept(e: Event) {
       const d = (e as CustomEvent<{ hasPhoto?: boolean; hasText?: boolean; keptTodayBefore?: number; moment?: boolean; tone?: string | null }>).detail ?? {};
       if (d.tone === "hard") {
-        react({ mood: "soft", motion: "sway", line: HARD_LINE, ms: 6000 });
+        react({ mood: "soft", motion: "sway", line: HARD_LINE, ms: 7000 });
         return;
       }
       const said = pickReaction(
@@ -77,10 +77,12 @@ export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "ba
           keptTodayBefore: d.keptTodayBefore ?? 1,
           mood: legacyMood,
           moment: !!d.moment,
+          good: d.tone === "good",
         },
         lastLine.current,
       );
-      react({ mood: "happy", motion: "bob", line: said, ms: 2400 });
+      // A "yay" moves: Pip skips out and back (twice when it read as a good moment).
+      react({ mood: "happy", motion: d.tone === "good" ? "skip-twice" : "skip", line: said, ms: 4500 });
     }
     function onHard() {
       react({ mood: "soft", motion: "sway", line: HARD_LINE, ms: 6000 });
@@ -99,7 +101,7 @@ export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "ba
 
   function tap() {
     const options = TAP_LINES.filter((l) => l !== lastLine.current);
-    react({ mood: "happy", motion: "giggle", line: options[Math.floor(Math.random() * options.length)], ms: 1600 });
+    react({ mood: "happy", motion: "giggle", line: options[Math.floor(Math.random() * options.length)], ms: 2600 });
   }
 
   return (
