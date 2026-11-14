@@ -11,6 +11,7 @@ import { NotifySwitch } from "./notify/notify-switch";
 import { pendingCheck } from "./checkin/pending";
 import { TodayIntention } from "./intention/today-intention";
 import { PeopleNudge } from "./people-nudge";
+import { GoalNudge } from "./goal-nudge";
 import { MomentLine } from "./moment/moment-line";
 import { ensureTodayMoment, phaseOf } from "./moment/today-moment";
 
@@ -58,6 +59,9 @@ async function SignedInCapture() {
       nudge={
         <>
           <NotifySwitch variant="card" />
+          <Suspense>
+            <GoalNudge userId={user.id} timeZone={timeZone} />
+          </Suspense>
           <Suspense>
             <PeopleNudge userId={user.id} timeZone={timeZone} />
           </Suspense>
