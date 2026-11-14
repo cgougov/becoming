@@ -7,6 +7,7 @@ import { DaysList } from "./capture/days-list";
 import { HomeView } from "./home-view";
 import { CheckinCard } from "./checkin/checkin-card";
 import { MoodBar } from "./checkin/mood-bar";
+import { NotifySwitch } from "./notify/notify-switch";
 import { pendingCheck } from "./checkin/pending";
 import { TodayIntention } from "./intention/today-intention";
 import { PeopleNudge } from "./people-nudge";
@@ -55,9 +56,12 @@ async function SignedInCapture() {
         </Suspense>
       }
       nudge={
-        <Suspense>
-          <PeopleNudge userId={user.id} timeZone={timeZone} />
-        </Suspense>
+        <>
+          <NotifySwitch variant="card" />
+          <Suspense>
+            <PeopleNudge userId={user.id} timeZone={timeZone} />
+          </Suspense>
+        </>
       }
       intention={
         <Suspense>

@@ -2,6 +2,17 @@
 
 _Last updated: 2026-11-14 (health check)_
 
+## Notifications (M4 part 2) ✅ code (PR "push") · needs one-time setup
+
+- Three nudges a day at most, each once: **8:30 morning** (if not checked in), **the moment**
+  (when it arrives; never late), **10pm wind-down** (if not done). Pure rules in `src/lib/push.ts`.
+- `public/sw.js` shows Pip's notification; tap opens Today. iPhone: Home Screen app only (iOS 16.4+).
+- Turn on: Pip asks once on Today ("can I tap you on the shoulder?"), or the switch in Yours.
+- Scheduler: Supabase pg_cron → `GET /api/push/tick` every 5 min, bearer `CRON_SECRET`
+  (read from Vault `push_tick_secret`). Vercel Hobby cron is daily-only, so it can't do this.
+- **One-time setup (Christian):** `npx supabase db push --remote`; add `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
+  + `VAPID_PRIVATE_KEY` to Vercel; store the cron secret in Vault; redeploy.
+
 ## Health check — 2026-11-14 ✅
 
 - ✅ Code: `npm run check` green (155 tests), main = what's live.
