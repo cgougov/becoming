@@ -165,7 +165,11 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
   banned patterns (em dashes, "journey", contrast-reveals, therapy-speak, emoji, length).
 - Black by default (`color-scheme: dark`, theme/manifest colors).
 
-## Next (agreed 2026-11-14, see PRODUCT.md "Decisions 2026-11-14")
+## Next (positioning 2026-11-14, see PRODUCT.md "Positioning")
+
+1. Today's page with live tags. 2. People pages + nudges. 3. 10pm wind-down. 4. Yours as the scrapbook of you. 5. Sunday letter. 6. Zero-friction onboarding. Then ten real people.
+
+### Superseded order
 
 1. Mock the 10pm wind-down (sliders + Pip's live face + one good thing) → build it.
 2. Today's page with live tags (replaces filing UI).
