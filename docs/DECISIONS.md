@@ -101,3 +101,11 @@ honest). It may start one collection a night, only from three or more unfiled th
 tile says so. Nightly run is Vercel Cron (Hobby allows daily, which is all filing needs);
 pg_cron is still the plan for random check-ins (M4), which need sub-daily scheduling.
 Model: Haiku 5.5 by default; filing is classification and cost matters more than nuance.
+
+### 2026-11-14 — Tags replace filing; collections and people are views
+Entries can carry several tags (`entry_tags`), so one thing can be in Lifts and about Sam.
+The partner tags live, right after Keep, and only into collections that exist; people are
+created on first mention. The person's own tags always win (setting tags replaces the AI's).
+Tagging also returns a tone so Pip can say sorry on hard things instead of "splendid." Pip
+therefore waits for the read (max 4 s) before speaking, and only spins in the meantime.
+Gave up: a single `collection_id` per entry; kept the column (deprecated) to avoid a risky drop.

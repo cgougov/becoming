@@ -15,22 +15,31 @@ interface CollectionRow {
 /** Collections as white tiles with a dot, a count and the latest thing kept. Tap opens the scrapbook. */
 export async function CollectionCards({ userId }: { userId: string }) {
   const supabase = await createClient();
-  const [{ data: collections }, { data: entries }] = await Promise.all([
+  const [{ data: collections }, { data: tags }] = await Promise.all([
     supabase.from("collections").select("id, slug, name, description, position, origin").eq("owner_id", userId).order("position"),
-    supabase
-      .from("entries")
-      .select("collection_id, body, photo_path, captured_at")
-      .eq("owner_id", userId)
-      .order("captured_at", { ascending: false }),
+    supabase.from("entry_tags").select("collection_id, entry_id").eq("owner_id", userId).eq("kind", "collection"),
   ]);
+  // Collections are views of your days: count tags, and find each one's latest kept thing.
+  const entryIds = [...new Set((tags ?? []).map((t) => t.entry_id as string))];
+  const { data: entries } = entryIds.length
+    ? await supabase.from("entries").select("id, body, photo_path, captured_at").in("id", entryIds).order("captured_at", { ascending: false })
+    : { data: [] as { id: string; body: string | null; photo_path: string | null; captured_at: string }[] };
+  const rank = new Map((entries ?? []).map((e, i) => [e.id as string, i]));
+  const entryById = new Map((entries ?? []).map((e) => [e.id as string, e]));
 
-  const tally = new Map<string | null, number>();
-  const latest = new Map<string | null, { body: string | null; photo_path: string | null }>();
-  for (const row of (entries ?? []) as { collection_id: string | null; body: string | null; photo_path: string | null }[]) {
-    tally.set(row.collection_id, (tally.get(row.collection_id) ?? 0) + 1);
-    if (!latest.has(row.collection_id)) latest.set(row.collection_id, row);
+  const tally = new Map<string, number>();
+  const latest = new Map<string, { body: string | null; photo_path: string | null }>();
+  const best = new Map<string, number>();
+  for (const t of tags ?? []) {
+    const cid = t.collection_id as string;
+    tally.set(cid, (tally.get(cid) ?? 0) + 1);
+    const r = rank.get(t.entry_id as string);
+    if (r !== undefined && (best.get(cid) === undefined || r < (best.get(cid) as number))) {
+      best.set(cid, r);
+      const e = entryById.get(t.entry_id as string);
+      if (e) latest.set(cid, { body: e.body as string | null, photo_path: e.photo_path as string | null });
+    }
   }
-  const unsorted = tally.get(null) ?? 0;
   const covers = await signedPhotoUrls([...latest.values()].map((l) => l.photo_path).filter((p): p is string => !!p));
 
   return (
@@ -65,11 +74,6 @@ export async function CollectionCards({ userId }: { userId: string }) {
           </Link>
         );
       })}
-      {unsorted > 0 && (
-        <Link href="/you/unsorted" className="col-span-2 text-xs font-semibold text-muted underline-offset-2 hover:underline">
-          {unsorted} filing tonight
-        </Link>
-      )}
     </section>
   );
 }

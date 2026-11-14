@@ -5,7 +5,9 @@ import { FRESH_HELLO, HARD_LINE, TAP_LINES, pickReaction, type Mood } from "@/li
 import { restingMood, type PipMood } from "@/lib/pip";
 import { PipFace } from "./pip-face";
 
-/** Fired by the capture form after a successful keep. Pip reacts to it. */
+/** Fired the instant you press Keep: Pip spins, says nothing yet. */
+export const KEEPING_EVENT = "becoming:keeping";
+/** Fired once the partner has read it (or after a short wait): Pip speaks, or goes soft if it was hard. */
 export const KEPT_EVENT = "becoming:kept";
 /** Fired when something kept reads as hard (the partner's tagging decides). Pip goes soft. */
 export const HARD_EVENT = "becoming:hard";
@@ -56,8 +58,17 @@ export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "ba
   );
 
   useEffect(() => {
+    function onKeeping() {
+      clearTimeout(timer.current);
+      setMood("happy");
+      setMotion("spin");
+    }
     function onKept(e: Event) {
-      const d = (e as CustomEvent<{ hasPhoto?: boolean; hasText?: boolean; keptTodayBefore?: number; moment?: boolean }>).detail ?? {};
+      const d = (e as CustomEvent<{ hasPhoto?: boolean; hasText?: boolean; keptTodayBefore?: number; moment?: boolean; tone?: string | null }>).detail ?? {};
+      if (d.tone === "hard") {
+        react({ mood: "soft", motion: "sway", line: HARD_LINE, ms: 6000 });
+        return;
+      }
       const said = pickReaction(
         {
           hasPhoto: !!d.hasPhoto,
@@ -69,14 +80,16 @@ export function Companion({ arrival = "normal", day }: { arrival?: "fresh" | "ba
         },
         lastLine.current,
       );
-      react({ mood: "happy", motion: "spin", line: said, ms: 2400 });
+      react({ mood: "happy", motion: "bob", line: said, ms: 2400 });
     }
     function onHard() {
       react({ mood: "soft", motion: "sway", line: HARD_LINE, ms: 6000 });
     }
+    window.addEventListener(KEEPING_EVENT, onKeeping);
     window.addEventListener(KEPT_EVENT, onKept);
     window.addEventListener(HARD_EVENT, onHard);
     return () => {
+      window.removeEventListener(KEEPING_EVENT, onKeeping);
       window.removeEventListener(KEPT_EVENT, onKept);
       window.removeEventListener(HARD_EVENT, onHard);
     };
