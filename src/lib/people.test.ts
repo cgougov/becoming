@@ -36,3 +36,14 @@ describe("nudgeLine and gradients", () => {
     expect(gradientFor("lifts")).toContain(dotColor("lifts"));
   });
 });
+
+describe("collection tones", () => {
+  it("gives neighbors different tones, in order, and wraps", async () => {
+    const { collectionTones, toneAt, TONES } = await import("./gradients");
+    const m = collectionTones([{ id: "a" }, { id: "b" }, { id: "c" }]);
+    expect(m.get("a")).toBe(TONES[0]);
+    expect(m.get("b")).not.toBe(m.get("a"));
+    expect(new Set(TONES.map((_, i) => toneAt(i))).size).toBe(TONES.length);
+    expect(toneAt(TONES.length)).toBe(TONES[0]);
+  });
+});

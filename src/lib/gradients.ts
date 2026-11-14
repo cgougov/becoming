@@ -5,13 +5,14 @@
  * and a collection's dot is exactly its tile's tone (Christian, 2026-11-14).
  */
 export const TONES = [
-  "#f2a77e", // peach
-  "#f1c77c", // honey
-  "#a6d4a9", // sage
-  "#8fc9d8", // sky
-  "#a7b3ef", // periwinkle
-  "#c7a8ea", // lilac
-  "#eea3bf", // rose
+  "#ff9b7a", // coral
+  "#6fc6e2", // aqua
+  "#ffd36e", // butter
+  "#c39bf2", // lilac
+  "#7fd6a6", // mint
+  "#f79cc4", // pink
+  "#8f9ff7", // periwinkle
+  "#e8b98a", // sand
 ] as const;
 
 /** The shared dark every tile fades into. */
@@ -28,7 +29,23 @@ export function toneFor(key: string): string {
   return TONES[hash(key) % TONES.length];
 }
 
+/**
+ * Collections get tones in order (1st coral, 2nd aqua, ...), so neighbors in the grid never
+ * match. Order is chosen so side-by-side and stacked tiles are different families.
+ */
+export function toneAt(index: number): string {
+  return TONES[((index % TONES.length) + TONES.length) % TONES.length];
+}
+
+/** id → tone for a user's collections, given in their display order. */
+export function collectionTones(ordered: { id: string }[]): Map<string, string> {
+  return new Map(ordered.map((c, i) => [c.id, toneAt(i)]));
+}
+
+export function gradientOf(tone: string): string {
+  return `linear-gradient(165deg, ${tone} 0%, color-mix(in oklab, ${tone} 72%, ${DUSK}) 50%, color-mix(in oklab, ${tone} 38%, ${DUSK}) 100%)`;
+}
+
 export function gradientFor(key: string): string {
-  const tone = toneFor(key);
-  return `linear-gradient(160deg, ${tone} 0%, color-mix(in oklab, ${tone} 40%, ${DUSK}) 100%)`;
+  return gradientOf(toneFor(key));
 }

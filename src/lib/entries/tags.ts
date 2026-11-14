@@ -1,3 +1,4 @@
+import { collectionTones, toneAt } from "@/lib/gradients";
 import { createClient } from "@/lib/supabase/server";
 
 export interface Tag {
@@ -5,10 +6,12 @@ export interface Tag {
   id: string;
   label: string;
   slug: string;
+  /** Collections only: the same tone as the collection's tile. */
+  tone?: string;
 }
 
 export interface TagOptions {
-  collections: { id: string; slug: string; name: string }[];
+  collections: { id: string; slug: string; name: string; tone: string }[];
   people: { id: string; slug: string; name: string }[];
 }
 
@@ -24,10 +27,12 @@ export async function withTags<T extends { id: string }>(userId: string, rows: T
   const colIds = [...new Set((tagRows ?? []).map((t) => t.collection_id as string | null).filter((x): x is string => !!x))];
   const personIds = [...new Set((tagRows ?? []).map((t) => t.person_id as string | null).filter((x): x is string => !!x))];
   const [{ data: cols }, { data: people }] = await Promise.all([
-    colIds.length ? supabase.from("collections").select("id, slug, name").in("id", colIds) : Promise.resolve({ data: [] }),
+    // All collections (a handful), in order, so a chip wears its tile's tone.
+    colIds.length ? supabase.from("collections").select("id, slug, name").eq("owner_id", userId).order("position") : Promise.resolve({ data: [] }),
     personIds.length ? supabase.from("people").select("id, slug, name").in("id", personIds) : Promise.resolve({ data: [] }),
   ]);
   const colById = new Map((cols ?? []).map((c) => [c.id as string, c]));
+  const tones = collectionTones((cols ?? []).map((c) => ({ id: c.id as string })));
   const personById = new Map((people ?? []).map((p) => [p.id as string, p]));
 
   const byEntry = new Map<string, Tag[]>();
@@ -35,7 +40,7 @@ export async function withTags<T extends { id: string }>(userId: string, rows: T
     const list = byEntry.get(t.entry_id as string) ?? [];
     if (t.kind === "collection" && t.collection_id) {
       const c = colById.get(t.collection_id as string);
-      if (c) list.push({ kind: "collection", id: c.id as string, label: c.name as string, slug: c.slug as string });
+      if (c) list.push({ kind: "collection", id: c.id as string, label: c.name as string, slug: c.slug as string, tone: tones.get(c.id as string) });
     } else if (t.kind === "person" && t.person_id) {
       const p = personById.get(t.person_id as string);
       if (p) list.push({ kind: "person", id: p.id as string, label: p.name as string, slug: p.slug as string });
@@ -53,7 +58,7 @@ export async function tagOptions(userId: string): Promise<TagOptions> {
     supabase.from("people").select("id, slug, name").eq("owner_id", userId).order("name").limit(200),
   ]);
   return {
-    collections: (cols ?? []).map((c) => ({ id: c.id as string, slug: c.slug as string, name: c.name as string })),
+    collections: (cols ?? []).map((c, i) => ({ id: c.id as string, slug: c.slug as string, name: c.name as string, tone: toneAt(i) })),
     people: (people ?? []).map((p) => ({ id: p.id as string, slug: p.slug as string, name: p.name as string })),
   };
 }
