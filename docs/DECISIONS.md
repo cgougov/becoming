@@ -150,3 +150,11 @@ open the link first and use it up. The login now asks for the 6-digit code from 
   can't read your messages at all (Apple doesn't allow it). Possible later: a Mac helper that
   reads your local Messages history with your permission, or an iOS Shortcut that shares a
   conversation into Becoming. Parked until after v1.
+
+## 2026-11-14 — Notifications: a surprise moment, two fixed nudges, Supabase as the clock
+- The moment's time is never shown in advance; the notification is the surprise (BeReal effect).
+  If it can't be delivered within 30 min it passes quietly. Morning 8:30, wind-down 10pm, each
+  only if not already done. Max three a day.
+- Supabase pg_cron + pg_net call `/api/push/tick` every 5 minutes (free, already in the stack).
+  Vercel Hobby cron runs once a day, which can't do random times. `push_sent` makes each nudge
+  once-a-day even if ticks overlap. `web-push` (free, VAPID) sends; dead devices are forgotten.

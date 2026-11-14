@@ -1,3 +1,4 @@
+import { NotifySwitch } from "../notify/notify-switch";
 import { Suspense } from "react";
 import { Pane } from "@/components/pane";
 import { requireUser } from "@/lib/session";
@@ -29,6 +30,9 @@ async function Sections() {
         <h2 className="text-[13px] font-bold text-muted">collections</h2>
         <CollectionCards userId={user.id} />
         <NewCollectionForm />
+      </section>
+      <section className="rounded-card bg-chip p-4" aria-label="Notifications">
+        <NotifySwitch />
       </section>
       <form action="/auth/signout" method="post" className="mt-auto flex items-center justify-between pt-4 text-[13px] text-muted">
         <span>{user.email}</span>
