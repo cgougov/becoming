@@ -15,7 +15,7 @@ function Icon({ d }: { d: React.ReactNode }) {
   );
 }
 
-export function CaptureForm({ userId, keptToday = 0 }: { userId: string; keptToday?: number }) {
+export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId: string; keptToday?: number; momentId?: string | null }) {
   const [body, setBody] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -52,9 +52,9 @@ export function CaptureForm({ userId, keptToday = 0 }: { userId: string; keptTod
         });
         if (upErr) return setError(upErr.message);
       }
-      const result = await createEntry({ body, photoPath });
+      const result = await createEntry({ body, photoPath, momentId });
       if (!result.ok) return setError(result.message);
-      const detail = { hasPhoto: !!photo, hasText: body.trim().length > 0, keptTodayBefore: keptToday };
+      const detail = { hasPhoto: !!photo, hasText: body.trim().length > 0, keptTodayBefore: keptToday, moment: !!momentId };
       reset();
       window.dispatchEvent(new CustomEvent(KEPT_EVENT, { detail }));
     });
@@ -81,7 +81,7 @@ export function CaptureForm({ userId, keptToday = 0 }: { userId: string; keptTod
         onKeyDown={(e) => {
           if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submit();
         }}
-        placeholder="What's on your mind."
+        placeholder={momentId ? "right now…" : "What's on your mind."}
         rows={3}
         enterKeyHint="done"
         className="w-full resize-none bg-transparent text-[28px] font-semibold leading-[1.2] tracking-[-0.025em] outline-none placeholder:text-foreground/30"

@@ -1,6 +1,6 @@
 # Status
 
-_Last updated: 2026-11-14 (M3 partner: filing)_
+_Last updated: 2026-11-14 (M4 part 1: daily moment)_
 
 ## Done
 
@@ -145,7 +145,42 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
 - Env needed: `ANTHROPIC_API_KEY` (local + Vercel), `ANTHROPIC_MODEL` (optional), `CRON_SECRET`
   + `SUPABASE_SERVICE_ROLE_KEY` (Vercel only, for the cron). Documented in `.env.example`.
 
-## Next
+## M4 part 1 — the daily moment, in-app ✅ (PR #16)
+
+- `moments` table (migration `20261114000000`): one row per local day, a random time inside
+  the profile's window (default 10:00–21:00), status scheduled/kept/missed, `entry_id`.
+  **Christian: `npx supabase db push --remote`.**
+- Created lazily on first open of the day (`ensureTodayMoment`); never earlier than now+15m.
+- Keep: upcoming → "today's moment · 4:12pm" (muted); live (90 min) → accent card with the
+  companion's ask ("what's right now?") + a line of encouragement, capture placeholder becomes
+  "right now…"; keeping during it marks the moment kept and the companion says so. Passed →
+  silence, by design (no "missed" copy anywhere).
+- Voice lines in `src/lib/moment.ts` and `src/lib/companion.ts`.
+- Look back: the "From your partner · an AI" label is gone; the companion's face instead.
+
+## Voice + black ✅ (PR #17, on #16)
+
+- Pip rewritten as a kawaii C-3PO everywhere (`src/lib/companion.ts`, `src/lib/moment.ts`,
+  `src/lib/partner/character.ts`); `docs/VOICE.md`; `src/lib/voice.test.ts` fails the build on
+  banned patterns (em dashes, "journey", contrast-reveals, therapy-speak, emoji, length).
+- Black by default (`color-scheme: dark`, theme/manifest colors).
+
+## Next (agreed 2026-11-14, see PRODUCT.md "Decisions 2026-11-14")
+
+1. Mock the 10pm wind-down (sliders + Pip's live face + one good thing) → build it.
+2. Today's page with live tags (replaces filing UI).
+3. Pip's one suggestion on open; Pip states (hop on return, spin, mirror, doze).
+4. People pages; directions; the weekly letter; resurfacing.
+5. M4 part 2: push for the moment and the wind-down (needs the phone install).
+
+### Earlier
+1. **Deploy** (Christian) → then **M4 part 2: push** (service worker, VAPID, a cron that sends
+   the moment's tap; `notified_at`).
+2. **People as first-class** (relationships second brain).
+3. Pip in code: spin, expressions, "I'm sorry" for hard things.
+4. Lenses + the Sunday question.
+
+### Earlier
 
 1. **Deploy** (Christian: Vercel import + env vars; Supabase redirect URLs) → iPhone Home Screen.
 2. `docs/BEHAVIOR.md`: evidence-backed principles mapped to the app (Claude drafts, Christian reviews).
