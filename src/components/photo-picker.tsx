@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { compressImage } from "@/lib/photos/compress";
-import { MAX_PHOTO_BYTES, photoObjectPath } from "@/lib/photos/path";
-import { createClient } from "@/lib/supabase/client";
+import { PHOTO_ACCEPT } from "@/lib/photos/path";
+import { uploadPhoto } from "@/lib/photos/upload";
 
 /**
  * "add a photo" for anything on Yours (a direction, a person, a collection cover).
@@ -26,10 +25,10 @@ export function PhotoPicker({
   return (
     <label className={`cursor-pointer ${pending ? "opacity-50" : ""} ${className}`}>
       {pending ? "uploading…" : label}
-      {error && <span className="ml-2 text-red-400">{error}</span>}
+      {error && <span className="mt-1 block text-[12px] font-semibold text-red-300">{error}</span>}
       <input
         type="file"
-        accept="image/*"
+        accept={PHOTO_ACCEPT}
         className="sr-only"
         disabled={pending}
         onChange={(e) => {
@@ -38,13 +37,9 @@ export function PhotoPicker({
           if (!picked) return;
           setError(null);
           start(async () => {
-            const file = await compressImage(picked);
-            if (file.size > MAX_PHOTO_BYTES) return setError("too large");
-            const path = photoObjectPath(userId, file.type, crypto.randomUUID());
-            if (!path) return setError("unsupported image");
-            const { error: up } = await createClient().storage.from("photos").upload(path, file, { contentType: file.type, cacheControl: "31536000" });
-            if (up) return setError(up.message);
-            await onPath(path);
+            const r = await uploadPhoto(userId, picked);
+            if ("error" in r) return setError(r.error);
+            await onPath(r.path);
           });
         }}
       />

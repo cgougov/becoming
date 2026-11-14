@@ -2,9 +2,8 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { KEEPING_EVENT, KEPT_EVENT } from "@/components/companion";
-import { compressImage } from "@/lib/photos/compress";
-import { MAX_PHOTO_BYTES, photoObjectPath } from "@/lib/photos/path";
-import { createClient } from "@/lib/supabase/client";
+import { PHOTO_ACCEPT } from "@/lib/photos/path";
+import { uploadPhoto } from "@/lib/photos/upload";
 import { createEntry, tagEntry } from "./actions";
 
 function Icon({ d }: { d: React.ReactNode }) {
@@ -68,15 +67,9 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
     startTransition(async () => {
       let photoPath: string | null = null;
       if (photo) {
-        const file = await compressImage(photo);
-        if (file.size > MAX_PHOTO_BYTES) return setError("That photo is too large (5 MB max).");
-        photoPath = photoObjectPath(userId, file.type, crypto.randomUUID());
-        if (!photoPath) return setError("Unsupported image type.");
-        const { error: upErr } = await createClient().storage.from("photos").upload(photoPath, file, {
-          contentType: file.type,
-          cacheControl: "31536000",
-        });
-        if (upErr) return setError(upErr.message);
+        const r = await uploadPhoto(userId, photo);
+        if ("error" in r) return setError(r.error);
+        photoPath = r.path;
       }
       window.dispatchEvent(new Event(KEEPING_EVENT));
       const result = await createEntry({ body, photoPath, momentId });
@@ -144,7 +137,7 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
       )}
 
       {error && (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm font-semibold text-red-300" role="alert">
           {error}
         </p>
       )}
@@ -163,7 +156,7 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
           <input
             ref={fileInput}
             type="file"
-            accept="image/*"
+            accept={PHOTO_ACCEPT}
             className="sr-only"
             onChange={(e) => pickPhoto(e.target.files?.[0] ?? null)}
           />
