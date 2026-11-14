@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { GRADIENTS, gradientFor } from "./gradients";
+import { TONES, gradientFor, toneFor } from "./gradients";
+import { dotColor } from "./collections";
 import { nudgeLine, pickNudge, sinceLabel } from "./people";
 
 const now = new Date("2026-11-14T18:00:00Z");
@@ -30,6 +31,8 @@ describe("nudgeLine and gradients", () => {
   it("fills the name and stays stable", () => {
     expect(nudgeLine("Maya", 0)).toBe("it's been a while since Maya. maybe say hi?");
     expect(gradientFor("lifts")).toBe(gradientFor("lifts"));
-    expect(GRADIENTS.some(([a, b]) => gradientFor("x").includes(a) && gradientFor("x").includes(b))).toBe(true);
+    expect(TONES).toContain(toneFor("x"));
+    // a tile and its dot always match
+    expect(gradientFor("lifts")).toContain(dotColor("lifts"));
   });
 });

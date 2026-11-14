@@ -1,3 +1,4 @@
+import { TONES, toneFor } from "./gradients";
 /**
  * Collections are the user's own places for things: chosen on first open from these
  * suggestions, added in their own words, and later proposed by the partner.
@@ -10,21 +11,26 @@ export interface SuggestedCollection {
 }
 
 export const SUGGESTED_COLLECTIONS: readonly SuggestedCollection[] = [
-  { slug: "lifts", name: "Lifts", hint: "PRs, sessions, how the body felt" },
-  { slug: "places-i-ate", name: "Places I ate", hint: "the ones worth going back to" },
-  { slug: "reading", name: "Reading", hint: "books, essays, lines to keep" },
-  { slug: "people", name: "People", hint: "who you saw, who to call back" },
-  { slug: "ideas", name: "Ideas", hint: "projects, half-thoughts, what-ifs" },
-  { slug: "outfits", name: "Outfits", hint: "what you wore, what you want" },
-  { slug: "quotes", name: "Quotes", hint: "things said that stuck" },
-  { slug: "art", name: "Art", hint: "paintings, photos, music that moved you" },
-  { slug: "work", name: "Work", hint: "what you're building, what's next" },
-  { slug: "places", name: "Places", hint: "where you've been, where you want to go" },
-  { slug: "small-wins", name: "Small wins", hint: "first attempts count" },
-  { slug: "questions", name: "Questions", hint: "ones that don't need an answer yet" },
+  { slug: "lifts", name: "Lifts", hint: "heavy things, lifted." },
+  { slug: "places-i-ate", name: "Places I ate", hint: "good bites only." },
+  { slug: "reading", name: "Reading", hint: "words, consumed." },
+  { slug: "people", name: "People", hint: "your favorite humans." },
+  { slug: "ideas", name: "Ideas", hint: "brain sparks. unfiltered." },
+  { slug: "outfits", name: "Outfits", hint: "fits, documented." },
+  { slug: "quotes", name: "Quotes", hint: "someone said a good thing." },
+  { slug: "art", name: "Art", hint: "pretty things. noted." },
+  { slug: "work", name: "Work", hint: "stuff you're making." },
+  { slug: "places", name: "Places", hint: "been there. or will." },
+  { slug: "small-wins", name: "Small wins", hint: "tiny victories. still count." },
+  { slug: "questions", name: "Questions", hint: "no answers required." },
 ] as const;
 
 export const MAX_COLLECTION_NAME = 40;
+
+/** What an empty tile says: the cute hint for a suggested collection, else its own words. */
+export function emptyTileLine(slug: string, description: string | null): string {
+  return SUGGESTED_COLLECTIONS.find((c) => c.slug === slug)?.hint ?? description ?? "nothing yet.";
+}
 
 /** URL- and DB-safe slug from a user-typed name. Returns null if nothing usable remains. */
 export function slugify(name: string): string | null {
@@ -79,11 +85,10 @@ export function buildInitialCollections(
  * A collection's dot color. Deterministic from the slug until the user picks one
  * (a `color` column can come later; the UI only needs a stable, pleasant hue).
  */
-export const DOT_COLORS = ["#5ad1a5", "#e0a06a", "#9c8cf0", "#7aa7ff", "#f08cab", "#f2cf5a", "#6fc3df", "#c9a0dc"] as const;
+/** Dots and tiles share one palette (src/lib/gradients.ts), so a dot always matches its tile. */
+export const DOT_COLORS = TONES;
 
 export function dotColor(slug: string | null | undefined): string {
   if (!slug) return "#c8c8d0"; // unsorted
-  let h = 0;
-  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  return DOT_COLORS[h % DOT_COLORS.length];
+  return toneFor(slug);
 }

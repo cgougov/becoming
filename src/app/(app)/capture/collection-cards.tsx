@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { dotColor } from "@/lib/collections";
+import { dotColor, emptyTileLine } from "@/lib/collections";
 import { gradientFor } from "@/lib/gradients";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "./entry-list";
@@ -73,9 +73,14 @@ export async function CollectionCards({ userId }: { userId: string }) {
               </h2>
               <span className="text-[13px] font-semibold tabular-nums text-white/70">{tally.get(c.id) ?? 0}</span>
             </div>
-            <p className="relative line-clamp-2 text-[13px] leading-[1.3] text-white/85">
-              {last?.body ?? (last?.photo_path ? "a photo." : (c.description ?? "nothing yet."))}
-            </p>
+            {/* Once something is tagged here, the tile quotes it back to you. */}
+            {last?.body ? (
+              <p className="relative line-clamp-3 text-[13px] italic leading-[1.3] text-white/90">“{last.body}”</p>
+            ) : (
+              <p className="relative line-clamp-2 text-[13px] leading-[1.3] text-white/75">
+                {last?.photo_path ? "a photo." : emptyTileLine(c.slug, c.description)}
+              </p>
+            )}
             {c.origin === "partner" && (
               <span className="relative mt-1 text-[11px] font-semibold text-white/70">started by your partner</span>
             )}

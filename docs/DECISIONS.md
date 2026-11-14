@@ -115,3 +115,12 @@ Safari and mail apps' in-app browsers keep separate storage, and school mail sca
 open the link first and use it up. The login now asks for the 6-digit code from the email
 (`verifyOtp`, type "email"), with the link still working where it can. Requires the Supabase
 "Magic Link" email template to include `{{ .Token }}`.
+
+## 2026-11-14 — One palette for tiles, dots and chips; green for kept days
+- Collection tiles, their dots and tag chips come from one set of seven pastel tones
+  (`src/lib/gradients.ts`). Each tile fades from its tone into the same dusk base, so the grid
+  reads as one family, and a dot is always its tile's exact tone. (Christian: tiles didn't go
+  together; the dot didn't match the tile.)
+- Week dots turn green (`--kept`) on days you kept something. Orange stays Pip's.
+- Tiles quote the latest thing tagged there ("…"); empty tiles get short, cute hints in Pip's
+  voice instead of descriptive ones. Stored descriptions stay as they are (the tagger reads them).
