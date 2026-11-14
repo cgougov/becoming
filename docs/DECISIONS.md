@@ -165,3 +165,12 @@ open the link first and use it up. The login now asks for the 6-digit code from 
   (week direction) → "can I tap you on the shoulder?" (notifications, or Home Screen how-to)
   → "now keep one thing." Lands on Today.
 - It leads with becoming, not features: the first real question is who you want to be.
+
+## 2026-11-14 — Goals, alive
+- Pip links what you keep to the goals it's a step toward (`direction_links`, at most two per
+  thing, generous about small steps). A goal card says "3 things this week" in its own horizon,
+  with tiny photos and the latest line; tap for everything that moved you toward it.
+- No targets, no streaks: zero reads "nothing yet this week. it's early."
+- Pip suggests a week goal every so often (Sun/Mon when there's none; Thu too if you have no
+  goals at all), with an inline field; "not now" hides it for the day.
+- Fixed: day-start math was an hour off on DST-change days.

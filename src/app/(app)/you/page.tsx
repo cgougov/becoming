@@ -21,10 +21,10 @@ export default function YouPage() {
 async function Sections() {
   const session = await requireUser();
   if (!session) return null;
-  const { user } = session;
+  const { user, timeZone } = session;
   return (
     <>
-      <Directions userId={user.id} />
+      <Directions userId={user.id} timeZone={timeZone} />
       <PeopleRow userId={user.id} />
       <section className="flex flex-col gap-3" aria-label="Collections">
         <h2 className="text-[13px] font-bold text-muted">collections</h2>

@@ -42,10 +42,12 @@ export async function tagEntryWith(supabase: SupabaseClient, ownerId: string, en
     return { tone: null, tagged: false };
   }
 
-  const [{ data: cols }, { data: people }] = await Promise.all([
+  const [{ data: cols }, { data: people }, { data: dirs }] = await Promise.all([
     supabase.from("collections").select("id, slug, name, description").eq("owner_id", ownerId).order("position"),
     supabase.from("people").select("name").eq("owner_id", ownerId).limit(200),
+    supabase.from("directions").select("id, text, horizon").eq("owner_id", ownerId).is("archived_at", null).limit(12),
   ]);
+  const directions = (dirs ?? []).map((d, i) => ({ key: `g${i + 1}`, id: d.id as string, text: d.text as string, horizon: d.horizon as string }));
   const collections = (cols ?? []).map((c) => ({ slug: c.slug as string, name: c.name as string, description: (c.description as string | null) ?? null }));
   const knownPeople = (people ?? []).map((p) => p.name as string);
 
@@ -53,7 +55,7 @@ export async function tagEntryWith(supabase: SupabaseClient, ownerId: string, en
     model: partner.model,
     max_tokens: 400,
     system: PARTNER_SYSTEM,
-    messages: [{ role: "user", content: buildTaggingPrompt(body, collections, knownPeople) }],
+    messages: [{ role: "user", content: buildTaggingPrompt(body, collections, knownPeople, directions) }],
     output_config: { format: { type: "json_schema", schema: TAGGING_SCHEMA } },
   });
   const text = response.content.find((b) => b.type === "text");
@@ -63,7 +65,7 @@ export async function tagEntryWith(supabase: SupabaseClient, ownerId: string, en
   } catch {
     raw = null;
   }
-  const result = cleanTaggingResult(raw, collections, knownPeople);
+  const result = cleanTaggingResult(raw, collections, knownPeople, directions);
 
   const idBySlug = new Map((cols ?? []).map((c) => [c.slug as string, c.id as string]));
   const rows: Record<string, unknown>[] = result.collections.map((slug) => ({
@@ -82,6 +84,15 @@ export async function tagEntryWith(supabase: SupabaseClient, ownerId: string, en
     const have = new Set((existing ?? []).map((t) => (t.collection_id ?? t.person_id) as string));
     const fresh = rows.filter((r) => !have.has((r.collection_id ?? r.person_id) as string));
     if (fresh.length) await supabase.from("entry_tags").insert(fresh);
+  }
+
+  // Goals: separate table, separate insert, so a hiccup here never costs the other tags.
+  const dirIdByKey = new Map(directions.map((d) => [d.key, d.id]));
+  const links = result.directions.map((k) => dirIdByKey.get(k)).filter((x): x is string => !!x);
+  if (links.length) {
+    await supabase
+      .from("direction_links")
+      .upsert(links.map((direction_id) => ({ owner_id: ownerId, entry_id: entryId, direction_id, source: "ai" })), { onConflict: "entry_id,direction_id", ignoreDuplicates: true });
   }
 
   await supabase.from("entries").update({ tagged_at: new Date().toISOString(), tone: result.tone }).eq("id", entryId).eq("owner_id", ownerId);

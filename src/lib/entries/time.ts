@@ -14,10 +14,21 @@ export function startOfDayInTimeZone(now: Date, timeZone: string): Date {
     hourCycle: "h23",
   }).formatToParts(now);
   const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
-  // Elapsed time since local midnight, subtracted from `now`, lands exactly on local midnight.
+  // Elapsed wall-clock time since local midnight, subtracted from `now`, lands on local midnight,
+  // except on a day the clocks change; then nudge by the hour it's off.
   const sinceMidnightMs =
     ((get("hour") * 60 + get("minute")) * 60 + get("second")) * 1000 + now.getMilliseconds();
-  return new Date(now.getTime() - sinceMidnightMs);
+  let guess = new Date(now.getTime() - sinceMidnightMs);
+  for (let i = 0; i < 2; i++) {
+    const p = new Intl.DateTimeFormat("en-US", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(guess);
+    const h = Number(p.find((x) => x.type === "hour")?.value);
+    const m = Number(p.find((x) => x.type === "minute")?.value);
+    if (h === 0 && m === 0) break;
+    // 23:00 → we're an hour early (previous day); 01:00 → an hour late.
+    const off = (h >= 12 ? h * 60 + m - 24 * 60 : h * 60 + m) * 60_000;
+    guess = new Date(guess.getTime() - off);
+  }
+  return guess;
 }
 
 export function formatTimeInTimeZone(date: Date, timeZone: string): string {

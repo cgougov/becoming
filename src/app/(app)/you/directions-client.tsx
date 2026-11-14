@@ -1,10 +1,29 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { PhotoPicker } from "@/components/photo-picker";
 import { addDirection, archiveDirection, setDirectionPhoto, type DirectionState } from "./actions";
 
-export function DirectionCard({ id, userId, text, horizon, background }: { id: string; userId: string; text: string; horizon: string; background: string }) {
+export function DirectionCard({
+  id,
+  userId,
+  text,
+  horizon,
+  background,
+  progress,
+  latest,
+  thumbs,
+}: {
+  id: string;
+  userId: string;
+  text: string;
+  horizon: string;
+  background: string;
+  progress: string;
+  latest: string | null;
+  thumbs: string[];
+}) {
   const [pending, start] = useTransition();
   return (
     <div className={`relative overflow-hidden rounded-card p-4 text-white ${pending ? "opacity-50" : ""}`} style={{ background }}>
@@ -23,7 +42,21 @@ export function DirectionCard({ id, userId, text, horizon, background }: { id: s
             ✕
           </button>
         </div>
-        <p className="text-[18px] font-bold leading-snug">{text}</p>
+        <Link href={`/you/goal/${id}`} className="flex flex-col gap-1.5">
+          <p className="text-[18px] font-bold leading-snug">{text}</p>
+          <div className="flex items-center gap-2">
+            {thumbs.length > 0 && (
+              <span className="flex -space-x-2">
+                {thumbs.map((u) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img key={u} src={u} alt="" className="h-6 w-6 rounded-full object-cover ring-2 ring-black/30" />
+                ))}
+              </span>
+            )}
+            <span className="text-[13px] font-semibold text-white/85">{progress}</span>
+          </div>
+          {latest && <span className="line-clamp-1 text-[13px] italic text-white/75">“{latest}”</span>}
+        </Link>
         <PhotoPicker userId={userId} onPath={setDirectionPhoto.bind(null, id)} label="add a photo" className="self-start text-[12px] font-semibold text-white/75" />
       </div>
     </div>

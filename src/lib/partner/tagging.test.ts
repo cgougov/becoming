@@ -34,8 +34,8 @@ describe("cleanTaggingResult", () => {
 
   it("defaults tone and survives garbage", () => {
     expect(cleanTaggingResult({ collections: [], people: [], tone: "angry" }, cols, []).tone).toBe("neutral");
-    expect(cleanTaggingResult(null, cols, [])).toEqual({ collections: [], people: [], tone: "neutral" });
-    expect(cleanTaggingResult({ collections: "x", people: 3 }, cols, [])).toEqual({ collections: [], people: [], tone: "neutral" });
+    expect(cleanTaggingResult(null, cols, [])).toEqual({ collections: [], people: [], tone: "neutral", directions: [] });
+    expect(cleanTaggingResult({ collections: "x", people: 3 }, cols, [])).toEqual({ collections: [], people: [], tone: "neutral", directions: [] });
   });
 });
 
@@ -56,5 +56,22 @@ describe("catch-all", () => {
     expect(cleanTaggingResult({ collections: [], people: [], tone: "neutral" }, cols, []).collections).toEqual(["thoughts"]);
     expect(cleanTaggingResult({ collections: ["lifts"], people: [], tone: "neutral" }, cols, []).collections).toEqual(["lifts"]);
     expect(cleanTaggingResult({ collections: [], people: [], tone: "neutral" }, cols.slice(1), []).collections).toEqual([]);
+  });
+});
+
+describe("direction links", () => {
+  const dirs = [
+    { key: "g1", text: "get stronger", horizon: "month" },
+    { key: "g2", text: "call home more", horizon: "week" },
+  ];
+  it("lists goals in the prompt", () => {
+    const p = buildTaggingPrompt("ran 3 miles", [], [], dirs);
+    expect(p).toContain("g1: get stronger (this month)");
+    expect(p).toContain("directions:");
+  });
+  it("keeps only known keys, at most two, deduped", () => {
+    const r = cleanTaggingResult({ collections: [], people: [], tone: "good", directions: ["g1", "g1", "g9", "g2"] }, [], [], dirs);
+    expect(r.directions).toEqual(["g1", "g2"]);
+    expect(cleanTaggingResult({ collections: [], people: [], tone: "good" }, [], [], dirs).directions).toEqual([]);
   });
 });
