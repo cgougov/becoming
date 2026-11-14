@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Pane } from "@/components/pane";
-import { startOfWeekInTimeZone } from "@/lib/entries/time";
+import { PipFace } from "@/components/pip-face";
+import { localDay, startOfWeekInTimeZone } from "@/lib/entries/time";
 import { requireUser } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { signedPhotoUrls } from "../capture/entry-list";
@@ -59,7 +60,7 @@ async function WeekSoFar() {
       )}
 
       <section className="mt-auto flex items-start gap-3 rounded-card bg-chip p-4 text-[15px] leading-relaxed">
-        <span aria-hidden className="mt-0.5 inline-block h-6 w-6 flex-none rounded-full bg-accent" />
+        <span className="mt-0.5 flex-none"><PipFace mood="calm" day={localDay(now, timeZone)} size={28} /></span>
         <div>
         {unlockIn > 0 ? (
           <p>

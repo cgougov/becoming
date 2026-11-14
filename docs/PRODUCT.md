@@ -169,7 +169,10 @@ or prescribing exercises. The partner is not a therapist; observation ("your lif
 lighter"), never diagnosis. Kept: voice as a capture mode; a one-tap feeling after a keep;
 feelings over time as a lens.
 
-**Companion: Pip** (big eyes, blush, nothing else). It should spin, change expression with
+**Companion: Pip.** Round 7 (2026-11-14): four face families rotate by day (Mochi, Bean
+with a small mouth, Smiley, Kitty); a hard day always uses Bean's soft face; moods switch
+between set faces with a bounce, never morph; **the body color is the mood** (Inside Out):
+calm coral, happy yellow, sleepy lilac, soft blue. Earlier note: (big eyes, blush, nothing else). It should spin, change expression with
 what you kept, and say sorry when something is hard.
 
 ## Decisions 2026-11-14 (after round 5)

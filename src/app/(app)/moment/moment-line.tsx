@@ -1,4 +1,5 @@
-import { formatTimeInTimeZone } from "@/lib/entries/time";
+import { PipFace } from "@/components/pip-face";
+import { formatTimeInTimeZone, localDay } from "@/lib/entries/time";
 import { MOMENT_ASKS, MOMENT_ENCOURAGEMENT, type MomentPhase } from "@/lib/moment";
 import type { Moment } from "./today-moment";
 
@@ -22,7 +23,7 @@ export function MomentLine({ moment, phase, timeZone, seed }: { moment: Moment; 
     const nudge = MOMENT_ENCOURAGEMENT[seed % MOMENT_ENCOURAGEMENT.length];
     return (
       <div className="anim-rise flex items-center gap-3 rounded-card bg-accent/15 px-4 py-3">
-        <span aria-hidden className="h-7 w-7 flex-none rounded-full bg-accent" />
+        <span className="flex-none"><PipFace mood="happy" day={localDay(new Date(), timeZone)} size={32} /></span>
         <div className="flex min-w-0 flex-col">
           <span className="text-[16px] font-bold leading-tight">{ask}</span>
           <span className="text-[13px] text-muted">{nudge}</span>
