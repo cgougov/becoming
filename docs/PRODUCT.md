@@ -2,6 +2,43 @@
 
 Codename history: "Goon App" (placeholder) → "Pacer" → **Becoming**.
 
+## North star (Christian, 2026-11-14)
+
+**Becoming is the running partner that helps you become who you want to be, understand
+yourself, and connect with others.** Every decision is tested against this.
+
+The edge is not the words; it is the combination (self-organizing capture + a partner that
+knows you + relationships, aimed at becoming) plus rituals, character and, later, the network.
+The real competitor is general assistants with memory; they wait to be asked, Becoming shows up.
+**Design the first week toward the "being known" moment**: Pip says something true about you
+that you hadn't noticed. Risks to watch: three jobs at once, journaling-app abandonment, trust,
+social cold start. Cheap validation: hand-write Pip-style Sunday letters for five friends.
+
+## Positioning (Christian, 2026-11-14 — supersedes earlier wedge talk)
+
+**Becoming is a scrapbook of your life that organizes itself, with a partner who knows you,
+that becomes the next social platform once enough of your friends are on it.**
+
+- **Why now:** people already log their lives (Beli, Strava, Letterboxd, Goodreads, Notes,
+  camera rolls). Logging is identity. It's split across apps, none of them understands you, and
+  none helps you stay close to the people in it.
+- **Everyone joins for their own reason.** Lifts, restaurants, reading, staying close to
+  friends from home. Becoming becomes *their* thing first, in their words, then widens.
+  One product, a different way in for each person.
+- **Differentiator 1: being known.** Pip remembers your real days, notices patterns, connects
+  things to people, and gets better as models do. Cuteness is copyable (Finch); being known isn't.
+- **Differentiator 2: relationships.** People are getting disconnected. "ask Sam how econ
+  went" works on day one with zero friends on the app, and those people become the social graph.
+- **Not a goal-achievement platform.** Directions with week / month / year horizons are
+  optional and in your words; never the center.
+- **Onboarding is almost none.** Open it, Pip says hi, start keeping. Pip proposes collections
+  in your words after a few keeps. At most one optional question. Everything editable; nothing locked.
+- **Build order:** Pip faces (chill, cute, discrete moods) → today's page with live tags +
+  annotations on past days → people pages, close circle, nudges → the Sunday letter → Yours
+  (directions with week/month/year and optional photos, people with close circle, collections
+  with gradient or photo covers) → 10pm wind-down → zero-friction onboarding → ten real people
+  → design the social layer from what they actually keep.
+
 ## Vision (short)
 
 People in their twenties feel themselves drifting into empty routines and endless scrolling.
