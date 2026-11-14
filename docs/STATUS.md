@@ -175,6 +175,23 @@ PRODUCT.md "Intentionality" items 2, 3, 4:
   sways, "oh no. I'm sorry." (fired by tagging in the next PR), giggles when tapped.
 - Pip's face replaces the plain accent dots on Look back and the moment card.
 
+## Step 1 — day is home, live tags ✅ (PR #21, on #20)
+
+- Migration `20261114100000_tags_people.sql`: `people` (with `close` for the close circle),
+  `entry_tags` (collection or person, source ai/user), `entries.tagged_at` + `tone`. Existing
+  filing carried over as collection tags. `entries.collection_id` is deprecated.
+  **Christian: `npx supabase db push --remote`.**
+- Keep → Pip spins → `tagEntry` reads it (`src/lib/partner/tagging.ts`, tested): up to 2
+  existing collections, people named (created on first mention), tone. Pip then speaks, or goes
+  soft blue with "oh no. I'm sorry." if it read as hard. "reading…" shimmer for up to 2 min.
+- Tap any tag (or "+ tag") → sheet: toggle people and collections, add new ones in your words,
+  or "no tag". User tags replace AI tags for that entry.
+- Today shows today open and the last six days folded underneath (`DaysList`); earlier days are
+  read-only text, tags still editable.
+- Collections are views: tiles and `/you/<slug>` read from `entry_tags`.
+- Removed: File now, "Filing tonight", nightly filing, `/you/unsorted`. The nightly cron is now
+  a safety net that tags anything never read (`/api/partner/tag`).
+
 ## Next (positioning 2026-11-14, see PRODUCT.md "Positioning")
 
 1. Today's page with live tags. 2. People pages + nudges. 3. 10pm wind-down. 4. Yours as the scrapbook of you. 5. Sunday letter. 6. Zero-friction onboarding. Then ten real people.

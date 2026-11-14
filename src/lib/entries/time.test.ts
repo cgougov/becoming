@@ -73,3 +73,13 @@ describe("localDay / localHour / weekDays", () => {
     expect(new Set(days).size).toBe(7);
   });
 });
+
+describe("isReading", () => {
+  it("shimmers only while untagged and fresh", async () => {
+    const { isReading } = await import("./reading");
+    const now = new Date("2026-11-14T17:00:00Z");
+    expect(isReading(null, "2026-11-14T16:59:30Z", now)).toBe(true);
+    expect(isReading(null, "2026-11-14T16:57:00Z", now)).toBe(false);
+    expect(isReading("2026-11-14T16:59:40Z", "2026-11-14T16:59:30Z", now)).toBe(false);
+  });
+});
