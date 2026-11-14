@@ -174,3 +174,14 @@ open the link first and use it up. The login now asks for the 6-digit code from 
 - Pip suggests a week goal every so often (Sun/Mon when there's none; Thu too if you have no
   goals at all), with an inline field; "not now" hides it for the day.
 - Fixed: day-start math was an hour off on DST-change days.
+
+## 2026-11-14 — Photos: one upload path, iPhone hands us JPEGs, failures get logged
+- Storage logs showed no upload attempts today: photos failed on the phone before leaving
+  (likely HEIC or very large originals that couldn't be shrunk, then refused as too big/odd type).
+- Pickers ask for JPEG/PNG/WebP, so iOS converts HEIC itself. Shrinking tries two decoders.
+  Type falls back to the file extension. One `uploadPhoto` for Keep and every "add a photo".
+- Errors are in plain words and readable on black; details (no image, no content) go to the
+  Vercel logs as `[photo]` so the next failure says exactly why.
+- Not now: IndexedDB as the main store. Cloud stays the source of truth (other devices, the
+  social layer later, Safari can evict local data). IndexedDB as an *outbox* for offline keeps
+  is the right use, later.

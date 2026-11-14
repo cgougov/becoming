@@ -13,3 +13,19 @@ describe("photoObjectPath", () => {
     expect(photoObjectPath("u", "application/pdf", "x")).toBeNull();
   });
 });
+
+describe("photoMime / photoProblem", () => {
+  it("reads the type, falling back to the extension", async () => {
+    const { photoMime } = await import("./path");
+    expect(photoMime({ type: "image/png", name: "a.png" })).toBe("image/png");
+    expect(photoMime({ type: "", name: "IMG_1.HEIC" })).toBe("image/heic");
+    expect(photoMime({ type: "image/heif", name: "x" })).toBe("image/heic");
+    expect(photoMime({ type: "", name: "notes.txt" })).toBe("");
+  });
+  it("says what's wrong in plain words", async () => {
+    const { photoProblem, MAX_PHOTO_BYTES } = await import("./path");
+    expect(photoProblem({ type: "image/jpeg", name: "a.jpg", size: 1000 })).toBeNull();
+    expect(photoProblem({ type: "image/gif", name: "a.gif", size: 1000 })).toMatch(/type/);
+    expect(photoProblem({ type: "image/jpeg", name: "a.jpg", size: MAX_PHOTO_BYTES + 1 })).toMatch(/too big/);
+  });
+});
