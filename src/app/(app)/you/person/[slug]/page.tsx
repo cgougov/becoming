@@ -10,7 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ENTRY_FIELDS, EntryList, signedPhotoUrls, type EntryRow } from "../../../capture/entry-list";
 import { setPersonPhoto } from "../../actions";
 import { Avatar } from "../../avatar";
-import { CloseToggle, PersonNote } from "../../person-client";
+import { CloseToggle, PersonNote, ReachOut } from "../../person-client";
 
 export default function PersonPage({ params }: PageProps<"/you/person/[slug]">) {
   return (
@@ -38,6 +38,9 @@ async function PersonBody({ params }: Pick<PageProps<"/you/person/[slug]">, "par
 
   const { data: tagRows } = await supabase.from("entry_tags").select("entry_id").eq("owner_id", user.id).eq("person_id", person.id);
   const ids = (tagRows ?? []).map((t) => t.entry_id as string);
+  // Separate, tolerant read: works before the phone migration is applied.
+  const { data: phoneRow } = await supabase.from("people").select("phone").eq("id", person.id).maybeSingle();
+  const phone = ((phoneRow as { phone?: string | null } | null)?.phone ?? null) as string | null;
   const [{ data }, options, urls] = await Promise.all([
     ids.length
       ? supabase.from("entries").select(ENTRY_FIELDS).in("id", ids).order("captured_at", { ascending: false }).limit(200)
@@ -60,6 +63,7 @@ async function PersonBody({ params }: Pick<PageProps<"/you/person/[slug]">, "par
         <Avatar name={person.name as string} slug={person.slug as string} url={person.photo_path ? urls.get(person.photo_path as string) : undefined} size={72} close={!!person.close} />
         <CloseToggle id={person.id as string} close={!!person.close} />
       </div>
+      <ReachOut id={person.id as string} name={person.name as string} phone={phone} />
       <PersonNote id={person.id as string} note={(person.note as string | null) ?? ""} />
       <section className="flex flex-col gap-1" aria-label={`Things about ${person.name}`}>
         <h2 className="text-[13px] font-bold text-muted">from your days</h2>

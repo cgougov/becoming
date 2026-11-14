@@ -42,3 +42,16 @@ export const NUDGE_LINES = [
 export function nudgeLine(name: string, seed: number): string {
   return NUDGE_LINES[seed % NUDGE_LINES.length].replace("{name}", name);
 }
+
+/** Digits only, keeping a leading +. Null if it isn't a plausible number. */
+export function normalizePhone(raw: string): string | null {
+  const t = raw.trim();
+  const digits = t.replace(/\D/g, "");
+  if (digits.length < 3 || digits.length > 20) return null;
+  return (t.startsWith("+") ? "+" : "") + digits;
+}
+
+/** One-tap ways to reach someone. Opens Messages / Phone / FaceTime on iPhone. */
+export function reachLinks(phone: string): { text: string; call: string; facetime: string } {
+  return { text: `sms:${phone}`, call: `tel:${phone}`, facetime: `facetime:${phone}` };
+}
