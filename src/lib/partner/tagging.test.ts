@@ -46,3 +46,15 @@ describe("displayPersonName", () => {
     expect(displayPersonName("McKenna")).toBe("McKenna");
   });
 });
+
+describe("catch-all", () => {
+  it("files into Thoughts when nothing else fits, if you have it", () => {
+    const cols = [
+      { slug: "thoughts", name: "Thoughts", description: null },
+      { slug: "lifts", name: "Lifts", description: null },
+    ];
+    expect(cleanTaggingResult({ collections: [], people: [], tone: "neutral" }, cols, []).collections).toEqual(["thoughts"]);
+    expect(cleanTaggingResult({ collections: ["lifts"], people: [], tone: "neutral" }, cols, []).collections).toEqual(["lifts"]);
+    expect(cleanTaggingResult({ collections: [], people: [], tone: "neutral" }, cols.slice(1), []).collections).toEqual([]);
+  });
+});
