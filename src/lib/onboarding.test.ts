@@ -18,3 +18,19 @@ describe("onboarding", () => {
     expect(DEFAULT_COLLECTIONS[0]).toBe("thoughts");
   });
 });
+
+describe("becoming choices", () => {
+  it("turns taps into plain goals", async () => {
+    const { goalsFromChoices } = await import("./onboarding");
+    expect(goalsFromChoices({ language: "Bulgarian", lift: "4 a week", faith: "read my Bible" }, "")).toEqual([
+      { text: "practice Bulgarian most days", horizon: "week" },
+      { text: "lift 4 a week", horizon: "week" },
+      { text: "read my Bible daily", horizon: "week" },
+    ]);
+    expect(goalsFromChoices({ read: "a book a month" }, "  be kinder ")).toEqual([
+      { text: "read a book a month", horizon: "month" },
+      { text: "be kinder", horizon: "year" },
+    ]);
+    expect(goalsFromChoices({ scroll: undefined }, "")).toEqual([{ text: "scroll less, live more", horizon: "week" }]);
+  });
+});

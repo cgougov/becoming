@@ -196,3 +196,11 @@ open the link first and use it up. The login now asks for the 6-digit code from 
   and Today shows "from last night: …" as a quiet marker.
 - Pip's suggestions (art, words, verses) stay off Today: they'll arrive as Pip's lines and
   notifications, and on Look back.
+
+## 2026-11-14 — Onboarding: tap who you want to become
+- "who do you want to become?" is ten tappable choices (learn a language, get stronger, read
+  more, grow in faith, art and culture, scroll less, closer to my people, sleep better, calmer,
+  make things). Some ask one follow-up with set answers (which language? how often?), and the
+  pair becomes a goal in plain words ("practice Bulgarian most days", "lift 4 a week").
+  Own words or voice cover the rest. No AI guessing, so it's instant and always right.
+- The separate "one thing this week" step is gone; the choices cover it. Five screens total.
