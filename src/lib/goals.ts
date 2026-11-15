@@ -32,7 +32,7 @@ export function goalNudge(i: { hasWeekGoal: boolean; hasAnyGoal: boolean; weekda
 }
 
 export const GOAL_NUDGE_LINES = [
-  "no plans this week? fine. suspicious, but fine.",
-  "one small thing for this week?",
-  "a goal for the week? tiny ones welcome.",
+  "what are your goals for this week?",
+  "a goal or two for this week, if I may?",
+  "what are we working on this week?",
 ];
