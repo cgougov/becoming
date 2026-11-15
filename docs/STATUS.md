@@ -2,6 +2,16 @@
 
 _Last updated: 2026-11-14 (health check)_
 
+## Round of Christian's notes (2026-11-14 evening) ✅
+- Voice leans C-3PO; mood words rough/low/okay/good/great; "lights low" gone.
+- The moment keeps its time a surprise ("today's moment is coming. I'll tap you.") + "what's this?".
+- No waiting: Keep and check-ins move on at once and save in the background.
+- Tap-or-write + mic on every check-in text step; wind-down asks "one thing to do better
+  tomorrow?" → comes back next morning (Today marker, morning starter, 8:30 push).
+  Needs `npx supabase db push --remote` (migration 20261115000000_tomorrow).
+- Onboarding: tap who you want to become, one follow-up each, own words or voice.
+- Next: Pip's gifts as lines/notifications + on Look back (not on Today); lenses; Sunday letter.
+
 ## Notifications (M4 part 2) ✅ code (PR "push") · needs one-time setup
 
 - Three nudges a day at most, each once: **8:30 morning** (if not checked in), **the moment**

@@ -3,15 +3,16 @@
 import { useState, useTransition } from "react";
 import { PipFace } from "@/components/pip-face";
 import { MAX_COLLECTION_NAME, SUGGESTED_COLLECTIONS, normalizeCollectionName } from "@/lib/collections";
-import { BECOMING_SPARKS, DEFAULT_COLLECTIONS, MAX_DIRECTION, ONBOARDING, sparkToDirection } from "@/lib/onboarding";
+import { BECOMING_OPTIONS, DEFAULT_COLLECTIONS, MAX_DIRECTION, ONBOARDING, goalsFromChoices } from "@/lib/onboarding";
+import { MicButton } from "@/components/mic-button";
 import type { PipMood } from "@/lib/pip";
 import { pushState, subscribe } from "@/lib/push-client";
 import { savePushSubscription, type SubscriptionJSON } from "../notify/actions";
 import { completeSetup } from "./actions";
 
-const STEPS = ["hello", "becoming", "keep", "week", "notify", "done"] as const;
+const STEPS = ["hello", "becoming", "keep", "notify", "done"] as const;
 type Step = (typeof STEPS)[number];
-const PIP: Record<Step, PipMood> = { hello: "happy", becoming: "calm", keep: "calm", week: "calm", notify: "happy", done: "happy" };
+const PIP: Record<Step, PipMood> = { hello: "happy", becoming: "calm", keep: "calm", notify: "happy", done: "happy" };
 
 /**
  * Onboarding as a short conversation with Pip. One thing per screen, everything skippable,
@@ -20,7 +21,8 @@ const PIP: Record<Step, PipMood> = { hello: "happy", becoming: "calm", keep: "ca
 export function StartForm({ pipDay }: { pipDay: string }) {
   const [step, setStep] = useState<Step>("hello");
   const [becoming, setBecoming] = useState("");
-  const [week, setWeek] = useState("");
+  // Picked options → their follow-up answer (undefined until answered).
+  const [picked, setPicked] = useState<Record<string, string | undefined>>({});
   const [chosen, setChosen] = useState<Set<string>>(new Set(DEFAULT_COLLECTIONS));
   const [custom, setCustom] = useState<string[]>([]);
   const [draft, setDraft] = useState("");
@@ -56,8 +58,7 @@ export function StartForm({ pipDay }: { pipDay: string }) {
     const fd = new FormData();
     for (const c of chosen) fd.append("suggested", c);
     for (const c of custom) fd.append("custom", c);
-    fd.set("becoming", becoming);
-    fd.set("week", week);
+    fd.set("goals", JSON.stringify(goalsFromChoices(picked, becoming)));
     start(() => completeSetup(fd));
   }
 
@@ -86,22 +87,56 @@ export function StartForm({ pipDay }: { pipDay: string }) {
           {"body" in s && <p className="mt-3 text-[16px] leading-snug text-muted">{s.body}</p>}
 
           {step === "becoming" && (
-            <div className="mt-6 flex flex-col gap-3">
-              <textarea
-                rows={2}
-                value={becoming}
-                maxLength={MAX_DIRECTION}
-                onChange={(e) => setBecoming(e.target.value)}
-                placeholder={ONBOARDING.becoming.placeholder}
-                aria-label={ONBOARDING.becoming.title}
-                className="resize-none rounded-[22px] bg-chip px-4 py-4 text-[19px] font-medium leading-snug outline-none placeholder:text-muted"
-              />
-              <div className="flex flex-wrap gap-2">
-                {BECOMING_SPARKS.map((sp) => (
-                  <button key={sp} type="button" onClick={() => setBecoming(sparkToDirection(sp))} className={chip(becoming === sparkToDirection(sp))}>
-                    {sp}
-                  </button>
-                ))}
+            <div className="mt-6 flex flex-col gap-4">
+              <div className="flex flex-wrap gap-2" role="group" aria-label="Who you want to become">
+                {BECOMING_OPTIONS.map((o) => {
+                  const on = o.id in picked;
+                  return (
+                    <button
+                      key={o.id}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => {
+                        const n = { ...picked };
+                        if (on) delete n[o.id];
+                        else n[o.id] = undefined;
+                        setPicked(n);
+                      }}
+                      className={chip(on)}
+                    >
+                      {o.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {BECOMING_OPTIONS.filter((o) => o.follow && o.id in picked).map((o) => (
+                <div key={o.id} className="anim-rise flex flex-col gap-2">
+                  <p className="text-[13px] font-bold text-muted">
+                    {o.label} · {o.follow!.ask}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {o.follow!.choices.map((c) => (
+                      <button key={c} type="button" aria-pressed={picked[o.id] === c} onClick={() => setPicked({ ...picked, [o.id]: c })} className={chip(picked[o.id] === c)}>
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <div className="flex items-end gap-2">
+                <label htmlFor="becoming-own" className="sr-only">
+                  {ONBOARDING.becoming.placeholder}
+                </label>
+                <textarea
+                  id="becoming-own"
+                  rows={2}
+                  value={becoming}
+                  maxLength={MAX_DIRECTION}
+                  onChange={(e) => setBecoming(e.target.value)}
+                  placeholder={ONBOARDING.becoming.placeholder}
+                  className="flex-1 resize-none rounded-[22px] bg-chip px-4 py-3 text-[17px] font-medium leading-snug outline-none placeholder:text-muted"
+                />
+                <MicButton onText={(t) => setBecoming(becoming ? `${becoming} ${t}` : t)} />
               </div>
             </div>
           )}
@@ -156,17 +191,6 @@ export function StartForm({ pipDay }: { pipDay: string }) {
             </div>
           )}
 
-          {step === "week" && (
-            <input
-              value={week}
-              maxLength={MAX_DIRECTION}
-              onChange={(e) => setWeek(e.target.value)}
-              placeholder={ONBOARDING.week.placeholder}
-              aria-label={ONBOARDING.week.title}
-              className="mt-6 min-h-14 rounded-[22px] bg-chip px-4 text-[19px] font-medium outline-none placeholder:text-muted"
-            />
-          )}
-
           {step === "notify" && homeScreen && (
             <p className="mt-6 rounded-[20px] bg-chip p-4 text-[15px] leading-snug">
               first, add me to your Home Screen: tap Share, then <b>Add to Home Screen</b>. open me from there and I can tap you. you can also do it later in Yours.
@@ -179,19 +203,19 @@ export function StartForm({ pipDay }: { pipDay: string }) {
                 hi, Pip
               </button>
             )}
-            {(step === "becoming" || step === "week") && (
+            {step === "becoming" && (
               <>
                 <button type="button" onClick={next} className={quiet}>
                   skip
                 </button>
-                <button type="button" onClick={next} disabled={step === "becoming" ? !becoming.trim() : !week.trim()} className={primary}>
-                  next
+                <button type="button" onClick={next} disabled={Object.keys(picked).length === 0 && !becoming.trim()} className={primary}>
+                  continue
                 </button>
               </>
             )}
             {step === "keep" && (
               <button type="button" onClick={next} className={primary}>
-                {chosen.size + custom.length === 0 ? "none for now" : "these, please"}
+                {chosen.size + custom.length === 0 ? "none for now" : "continue"}
               </button>
             )}
             {step === "notify" && (
