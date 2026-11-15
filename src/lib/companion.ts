@@ -37,25 +37,25 @@ const GENERAL = [
   "kept. I shall guard it with my life.",
   "filed under 'excellent decisions'.",
   "oh my. how wonderfully specific.",
-  "noted. with enthusiasm.",
+  "noted. with considerable enthusiasm.",
   "by my calculations, that was a good one.",
   "I have saved it. twice, to be safe.",
   "how very human of you. I approve.",
   "splendid. truly splendid.",
-  "another page for the scrapbook!",
-  "I'll remember that. it's my whole job.",
-  "acknowledged ♡",
-  "oh, lovely. lovely lovely.",
+  "I'll remember that. it's my primary function.",
+  "acknowledged, and filed with great care ♡",
+  "oh, how marvelous. I do love a good entry.",
+  "protocol says I should be calm. I am not.",
 ];
-const PHOTO = ["oh! a photograph. how thrilling.", "I'm told this is called art. I agree.", "framed. metaphorically.", "a picture! I'll keep it very safe.", "ooh. let me look closer. lovely."];
-const FIRST_TODAY = ["the first one today! I was waiting.", "oh, hello. I've been very patient.", "there you are. the day may begin.", "good whenever-it-is."];
-const MANY_TODAY = ["goodness. you are a busy person.", "another! I'm running out of shelves.", "my, what a full day.", "you're on a roll. I'm keeping up."];
-const LATE = ["it is very late. I am keeping it anyway.", "you should be asleep. so should I.", "a midnight one. how mysterious.", "quietly saved. bed soon?"];
-const EARLY = ["you're up early. so am I, apparently.", "good morning ♡", "an early one! how industrious."];
-const BACK = ["oh! you're back. I kept everything tidy.", "I kept everything exactly where you left it.", "hello again. I hoped you'd come.", "there you are! hello hello."];
-const GOOD = ["oh! that sounds lovely.", "goodness, a good one!", "how wonderful. I'm doing a little dance.", "yay! (that's the technical term.)"];
+const PHOTO = ["oh! a photograph. how thrilling.", "I'm told this is called art. I agree.", "framed. metaphorically, of course.", "a picture! I'll handle it very carefully.", "goodness. let me look closer. lovely."];
+const FIRST_TODAY = ["the first one today! I was waiting.", "oh, hello. I've been very patient.", "there you are. the day may now begin.", "ah. the day's first entry. how official."];
+const MANY_TODAY = ["goodness. you are a busy person.", "another! I'm running out of shelves.", "my, what a full day.", "I'm keeping up. barely, but I am."];
+const LATE = ["it is very late. I am keeping it anyway.", "you should be asleep. I say this with love.", "a midnight one. how irregular.", "quietly saved. bed soon, if I may?"];
+const EARLY = ["you're up early. so am I, apparently.", "good morning. how very punctual of you.", "an early one! how industrious."];
+const BACK = ["oh! you're back. I kept everything tidy.", "I kept everything exactly where you left it.", "hello again. I was only slightly worried.", "there you are! I've been polishing things."];
+const GOOD = ["oh! that sounds lovely.", "goodness gracious, a good one!", "how wonderful. I'm doing a little dance.", "yay! (that's the technical term.)"];
 export const FRESH_HELLO = "oh! hello. I'm Pip.";
-export const TAP_LINES = ["hee. that tickles.", "oh! hello.", "yes? I'm here.", "boop. I'm told that's a greeting.", "please, I'm working. (I'm not.)"];
+export const TAP_LINES = ["hee. that tickles.", "oh! hello. may I help you?", "yes? I'm here. at your service.", "boop. I'm told that's a greeting.", "please, I'm working. (I'm not.)"];
 export const HARD_LINE = "oh no. I'm sorry.";
 
 /** Every curated line Pip can say, for the voice test. */

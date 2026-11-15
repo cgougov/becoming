@@ -32,51 +32,57 @@ export function pipMoodFor(mood: number, energy: number): PipMood {
 
 /** Pip's lines (docs/VOICE.md). One per state; picked by a stable seed so it doesn't flicker. */
 export const MORNING_HELLOS = [
-  "good morning. today has potential. I checked.",
-  "morning ♡ I have a good feeling about today.",
-  "rise and shine. mostly rise.",
-  "a new day! I've already tidied it for you.",
+  "good morning. I've reviewed today. promising.",
+  "ah, you're awake. splendid.",
+  "good morning. by my calculations, today will do.",
+  "morning. I've been up for hours. figuratively.",
 ];
-export const EVENING_HELLOS = ["it's wind-down time. come sit with me.", "the day is nearly done. how was it?", "lights low. let's look back, briefly."];
+export const EVENING_HELLOS = [
+  "pardon me. it's ten o'clock. wind-down time.",
+  "the day is nearly done. shall we review it?",
+  "if I may, it's time to close out the day.",
+];
 
 export function sliderLine(mood: number, energy: number): string {
   const m = pipMoodFor(mood, energy);
   if (m === "soft") return "oh no. I'm sorry.";
-  if (m === "sleepy") return "you sound sleepy. so am I.";
-  if (m === "happy") return energy > 60 ? "goodness, a good one!" : "oh, that is lovely.";
-  return "an ordinary day. those count.";
+  if (m === "sleepy") return "you sound tired. I'll speak softly.";
+  if (m === "happy") return energy > 60 ? "oh! splendid. most splendid." : "how lovely. noted with joy.";
+  return "an ordinary day. those count too.";
 }
 
 export function goodThingPrompt(kind: CheckKind, mood: number): { ask: string; hint: string } {
-  if (kind === "morning") return { ask: "one thing for today?", hint: "small is perfect." };
-  return mood < 30 ? { ask: "even a tiny good thing?", hint: "it counts. truly." } : { ask: "one good thing from today?", hint: "small is fine." };
+  if (kind === "morning") return { ask: "one thing for today?", hint: "small is perfectly acceptable." };
+  return mood < 30
+    ? { ask: "even a very small good thing?", hint: "small things count. it's in my manual." }
+    : { ask: "best thing since you woke up?", hint: "anything qualifies. I checked the rules." };
 }
 
 export function goodbyeLine(kind: CheckKind, mood: number): string {
-  if (kind === "morning") return mood < 30 ? "gently, then. I'm here." : "off you go. I'll be right here.";
-  return mood < 30 ? "goodnight. tomorrow is new." : "goodnight. I'll keep these safe.";
+  if (kind === "morning") return mood < 30 ? "gently, then. I'll be right here." : "off you go. I'll mind things here.";
+  return mood < 30 ? "goodnight. tomorrow is a fresh one." : "goodnight. I'll keep everything safe.";
 }
 
 export const CHECKIN_LINES = [
   ...MORNING_HELLOS,
   ...EVENING_HELLOS,
   "oh no. I'm sorry.",
-  "you sound sleepy. so am I.",
-  "goodness, a good one!",
-  "oh, that is lovely.",
-  "an ordinary day. those count.",
+  "you sound tired. I'll speak softly.",
+  "oh! splendid. most splendid.",
+  "how lovely. noted with joy.",
+  "an ordinary day. those count too.",
   "one thing for today?",
-  "small is perfect.",
-  "even a tiny good thing?",
-  "it counts. truly.",
-  "one good thing from today?",
-  "small is fine.",
-  "gently, then. I'm here.",
-  "off you go. I'll be right here.",
-  "goodnight. tomorrow is new.",
-  "goodnight. I'll keep these safe.",
-  "how are you, right now?",
-  "noted. I'll match you.",
+  "small is perfectly acceptable.",
+  "even a very small good thing?",
+  "small things count. it's in my manual.",
+  "best thing since you woke up?",
+  "anything qualifies. I checked the rules.",
+  "gently, then. I'll be right here.",
+  "off you go. I'll mind things here.",
+  "goodnight. tomorrow is a fresh one.",
+  "goodnight. I'll keep everything safe.",
+  "how are you, honestly?",
+  "noted. I shall adjust accordingly.",
 ];
 
 /**
@@ -87,17 +93,20 @@ export function anytimeKind(localHour: number): CheckKind {
   return localHour >= 5 && localHour < 22 ? "morning" : "evening";
 }
 
-/** One word for the mood bar. */
+/** One plain, honest word for the mood bar (Christian: "light" read as dishonest). */
 export function moodWord(mood: number): string {
-  if (mood < 20) return "heavy";
+  if (mood < 20) return "rough";
   if (mood < 40) return "low";
   if (mood < 60) return "okay";
   if (mood < 80) return "good";
-  return "light";
+  return "great";
 }
 
-export const MOOD_BAR_ASK = "how are you, right now?";
+/** The ends of the mood slider, same plain words. */
+export const MOOD_ENDS = ["rough", "great"] as const;
+
+export const MOOD_BAR_ASK = "how are you, honestly?";
 
 export function barGoodbye(mood: number): string {
-  return mood < 30 ? "gently, then. I'm here." : "noted. I'll match you.";
+  return mood < 30 ? "gently, then. I'll be right here." : "noted. I shall adjust accordingly.";
 }

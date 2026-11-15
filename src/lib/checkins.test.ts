@@ -32,8 +32,8 @@ describe("Pip mirrors the sliders with set faces", () => {
   });
 
   it("asks gently on a heavy evening", () => {
-    expect(goodThingPrompt("evening", 10).ask).toBe("even a tiny good thing?");
-    expect(goodThingPrompt("evening", 70).ask).toBe("one good thing from today?");
+    expect(goodThingPrompt("evening", 10).ask).toBe("even a very small good thing?");
+    expect(goodThingPrompt("evening", 70).ask).toBe("best thing since you woke up?");
     expect(goodThingPrompt("morning", 10).ask).toBe("one thing for today?");
   });
 });
@@ -49,6 +49,6 @@ describe("mood bar", () => {
   });
   it("has one word per range", async () => {
     const { moodWord } = await import("./checkins");
-    expect([10, 30, 50, 70, 90].map(moodWord)).toEqual(["heavy", "low", "okay", "good", "light"]);
+    expect([10, 30, 50, 70, 90].map(moodWord)).toEqual(["rough", "low", "okay", "good", "great"]);
   });
 });

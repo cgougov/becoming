@@ -34,6 +34,14 @@ export function momentPhase(now: Date, at: Date): MomentPhase {
 }
 
 /** Pip's lines for the moment (docs/VOICE.md). Never pressure; missing it is never mentioned. */
-export const MOMENT_ASKS = ["it's the moment! what's around you?", "quickly, what's right now?", "now, please. anything at all.", "look up. what do you see?", "this minute, if you don't mind."];
-export const MOMENT_ENCOURAGEMENT = ["no rush. it counts whenever.", "boring is allowed.", "a photo is plenty.", "anything at all is fine.", "I'm not grading it."];
+export const MOMENT_ASKS = [
+  "it's the moment! what are you doing right now?",
+  "the moment has arrived. what's happening?",
+  "pardon me. it's the moment. what's this minute?",
+  "now, if you please. what's going on?",
+];
+export const MOMENT_ENCOURAGEMENT = ["a photo is plenty. boring is allowed.", "no polish required. I'm not grading it.", "whatever is in front of you. that's the point."];
 export const MOMENT_KEPT = ["right on time!", "that's today's moment. perfect.", "got it. now go back to it.", "oh good, I hoped you'd catch it."];
+/** What the moment is, said once, plainly. */
+export const MOMENT_EXPLAINER = "once a day, at a surprise time, I ask what you're doing right then. a snapshot of real life, not the best bits.";
+export const MOMENT_UPCOMING = "today's moment is coming. I'll tap you.";
