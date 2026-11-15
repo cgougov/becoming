@@ -11,6 +11,8 @@ export const KEEPING_EVENT = "becoming:keeping";
 export const KEPT_EVENT = "becoming:kept";
 /** Fired when something kept reads as hard (the partner's tagging decides). Pip goes soft. */
 export const HARD_EVENT = "becoming:hard";
+/** Pip says one line now (e.g. the check-in goodbye, after the sheet has already closed). */
+export const SAY_EVENT = "becoming:say";
 /** Fired after a check-in: Pip rests in the mood you just gave. */
 export const MOOD_EVENT = "becoming:mood";
 
@@ -102,6 +104,11 @@ export function Companion({ arrival = "normal", day, checked = null }: { arrival
     function onHard() {
       react({ mood: "soft", motion: "sway", line: HARD_LINE, ms: 6000 });
     }
+    function onSay(e: Event) {
+      const d = (e as CustomEvent<{ line: string; soft?: boolean }>).detail;
+      if (d?.line) react({ mood: d.soft ? "soft" : "happy", motion: d.soft ? "sway" : "hop", line: d.line, ms: 4000 });
+    }
+    window.addEventListener(SAY_EVENT, onSay);
     window.addEventListener(KEEPING_EVENT, onKeeping);
     window.addEventListener(KEPT_EVENT, onKept);
     window.addEventListener(HARD_EVENT, onHard);
@@ -109,6 +116,7 @@ export function Companion({ arrival = "normal", day, checked = null }: { arrival
       window.removeEventListener(KEEPING_EVENT, onKeeping);
       window.removeEventListener(KEPT_EVENT, onKept);
       window.removeEventListener(HARD_EVENT, onHard);
+      window.removeEventListener(SAY_EVENT, onSay);
     };
   }, [legacyMood, react]);
 

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TapOrWrite } from "@/components/tap-or-write";
 import { PipFace } from "@/components/pip-face";
-import { MOOD_EVENT } from "@/components/companion";
+import { MOOD_EVENT, SAY_EVENT } from "@/components/companion";
 import { lastNightLine, GOOD_CHIPS, MOOD_BAR_ASK, MOOD_ENDS, MORNING_CHIPS, TOMORROW_CHIPS, TOMORROW_PROMPT, barGoodbye, goodThingPrompt, goodbyeLine, moodWord, pipMoodFor, sliderLine, type CheckKind } from "@/lib/checkins";
 import { MOOD_COLORS } from "@/lib/pip";
 import { saveCheckin, skipCheckin } from "./actions";
@@ -59,14 +59,17 @@ export function CheckinFlow({
    * No waiting: the screen moves on at once and the save happens in the background
    * (Christian: "it should move you to the next screen and save in the background").
    */
+  /**
+   * No waiting at all: the sheet closes the moment you tap, Pip says goodbye from the corner,
+   * and the save happens in the background.
+   */
   function finish(t: { text?: string; tomorrow?: string } = {}) {
     window.dispatchEvent(new CustomEvent(MOOD_EVENT, { detail: { mood: pipMoodFor(mood, energy) } }));
-    setStep("done");
-    const saving = saveCheckin({ kind, mood, energy, text: t.text ?? "", tomorrow: t.tomorrow ?? "" });
-    setTimeout(() => {
-      setOpen(false);
-      void saving.finally(() => router.refresh());
-    }, 1800);
+    const bye = variant === "bar" ? barGoodbye(mood) : goodbyeLine(kind, mood);
+    setOpen(false);
+    if (variant === "card") setHidden(true);
+    setTimeout(() => window.dispatchEvent(new CustomEvent(SAY_EVENT, { detail: { line: bye, soft: mood < 30 } })), 150);
+    void saveCheckin({ kind, mood, energy, text: t.text ?? "", tomorrow: t.tomorrow ?? "" }).finally(() => router.refresh());
   }
 
   const afterText = () => (kind === "evening" && variant === "card" ? setStep("tomorrow") : finish({ text }));
