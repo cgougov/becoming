@@ -1,4 +1,4 @@
-import { EVENING_HELLOS, MORNING_HELLOS } from "./checkins";
+import { EVENING_HELLOS, MORNING_HELLOS, lastNightLine } from "./checkins";
 import { LIVE_MINUTES, MOMENT_ASKS } from "./moment";
 
 /**
@@ -41,9 +41,9 @@ export function localMinutes(now: Date, timeZone: string): number {
 }
 
 /** What the notification says, in Pip's voice. Seeded so a day's line is stable. */
-export function pushMessage(kind: PushKind, seed: number): { title: string; body: string; url: string } {
+export function pushMessage(kind: PushKind, seed: number, lastNight: string | null = null): { title: string; body: string; url: string } {
   const pick = (pool: readonly string[]) => pool[Math.abs(seed) % pool.length];
-  if (kind === "morning") return { title: "Pip", body: pick(MORNING_HELLOS), url: "/" };
+  if (kind === "morning") return { title: "Pip", body: lastNight ? `good morning. ${lastNightLine(lastNight)}` : pick(MORNING_HELLOS), url: "/" };
   if (kind === "evening") return { title: "Pip", body: pick(EVENING_HELLOS), url: "/" };
   return { title: "Pip", body: pick(MOMENT_ASKS), url: "/" };
 }

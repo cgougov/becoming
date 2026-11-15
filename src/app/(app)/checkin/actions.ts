@@ -24,7 +24,7 @@ const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)));
  * Save a morning check-in or a wind-down. Morning text becomes today's intention; evening text
  * becomes a kept thing on the day's page (and gets tagged like anything else).
  */
-export async function saveCheckin(input: { kind: CheckKind; mood: number; energy: number; text?: string }): Promise<{ ok: boolean }> {
+export async function saveCheckin(input: { kind: CheckKind; mood: number; energy: number; text?: string; tomorrow?: string }): Promise<{ ok: boolean }> {
   const c = await ctx();
   if (!c) return { ok: false };
   const day = checkDay(input.kind, c.today, c.hour);
@@ -52,10 +52,12 @@ export async function saveCheckin(input: { kind: CheckKind; mood: number; energy
     if (t) await c.supabase.from("intentions").upsert({ owner_id: c.user.id, day: c.today, text: t, done_at: null }, { onConflict: "owner_id,day" });
   }
 
-  const { error } = await c.supabase.from("day_checks").upsert(
-    { owner_id: c.user.id, day, kind: input.kind, mood: clamp(input.mood), energy: clamp(input.energy), skipped: false, entry_id: entryId },
-    { onConflict: "owner_id,day,kind" },
-  );
+  const row = { owner_id: c.user.id, day, kind: input.kind, mood: clamp(input.mood), energy: clamp(input.energy), skipped: false, entry_id: entryId };
+  const tomorrow = input.kind === "evening" ? normalizeIntention(input.tomorrow ?? "") : null;
+  const withTomorrow: Record<string, unknown> = tomorrow ? { ...row, tomorrow } : row;
+  let { error } = await c.supabase.from("day_checks").upsert(withTomorrow, { onConflict: "owner_id,day,kind" });
+  // Before the `tomorrow` migration is applied, save the rest anyway.
+  if (error && tomorrow) ({ error } = await c.supabase.from("day_checks").upsert(row, { onConflict: "owner_id,day,kind" }));
   revalidatePath("/");
   return { ok: !error };
 }

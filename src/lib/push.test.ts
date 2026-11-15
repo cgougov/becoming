@@ -45,3 +45,9 @@ describe("push helpers", () => {
     expect(m.url).toBe("/");
   });
 });
+
+describe("morning carries last night's note", () => {
+  it("says it back, politely", () => {
+    expect(pushMessage("morning", 1, "less phone").body).toBe("good morning. from last night: less phone");
+  });
+});
