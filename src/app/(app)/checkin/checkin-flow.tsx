@@ -1,14 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState } from "react";
+import { TapOrWrite } from "@/components/tap-or-write";
 import { PipFace } from "@/components/pip-face";
 import { MOOD_EVENT } from "@/components/companion";
-import { MOOD_BAR_ASK, MOOD_ENDS, barGoodbye, goodThingPrompt, goodbyeLine, moodWord, pipMoodFor, sliderLine, type CheckKind } from "@/lib/checkins";
+import { lastNightLine, GOOD_CHIPS, MOOD_BAR_ASK, MOOD_ENDS, MORNING_CHIPS, TOMORROW_CHIPS, TOMORROW_PROMPT, barGoodbye, goodThingPrompt, goodbyeLine, moodWord, pipMoodFor, sliderLine, type CheckKind } from "@/lib/checkins";
 import { MOOD_COLORS } from "@/lib/pip";
 import { saveCheckin, skipCheckin } from "./actions";
 
-type Step = "sliders" | "text" | "done";
+type Step = "sliders" | "text" | "tomorrow" | "done";
 
 /**
  * The morning check-in and the 10pm wind-down. Collapsed: a small card with a line from Pip.
@@ -20,6 +21,7 @@ export function CheckinFlow({
   pipDay,
   variant = "card",
   current = null,
+  lastNight = null,
 }: {
   kind: CheckKind;
   hello: string;
@@ -28,6 +30,8 @@ export function CheckinFlow({
   variant?: "card" | "bar";
   /** Today's last check, so the bar shows it and the sliders start there. */
   current?: { mood: number; energy: number } | null;
+  /** Morning only: last night's "better tomorrow", offered as the first starter. */
+  lastNight?: string | null;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -35,23 +39,37 @@ export function CheckinFlow({
   const [mood, setMood] = useState(current?.mood ?? 60);
   const [energy, setEnergy] = useState(current?.energy ?? (kind === "evening" ? 40 : 60));
   const [text, setText] = useState("");
-  const [pending, start] = useTransition();
+  const [tomorrow, setTomorrow] = useState("");
+  const [hidden, setHidden] = useState(false);
 
   const pip = step === "done" && mood >= 30 ? "happy" : pipMoodFor(mood, energy);
-  const line = step === "sliders" ? sliderLine(mood, energy) : step === "text" ? goodThingPrompt(kind, mood).hint : variant === "bar" ? barGoodbye(mood) : goodbyeLine(kind, mood);
+  const line =
+    step === "sliders"
+      ? sliderLine(mood, energy)
+      : step === "text"
+        ? goodThingPrompt(kind, mood).hint
+        : step === "tomorrow"
+          ? TOMORROW_PROMPT.hint
+          : variant === "bar"
+            ? barGoodbye(mood)
+            : goodbyeLine(kind, mood);
   const prompt = goodThingPrompt(kind, mood);
 
-  function finish(withText: boolean) {
-    start(async () => {
-      await saveCheckin({ kind, mood, energy, text: withText ? text : "" });
-      window.dispatchEvent(new CustomEvent(MOOD_EVENT, { detail: { mood: pipMoodFor(mood, energy) } }));
-      setStep("done");
-      setTimeout(() => {
-        setOpen(false);
-        router.refresh();
-      }, 2600);
-    });
+  /**
+   * No waiting: the screen moves on at once and the save happens in the background
+   * (Christian: "it should move you to the next screen and save in the background").
+   */
+  function finish(t: { text?: string; tomorrow?: string } = {}) {
+    window.dispatchEvent(new CustomEvent(MOOD_EVENT, { detail: { mood: pipMoodFor(mood, energy) } }));
+    setStep("done");
+    const saving = saveCheckin({ kind, mood, energy, text: t.text ?? "", tomorrow: t.tomorrow ?? "" });
+    setTimeout(() => {
+      setOpen(false);
+      void saving.finally(() => router.refresh());
+    }, 1800);
   }
+
+  const afterText = () => (kind === "evening" && variant === "card" ? setStep("tomorrow") : finish({ text }));
 
   if (!open && variant === "bar") {
     const shown = current ? pipMoodFor(current.mood, current.energy) : "calm";
@@ -73,15 +91,24 @@ export function CheckinFlow({
     );
   }
 
+  if (hidden) return null;
+
   if (!open) {
     return (
       <div className="flex items-center gap-3 rounded-card bg-chip p-3 pr-4">
         <PipFace mood={kind === "evening" ? "sleepy" : "calm"} day={pipDay} size={40} />
         <button type="button" onClick={() => setOpen(true)} className="min-w-0 flex-1 text-left">
           <span className="block text-[15px] font-semibold leading-snug">{hello}</span>
-          <span className="block text-[13px] text-muted">{kind === "morning" ? "how are you starting?" : "how was today?"}</span>
+          <span className="block text-[13px] text-muted">{lastNight ? lastNightLine(lastNight) : kind === "morning" ? "how are you starting?" : "how was today?"}</span>
         </button>
-        <button type="button" onClick={() => start(() => skipCheckin(kind))} disabled={pending} className="text-[12px] font-semibold text-muted">
+        <button
+          type="button"
+          onClick={() => {
+            setHidden(true);
+            void skipCheckin(kind);
+          }}
+          className="text-[12px] font-semibold text-muted"
+        >
           not now
         </button>
       </div>
@@ -139,11 +166,10 @@ export function CheckinFlow({
             ))}
             <button
               type="button"
-              disabled={pending}
-              onClick={() => (variant === "bar" ? finish(false) : setStep("text"))}
-              className="h-13 min-h-12 rounded-full bg-foreground text-[16px] font-bold text-background disabled:opacity-40"
+              onClick={() => (variant === "bar" ? finish() : setStep("text"))}
+              className="h-13 min-h-12 rounded-full bg-foreground text-[16px] font-bold text-background"
             >
-              {variant === "bar" ? (pending ? "noting…" : "that's me") : "next"}
+              {variant === "bar" ? "that's me" : "continue"}
             </button>
           </div>
         )}
@@ -151,24 +177,34 @@ export function CheckinFlow({
         {step === "text" && (
           <div className="anim-rise mt-8 flex flex-col gap-4">
             <h2 className="text-[26px] font-bold leading-tight tracking-[-0.02em]">{prompt.ask}</h2>
-            <label htmlFor="checkin-text" className="sr-only">
-              {prompt.ask}
-            </label>
-            <textarea
+            <TapOrWrite
               id="checkin-text"
-              rows={3}
+              label={prompt.ask}
               value={text}
-              onChange={(e) => setText(e.target.value)}
-              autoFocus
-              placeholder={prompt.hint}
-              className="resize-none rounded-[22px] bg-chip px-4 py-4 text-[19px] font-medium leading-snug outline-none placeholder:text-muted"
+              onChange={setText}
+              chips={kind === "morning" ? (lastNight ? [lastNight, ...MORNING_CHIPS] : MORNING_CHIPS) : GOOD_CHIPS}
             />
             <div className="flex gap-2">
-              <button type="button" disabled={pending} onClick={() => finish(false)} className="min-h-12 flex-1 rounded-full border-[1.5px] border-foreground/15 text-[15px] font-semibold disabled:opacity-40">
+              <button type="button" onClick={() => { setText(""); if (kind === "evening" && variant === "card") setStep("tomorrow"); else finish(); }} className="min-h-12 flex-1 rounded-full border-[1.5px] border-foreground/15 text-[15px] font-semibold">
                 skip
               </button>
-              <button type="button" disabled={pending || !text.trim()} onClick={() => finish(true)} className="min-h-12 flex-[2] rounded-full bg-foreground text-[16px] font-bold text-background disabled:opacity-40">
-                {pending ? "keeping…" : "keep"}
+              <button type="button" disabled={!text.trim()} onClick={afterText} className="min-h-12 flex-[2] rounded-full bg-foreground text-[16px] font-bold text-background disabled:opacity-40">
+                continue
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === "tomorrow" && (
+          <div className="anim-rise mt-8 flex flex-col gap-4">
+            <h2 className="text-[26px] font-bold leading-tight tracking-[-0.02em]">{TOMORROW_PROMPT.ask}</h2>
+            <TapOrWrite id="checkin-tomorrow" label={TOMORROW_PROMPT.ask} value={tomorrow} onChange={setTomorrow} chips={TOMORROW_CHIPS} />
+            <div className="flex gap-2">
+              <button type="button" onClick={() => finish({ text })} className="min-h-12 flex-1 rounded-full border-[1.5px] border-foreground/15 text-[15px] font-semibold">
+                skip
+              </button>
+              <button type="button" disabled={!tomorrow.trim()} onClick={() => finish({ text, tomorrow })} className="min-h-12 flex-[2] rounded-full bg-foreground text-[16px] font-bold text-background disabled:opacity-40">
+                goodnight
               </button>
             </div>
           </div>

@@ -52,3 +52,11 @@ describe("mood bar", () => {
     expect([10, 30, 50, 70, 90].map(moodWord)).toEqual(["rough", "low", "okay", "good", "great"]);
   });
 });
+
+describe("tomorrow", () => {
+  it("brings last night back", async () => {
+    const { lastNightLine, TOMORROW_CHIPS } = await import("./checkins");
+    expect(lastNightLine("sleep earlier")).toBe("from last night: sleep earlier");
+    expect(TOMORROW_CHIPS.length).toBeGreaterThan(3);
+  });
+});

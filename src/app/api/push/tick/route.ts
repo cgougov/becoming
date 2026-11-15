@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import webpush from "web-push";
 import { localDay } from "@/lib/entries/time";
 import { pickMomentTime } from "@/lib/moment";
+import { lastNightTomorrow } from "@/app/(app)/checkin/last-night";
 import { dueNotifications, localMinutes, pushMessage, type PushKind } from "@/lib/push";
 
 /**
@@ -89,7 +90,8 @@ async function tickOne(
       .select("kind");
     if (!claimed?.length) continue;
     const seed = [...day].reduce((a, ch) => a + ch.charCodeAt(0), 0);
-    const payload = JSON.stringify(pushMessage(kind, seed));
+    const lastNight = kind === "morning" ? await lastNightTomorrow(admin, ownerId, timeZone, now) : null;
+    const payload = JSON.stringify(pushMessage(kind, seed, lastNight));
     for (const d of devices) {
       try {
         await webpush.sendNotification({ endpoint: d.endpoint, keys: { p256dh: d.p256dh, auth: d.auth } }, payload, { TTL: 60 * 30 });

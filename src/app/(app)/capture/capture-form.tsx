@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { KEEPING_EVENT, KEPT_EVENT } from "@/components/companion";
+import { MicButton } from "@/components/mic-button";
 import { PHOTO_ACCEPT } from "@/lib/photos/path";
 import { uploadPhoto } from "@/lib/photos/upload";
 import { createEntry, tagEntry } from "./actions";
@@ -34,7 +35,7 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
   const [photo, setPhoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -54,28 +55,38 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
     setPreview(file ? URL.createObjectURL(file) : null);
   }
 
-  function reset() {
-    setBody("");
-    saveDraft("");
-    pickPhoto(null);
-    if (fileInput.current) fileInput.current.value = "";
-  }
 
+  /**
+   * No waiting: the box clears at once and Pip starts reading; the upload and save happen in
+   * the background. If anything fails, what you wrote comes back with a plain error.
+   */
   function submit() {
     if (!body.trim() && !photo) return;
     setError(null);
+    const kept = { body, photo };
+    const detail = { hasPhoto: !!photo, hasText: body.trim().length > 0, keptTodayBefore: keptToday, moment: !!momentId };
+    // Clear without revoking the preview URL yet; the photo is still uploading.
+    setBody("");
+    saveDraft("");
+    setPhoto(null);
+    setPreview(null);
+    if (fileInput.current) fileInput.current.value = "";
+    window.dispatchEvent(new Event(KEEPING_EVENT));
     startTransition(async () => {
+      const restore = (message: string) => {
+        setBody(kept.body);
+        saveDraft(kept.body);
+        if (kept.photo) pickPhoto(kept.photo);
+        setError(message);
+      };
       let photoPath: string | null = null;
-      if (photo) {
-        const r = await uploadPhoto(userId, photo);
-        if ("error" in r) return setError(r.error);
+      if (kept.photo) {
+        const r = await uploadPhoto(userId, kept.photo);
+        if ("error" in r) return restore(r.error);
         photoPath = r.path;
       }
-      window.dispatchEvent(new Event(KEEPING_EVENT));
-      const result = await createEntry({ body, photoPath, momentId });
-      if (!result.ok) return setError(result.message);
-      const detail = { hasPhoto: !!photo, hasText: body.trim().length > 0, keptTodayBefore: keptToday, moment: !!momentId };
-      reset();
+      const result = await createEntry({ body: kept.body, photoPath, momentId });
+      if (!result.ok) return restore(result.message);
       // The partner reads it; Pip speaks once it knows how it reads (or after 4s regardless).
       const tone = result.id
         ? await Promise.race([
@@ -87,7 +98,7 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
     });
   }
 
-  const canSave = (body.trim().length > 0 || photo !== null) && !pending;
+  const canSave = body.trim().length > 0 || photo !== null;
 
   return (
     <form
@@ -161,19 +172,21 @@ export function CaptureForm({ userId, keptToday = 0, momentId = null }: { userId
             onChange={(e) => pickPhoto(e.target.files?.[0] ?? null)}
           />
         </label>
-        {pending ? (
-          <span className="ml-auto text-[13px] font-semibold text-muted">keeping…</span>
-        ) : (
-          (body.trim() || photo) && (
-            <button
-              type="submit"
-              disabled={!canSave}
-              aria-label="Keep"
-              className="anim-rise ml-auto flex h-11 w-11 items-center justify-center rounded-full bg-foreground text-background"
-            >
-              <Icon d={<path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" />} />
-            </button>
-          )
+        <MicButton
+          onText={(t) => {
+            const next = body ? `${body} ${t}` : t;
+            setBody(next);
+            saveDraft(next);
+          }}
+        />
+        {canSave && (
+          <button
+            type="submit"
+            aria-label="Keep"
+            className="anim-rise ml-auto flex h-11 w-11 items-center justify-center rounded-full bg-foreground text-background"
+          >
+            <Icon d={<path d="M12 19V5M5.5 11.5L12 5l6.5 6.5" />} />
+          </button>
         )}
       </div>
     </form>

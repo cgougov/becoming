@@ -185,3 +185,14 @@ open the link first and use it up. The login now asks for the 6-digit code from 
 - Not now: IndexedDB as the main store. Cloud stays the source of truth (other devices, the
   social layer later, Safari can evict local data). IndexedDB as an *outbox* for offline keeps
   is the right use, later.
+
+## 2026-11-14 — No waiting; tap-or-write with voice; "better tomorrow" comes back in the morning
+- Keep clears the box at once and saves in the background (text comes back with an error if it
+  fails). Check-ins jump to the goodbye immediately and save behind it. "not now" hides instantly.
+- Every text step in the check-ins is tap-or-write: starters you can tap (then edit), a box, a
+  mic (browser speech recognition where it exists; hidden elsewhere), and continue / skip.
+- The wind-down ends with "one thing to do better tomorrow?" (`day_checks.tomorrow`). Next
+  morning it's the first starter in the morning check-in, the 8:30 notification says it back,
+  and Today shows "from last night: …" as a quiet marker.
+- Pip's suggestions (art, words, verses) stay off Today: they'll arrive as Pip's lines and
+  notifications, and on Look back.

@@ -63,7 +63,20 @@ export function goodbyeLine(kind: CheckKind, mood: number): string {
   return mood < 30 ? "goodnight. tomorrow is a fresh one." : "goodnight. I'll keep everything safe.";
 }
 
-export const CHECKIN_LINES = [
+/** Tap-or-write: a few starters for each text step. Tapping fills the box; you can edit it. */
+export const GOOD_CHIPS = ["a good meal", "time with someone", "got something done", "moved my body", "a quiet minute", "learned something"];
+export const TOMORROW_CHIPS = ["sleep earlier", "less phone", "move more", "reach out to someone", "one thing at a time", "be patient with myself"];
+export const MORNING_CHIPS = ["move my body", "call someone", "read a little", "one thing at a time"];
+
+/** The wind-down's last question; the answer becomes tomorrow morning's reminder. */
+export const TOMORROW_PROMPT = { ask: "one thing to do better tomorrow?", hint: "I'll remind you in the morning. politely." };
+
+/** How last night's answer comes back in the morning. */
+export function lastNightLine(text: string): string {
+  return `from last night: ${text}`;
+}
+
+export const CHECKIN_LINES: string[] = [
   ...MORNING_HELLOS,
   ...EVENING_HELLOS,
   "oh no. I'm sorry.",
@@ -82,6 +95,8 @@ export const CHECKIN_LINES = [
   "goodnight. tomorrow is a fresh one.",
   "goodnight. I'll keep everything safe.",
   "how are you, honestly?",
+  TOMORROW_PROMPT.ask,
+  TOMORROW_PROMPT.hint,
   "noted. I shall adjust accordingly.",
 ];
 
