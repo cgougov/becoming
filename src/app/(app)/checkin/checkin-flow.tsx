@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { PipFace } from "@/components/pip-face";
 import { MOOD_EVENT } from "@/components/companion";
-import { MOOD_BAR_ASK, barGoodbye, goodThingPrompt, goodbyeLine, moodWord, pipMoodFor, sliderLine, type CheckKind } from "@/lib/checkins";
+import { MOOD_BAR_ASK, MOOD_ENDS, barGoodbye, goodThingPrompt, goodbyeLine, moodWord, pipMoodFor, sliderLine, type CheckKind } from "@/lib/checkins";
 import { MOOD_COLORS } from "@/lib/pip";
 import { saveCheckin, skipCheckin } from "./actions";
 
@@ -114,7 +114,7 @@ export function CheckinFlow({
             <h2 className="text-[26px] font-bold leading-tight tracking-[-0.02em]">{variant === "bar" ? MOOD_BAR_ASK : kind === "morning" ? "how are you starting?" : "how was today?"}</h2>
             {(
               [
-                ["mood", mood, setMood, "heavy", "light"],
+                ["mood", mood, setMood, MOOD_ENDS[0], MOOD_ENDS[1]],
                 ["energy", energy, setEnergy, "empty", "full"],
               ] as const
             ).map(([name, value, set, lo, hi]) => (
